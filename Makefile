@@ -6,70 +6,92 @@
 #    By: mpitot <mpitot@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2024/10/21 15:08:35 by mpitot           ###   ########.fr        #
+#    Updated: 2024/10/21 16:22:52 by mpitot           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 include .config/srcs.mk
-include .config/config.mk
+include .config/display.mk
+include .config/colors.mk
 
-################################################################################
-#                                     CONFIG                                   #
-################################################################################
+OBJS	=	$(SRCS:%.cpp=${OBJ_D}%.o)
+SRC_D	=	srcs/
+OBJ_D	=	.objs/
+NAME	=	webserv
+CC		=	c++
+CFLAGS	=	-Wall -Wextra -Werror -std=c++98
+DFLAGS	=	-MMD -MF $(@:.o=.d)
 
-NAME	= webserv
-CC 		= c++
-CFLAGS	= -Wall -Werror -Wextra -std=c++98
-DFLAGS	= -MMD -MF $(@:.o=.d)
-AUTHOR	= mpitot, gberthol, mbrousse
-DATE	= 21/10/2024
+AUTHORS	=	mpitot, gberthol, mbrousse
+DEBUT	=	21/10/2024
+FIN		=	...
 
-NOVISU 	= 0 # 1 = no progress bar usefull when tty is not available
+all		:	header .internal_separate1 ${NAME}
 
-################################################################################
-#                                 Makefile rules                             #
-################################################################################
+${OBJS}	:	${OBJ_D}%.o: ${SRC_D}%.cpp Makefile
+	@$(call print_progress,$<)
+	@${CC} ${CFLAGS} ${DFLAGS} -c $< -o $@
+	@$(call update_progress,$<)
 
-all: header setup $(NAME)
-	@rm -rf .files_changed
+-include $(OBJS:.o=.d)
+${NAME}	:	${OBJ_D} ${OBJS}
+	@$(call print_progress,$(NAME))
+	@${CC} ${CFLAGS} ${OBJS} -o ${NAME}
+	@$(eval CHANGED=1)
+	@$(call erase)
+	@$(call done_and_dusted,$(NAME))
+
+${OBJ_D}:
+	@mkdir -p ${OBJ_D}
+
+clean	:
+	@echo "Cleaning $(WHITE)[$(RED)$(NAME)$(WHITE)]...$(DEFAULT)"
+	@rm -rf ${OBJ_D}
+	@echo "$(WHITE)[$(RED)$(OBJ_D)$(WHITE)] $(RED)deleted.$(DEFAULT)"
+
+fclean	:
+	@echo "F***ing-Cleaning $(WHITE)[$(RED)$(NAME)$(WHITE)]...$(DEFAULT)"
+	@rm -rf ${OBJ_D}
+	@echo "$(WHITE)[$(RED)$(OBJ_D)$(WHITE)] $(RED)deleted.$(DEFAULT)"
+	@rm -f ${NAME}
+	@echo "$(WHITE)[$(RED)$(NAME)$(WHITE)] $(RED)deleted.$(DEFAULT)"
 
 header:
-	@printf "$(GREEN) _       __     __   $(WHITE)_____                \n"
-	@printf "$(GREEN)| |     / /__  / /_ $(WHITE)/ ___/___  ______   __\n"
-	@printf "$(GREEN)| | /| / / _ \/ __ \\\\$(WHITE)\\\\__ \/ _ \/ ___/ | / /\n"
-	@printf "$(GREEN)| |/ |/ /  __/ /_/ /$(WHITE)__/ /  __/ /   | |/ / \n"
-	@printf "$(GREEN)|__/|__/\___/_.___/$(WHITE)____/\___/_/    |___/  \n"
+	@printf "$(GREEN_B) _       __     __   $(WHITE_B)_____                \n"
+	@printf "$(GREEN_B)| |     / /__  / /_ $(WHITE_B)/ ___/___  ______   __\n"
+	@printf "$(GREEN_B)| | /| / / _ \/ __ \\\\$(WHITE_B)\\\\__ \/ _ \/ ___/ | / /\n"
+	@printf "$(GREEN_B)| |/ |/ /  __/ /_/ /$(WHITE_B)__/ /  __/ /   | |/ / \n"
+	@printf "$(GREEN_B)|__/|__/\___/_.___/$(WHITE_B)____/\___/_/    |___/  \n"
 	@echo
-	@printf "%b" "$(OBJ_COLOR)Name:		$(WHITE_FIN)$(NAME)\n"
-	@printf "%b" "$(OBJ_COLOR)Authors:	$(WHITE_FIN)$(AUTHOR)\n"
-	@printf "%b" "$(OBJ_COLOR)Date: 		$(WHITE_FIN)$(DATE)\n$(NO_COLOR)"
-	@printf "%b" "$(OBJ_COLOR)CC: 		$(WHITE_FIN)$(CC)\n$(NO_COLOR)"
-	@printf "%b" "$(OBJ_COLOR)Flags: 		$(WHITE_FIN)$(CFLAGS)\n$(NO_COLOR)"
-	@printf "%b" "$(OBJ_COLOR)Credits:	$(WHITE_FIN)tmatis (42make)\n"
-	@echo
+	@printf "%b" "$(GREEN_B)Name:		$(WHITE)$(NAME)\n"
+	@printf "%b" "$(GREEN_B)Authors:	$(WHITE)$(AUTHORS)\n"
+	@printf "%b" "$(GREEN_B)Date: 		$(WHITE)$(DEBUT) $(WHITE_B)-> $(WHITE)$(FIN)\n$(NO_COLOR)"
+	@printf "%b" "$(GREEN_B)CC: 		$(WHITE)$(CC)\n$(NO_COLOR)"
+	@printf "%b" "$(GREEN_B)Flags: 		$(WHITE)$(CFLAGS)\n$(NO_COLOR)"
 
+leak: all .internal_separate3
+	@echo "$(MAGENTA)Valgrind $(WHITE)~ $(YELLOW)Flags:$(DEFAULT)"
+	@echo "   $(YELLOW)-$(DEFAULT)Show Leak Kinds"
+	@echo "   $(YELLOW)-$(DEFAULT)Track FDs"
+	@echo "   $(YELLOW)-$(DEFAULT)Show Mismatched Frees"
+	@echo "   $(YELLOW)-$(DEFAULT)Read Variable Information"
+	@echo "   $(YELLOW)-$(DEFAULT)Leak check"
+	@$(call separator)
+	@valgrind		--show-leak-kinds=all		\
+					--track-fds=yes 			\
+					--show-mismatched-frees=yes	\
+					--read-var-info=yes			\
+					--leak-check=full			\
+					./$(NAME)
 
--include $(DEPS) $(DEPS_MAIN)
-$(NAME):	${OBJS} ${OBJ_MAIN}
-			@$(call display_progress_bar)
-			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) -I$(INCLUDE_PATH) -o $@ ${OBJS} ${OBJ_MAIN})
+re		:	header .internal_separate1 fclean .internal_separate2 ${NAME}
 
-setup:
-	@$(call save_files_changed)
+.PHONY	:	all clean fclean re leak
 
-objs/%.o: 	$(SRCS_PATH)/%$(FILE_EXTENSION)
-			@mkdir -p $(dir $@)
-			@$(call display_progress_bar)
-			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) -c $< -o $@ -I$(INCLUDE_PATH))
+.NOTPARALLEL all:
+	@if [ $(CHANGED) -eq 0 ]; then \
+		echo "$(YELLOW)Nothing to be done for $(WHITE)[$(CYAN)$(NAME)$(WHITE)].$(DEFAULT)"; \
+	fi
 
-clean:		header
-			@rm -rf objs objs_tests
-			@printf "%-53b%b" "$(COM_COLOR)clean:" "$(GREEN)[✓]$(NO_COLOR)\n"
-
-fclean:		header clean
-			@rm -rf $(NAME)
-			@printf "%-53b%b" "$(COM_COLOR)fclean:" "$(GREEN)[✓]$(NO_COLOR)\n"
-
-re:			fclean all
-
-.PHONY:		all clean fclean re header
+.internal_announce	:
+	@echo "$(YELLOW)Compiling $(WHITE)[$(CYAN)${NAME}$(WHITE)]...$(DEFAULT)"

@@ -1,24 +1,43 @@
-################################################################################
-#                                  Makefile  srcs                              #
-################################################################################
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    srcs.mk                                            :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: mpitot <mpitot@student.42lyon.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/10/21 15:46:19 by mpitot            #+#    #+#              #
+#    Updated: 2024/10/21 15:51:04 by mpitot           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-FILE_EXTENSION	=	.cpp
+SRCS		=	$(MAIN)		\
+#				$(UTILS)	\
+#				$(ERROR)
 
-SRCS_PATH		=	./srcs
 
-INCLUDE_PATH	=	./srcs
 
-SRCS			=
+SRC_MAIN	=	main.cpp
+SRC_UTILS	=	utils.example
+SRC_ERROR	=	error.example
 
-MAIN			= 	main.cpp
 
-################################################################################
-#                                  Makefile  objs                              #
-################################################################################
 
-SHELL := /bin/bash
+DIR_MAIN	=	./
+DIR_UTILS	=	utils/
+DIR_ERROR	=	error/
 
-OBJS				= $(addprefix objs/, ${SRCS:$(FILE_EXTENSION)=.o})
-OBJ_MAIN			= $(addprefix objs/, ${MAIN:$(FILE_EXTENSION)=.o})
-DEPS				= $(addprefix objs/, ${SRCS:$(FILE_EXTENSION)=.d})
-DEPS_MAIN			= $(addprefix objs/, ${MAIN:$(FILE_EXTENSION)=.d})
+
+
+MAIN		=	$(addprefix $(DIR_MAIN), $(SRC_MAIN))
+ERROR		=	$(addprefix $(DIR_ERROR), $(SRC_ERROR))
+UTILS		=	$(addprefix $(DIR_UTILS), $(SRC_UTILS))
+
+# **************************************************************************** #
+
+HEAD		=	$(addprefix $(DIR_HEAD), $(HEADERS))
+
+HEADERS		=	[example1.h]	\
+				[example2.h]	\
+				[example3.h]
+
+DIR_HEAD	=	includes/
