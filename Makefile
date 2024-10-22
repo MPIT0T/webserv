@@ -6,7 +6,7 @@
 #    By: mpitot <mpitot@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2024/10/21 16:22:52 by mpitot           ###   ########.fr        #
+#    Updated: 2024/10/22 14:28:21 by mpitot           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ ${OBJS}	:	${OBJ_D}%.o: ${SRC_D}%.cpp Makefile
 -include $(OBJS:.o=.d)
 ${NAME}	:	${OBJ_D} ${OBJS}
 	@$(call print_progress,$(NAME))
-	@${CC} ${CFLAGS} ${OBJS} -I${DIR_HEAD} -I${DIR_CLASS} -o ${NAME}
+	@${CC} ${CFLAGS} ${OBJS} ${HEAD} -o ${NAME}
 	@$(eval CHANGED=1)
 	@$(call erase)
 	@$(call done_and_dusted,$(NAME))
