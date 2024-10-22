@@ -6,7 +6,7 @@
 /*   By: mpitot <mpitot@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:33:04 by mpitot            #+#    #+#             */
-/*   Updated: 2024/10/22 13:05:20 by mpitot           ###   ########.fr       */
+/*   Updated: 2024/10/22 14:09:56 by mpitot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ Socket::~Socket()
 Socket &Socket::operator=(const Socket &src)
 {
 	_fd = src._fd;
+	return (*this);
 }
 
 /* Methods ****************************************************************** */
@@ -82,12 +83,12 @@ int Socket::accept() const
 
 bool Socket::send(const int clientSock, const std::string &data)
 {
-	return write(clientSock, data.c_str(), data.size()) != -1;
+	return (write(clientSock, data.c_str(), data.size()) != -1);
 }
 
 int Socket::receive(int client_sock, char* buffer, const size_t bufferSize)
 {
-	return read(client_sock, buffer, bufferSize);
+	return (read(client_sock, buffer, bufferSize));
 }
 
 void Socket::closeSocket()

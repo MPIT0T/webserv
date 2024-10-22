@@ -6,7 +6,7 @@
 #    By: mpitot <mpitot@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2024/10/21 17:31:07 by mpitot           ###   ########.fr        #
+#    Updated: 2024/10/22 14:21:22 by mpitot           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,6 @@ include .config/display.mk
 include .config/colors.mk
 
 OBJS	=	$(SRCS:%.cpp=${OBJ_D}%.o)
-SRC_D	=	srcs/
 OBJ_D	=	.objs/
 NAME	=	webserv
 CC		=	c++
@@ -28,9 +27,9 @@ FIN		=	...
 
 all		:	header .internal_separate1 ${NAME}
 
-${OBJS}	:	${OBJ_D}%.o: ${SRC_D}%.cpp Makefile ${HEAD}
+${OBJS}	:	${OBJ_D}%.o: ${SRC_D}%.cpp Makefile
 	@$(call print_progress,$<)
-	@${CC} ${CFLAGS} ${DFLAGS} -I${DIR_HEAD} -I${DIR_CLASS} -c $< -o $@
+	@${CC} ${CFLAGS} ${DFLAGS} ${HEAD} -c $< -o $@
 	@$(call update_progress,$<)
 
 -include $(OBJS:.o=.d)
@@ -43,7 +42,7 @@ ${NAME}	:	${OBJ_D} ${OBJS}
 
 ${OBJ_D}:
 	@mkdir -p ${OBJ_D}
-	@mkdir -p ${OBJ_D}/Classes
+	@mkdir -p ${OBJ_D}/sockets
 
 clean	:
 	@echo "Cleaning $(WHITE)[$(RED)$(NAME)$(WHITE)]...$(DEFAULT)"
