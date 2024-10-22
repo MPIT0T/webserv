@@ -10,34 +10,24 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRCS		=	$(MAIN)		\
-#				$(UTILS)	\
-#				$(ERROR)
-
-
+# Sources ******************************************************************** #
+SRCS		=	$(MAIN)			\
+				$(SOCK)			\
+				$(PARSING)
 
 SRC_MAIN	=	main.cpp
-SRC_UTILS	=	utils.example
-SRC_ERROR	=	error.example
-
-
-
-DIR_MAIN	=	./
-DIR_UTILS	=	utils/
-DIR_ERROR	=	error/
-
-
+SRC_SOCK	=	Socket.cpp
+SRC_PARSING =	Request.cpp		\
+				Header.cpp
 
 MAIN		=	$(addprefix $(DIR_MAIN), $(SRC_MAIN))
-ERROR		=	$(addprefix $(DIR_ERROR), $(SRC_ERROR))
-UTILS		=	$(addprefix $(DIR_UTILS), $(SRC_UTILS))
+SOCK		=	$(addprefix $(DIR_SOCK), $(SRC_SOCK))
+PARSING		=	$(addprefix $(DIR_PARSING), $(SRC_PARSING))
+# Directories **************************************************************** #
+SRC_D		=	srcs/
+DIR_MAIN	=
+DIR_SOCK	=	sockets/
+DIR_PARSING =	parsing/
 
-# **************************************************************************** #
-
-HEAD		=	$(addprefix $(DIR_HEAD), $(HEADERS))
-
-HEADERS		=	[example1.h]	\
-				[example2.h]	\
-				[example3.h]
-
-DIR_HEAD	=	includes/
+# Headers ******************************************************************** #
+HEAD		=	-Iincludes -I$(SRC_D)$(DIR_SOCK) -I$(SRC_D)$(DIR_PARSING)

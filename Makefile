@@ -6,7 +6,7 @@
 #    By: mpitot <mpitot@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2024/10/21 16:22:52 by mpitot           ###   ########.fr        #
+#    Updated: 2024/10/22 14:28:21 by mpitot           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,19 +30,21 @@ all		:	header .internal_separate1 ${NAME}
 
 ${OBJS}	:	${OBJ_D}%.o: ${SRC_D}%.cpp Makefile
 	@$(call print_progress,$<)
-	@${CC} ${CFLAGS} ${DFLAGS} -c $< -o $@
+	@${CC} ${CFLAGS} ${DFLAGS} ${HEAD} -c $< -o $@
 	@$(call update_progress,$<)
 
 -include $(OBJS:.o=.d)
 ${NAME}	:	${OBJ_D} ${OBJS}
 	@$(call print_progress,$(NAME))
-	@${CC} ${CFLAGS} ${OBJS} -o ${NAME}
+	@${CC} ${CFLAGS} ${OBJS} ${HEAD} -o ${NAME}
 	@$(eval CHANGED=1)
 	@$(call erase)
 	@$(call done_and_dusted,$(NAME))
 
 ${OBJ_D}:
 	@mkdir -p ${OBJ_D}
+	@mkdir -p ${OBJ_D}/sockets
+	@mkdir -p ${OBJ_D}/parsing
 
 clean	:
 	@echo "Cleaning $(WHITE)[$(RED)$(NAME)$(WHITE)]...$(DEFAULT)"
