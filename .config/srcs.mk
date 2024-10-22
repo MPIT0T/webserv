@@ -11,19 +11,22 @@
 # **************************************************************************** #
 
 SRCS		=	$(MAIN)		\
+				$(PARSING)	\
 #				$(UTILS)	\
 #				$(ERROR)
 
 
 
 SRC_MAIN	=	main.cpp
+SRC_PARSING =	Request.cpp		\
+				Header.cpp
 SRC_UTILS	=	utils.example
 SRC_ERROR	=	error.example
 
 
-
 DIR_MAIN	=	./
 DIR_UTILS	=	utils/
+DIR_PARSING =	parsing/
 DIR_ERROR	=	error/
 
 
@@ -31,6 +34,7 @@ DIR_ERROR	=	error/
 MAIN		=	$(addprefix $(DIR_MAIN), $(SRC_MAIN))
 ERROR		=	$(addprefix $(DIR_ERROR), $(SRC_ERROR))
 UTILS		=	$(addprefix $(DIR_UTILS), $(SRC_UTILS))
+PARSING		=	$(addprefix $(DIR_PARSING), $(SRC_PARSING))
 
 # **************************************************************************** #
 
