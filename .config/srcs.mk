@@ -6,38 +6,43 @@
 #    By: mpitot <mpitot@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/21 15:46:19 by mpitot            #+#    #+#              #
-#    Updated: 2024/10/21 15:51:04 by mpitot           ###   ########.fr        #
+#    Updated: 2024/10/21 17:31:07 by mpitot           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+# Sources ******************************************************************** #
 SRCS		=	$(MAIN)		\
-#				$(UTILS)	\
-#				$(ERROR)
-
+				$(S_CLASS)
 
 
 SRC_MAIN	=	main.cpp
-SRC_UTILS	=	utils.example
-SRC_ERROR	=	error.example
+
+SRC_SOCK	=	sockets.cpp	\
 
 
 
 DIR_MAIN	=	./
-DIR_UTILS	=	utils/
-DIR_ERROR	=	error/
+DIR_SOCK	=	sockets/
 
 
 
 MAIN		=	$(addprefix $(DIR_MAIN), $(SRC_MAIN))
-ERROR		=	$(addprefix $(DIR_ERROR), $(SRC_ERROR))
-UTILS		=	$(addprefix $(DIR_UTILS), $(SRC_UTILS))
+SOCK		=	$(addprefix $(DIR_SOCK), $(SRC_SOCK))
 
-# **************************************************************************** #
+# Classes ******************************************************************** #
+SRC_CLASS	=	Socket.cpp
+HEAD_CLASS	=	Socket.hpp
 
-HEAD		=	$(addprefix $(DIR_HEAD), $(HEADERS))
+DIR_CLASS	=	Classes/
 
-HEADERS		=	[example1.h]	\
-				[example2.h]	\
-				[example3.h]
+S_CLASS		=	$(addprefix $(DIR_CLASS), $(SRC_CLASS))
+H_CLASS		=	$(addprefix $(DIR_CLASS), $(HEAD_CLASS))
+
+# Headers ******************************************************************** #
+HEADERS		=	$(HEAD) $(H_CLASS)
+
+HEAD		=	$(addprefix $(DIR_HEAD), $(SRC_HEAD))
+
+SRC_HEAD	=
 
 DIR_HEAD	=	includes/

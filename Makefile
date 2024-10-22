@@ -6,7 +6,7 @@
 #    By: mpitot <mpitot@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2024/10/21 16:22:52 by mpitot           ###   ########.fr        #
+#    Updated: 2024/10/21 17:31:07 by mpitot           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,21 +28,22 @@ FIN		=	...
 
 all		:	header .internal_separate1 ${NAME}
 
-${OBJS}	:	${OBJ_D}%.o: ${SRC_D}%.cpp Makefile
+${OBJS}	:	${OBJ_D}%.o: ${SRC_D}%.cpp Makefile ${HEAD}
 	@$(call print_progress,$<)
-	@${CC} ${CFLAGS} ${DFLAGS} -c $< -o $@
+	@${CC} ${CFLAGS} ${DFLAGS} -I${DIR_HEAD} -I${DIR_CLASS} -c $< -o $@
 	@$(call update_progress,$<)
 
 -include $(OBJS:.o=.d)
 ${NAME}	:	${OBJ_D} ${OBJS}
 	@$(call print_progress,$(NAME))
-	@${CC} ${CFLAGS} ${OBJS} -o ${NAME}
+	@${CC} ${CFLAGS} ${OBJS} -I${DIR_HEAD} -I${DIR_CLASS} -o ${NAME}
 	@$(eval CHANGED=1)
 	@$(call erase)
 	@$(call done_and_dusted,$(NAME))
 
 ${OBJ_D}:
 	@mkdir -p ${OBJ_D}
+	@mkdir -p ${OBJ_D}/Classes
 
 clean	:
 	@echo "Cleaning $(WHITE)[$(RED)$(NAME)$(WHITE)]...$(DEFAULT)"
