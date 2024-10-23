@@ -14,6 +14,7 @@
 # define SOCKET_HPP
 
 # include <string>
+# include "ClientInfo.hpp"
 
 class Socket
 {
@@ -30,7 +31,7 @@ public:
 	bool			create();
 	bool			bind(const std::string &ip, int port) const;
 	bool			listen() const;
-	int				accept() const;
+	ClientInfo		*accept() const;
 	static bool		send(int clientSock, const std::string &data);
 	static int		receive(int clientSock, char *buffer, size_t bufferSize);
 	void			closeSocket();

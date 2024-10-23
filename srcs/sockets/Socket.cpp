@@ -73,12 +73,17 @@ bool Socket::listen() const
 	return ::listen(_fd, 5) != -1;
 }
 
-int Socket::accept() const
+ClientInfo *Socket::accept() const
 {
-	sockaddr_in client_addr = {};
-	socklen_t client_len = sizeof(client_addr);
-	const int client_sock = ::accept(_fd, reinterpret_cast<struct sockaddr*>(&client_addr), &client_len);
-	return client_sock;
+	sockaddr_in clientAddr = {};
+	socklen_t clientLen = sizeof(clientAddr);
+	const int clientSock = ::accept(_fd, reinterpret_cast<struct sockaddr*>(&clientAddr), &clientLen);
+	if (clientSock == -1)
+		return (NULL);
+	std::string clientIP = inet_ntoa(clientAddr.sin_addr);
+	int			clientPort = ntohs(clientAddr.sin_port);
+
+	return new ClientInfo(clientSock, clientPort, clientIP);
 }
 
 bool Socket::send(const int clientSock, const std::string &data)

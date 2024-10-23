@@ -16,7 +16,8 @@ SRCS		=	$(MAIN)			\
 				$(PARSING)
 
 SRC_MAIN	=	main.cpp
-SRC_SOCK	=	Socket.cpp
+SRC_SOCK	=	Socket.cpp		\
+				ClientInfo.cpp
 SRC_PARSING =	Request.cpp		\
 				Header.cpp
 
