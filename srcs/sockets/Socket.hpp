@@ -6,7 +6,7 @@
 /*   By: mbrousse <mbrousse@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:52:23 by mpitot            #+#    #+#             */
-/*   Updated: 2024/10/24 11:12:53 by mbrousse         ###   ########.fr       */
+/*   Updated: 2024/10/24 11:32:41 by mbrousse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <err.h>
+
 class Socket
 {
 public:
@@ -42,7 +43,7 @@ public:
 	bool			listen() const;
 	int				accept() const;
 	static bool		send(int clientSock, const std::string &data);
-	static int		receive(int clientSock, char *buffer, size_t bufferSize);
+	static int		receive(int clientSock);
 	void			closeSocket();
 	int 			getFd() const;
 

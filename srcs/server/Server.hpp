@@ -6,7 +6,7 @@
 /*   By: mbrousse <mbrousse@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 09:35:11 by mbrousse          #+#    #+#             */
-/*   Updated: 2024/10/24 09:59:35 by mbrousse         ###   ########.fr       */
+/*   Updated: 2024/10/24 11:32:44 by mbrousse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <iostream>
 #include "Socket.hpp"
 # include <unistd.h>
+# include <fstream>
 class Server{
 private:
     Socket _socket;

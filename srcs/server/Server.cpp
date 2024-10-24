@@ -6,7 +6,7 @@
 /*   By: mbrousse <mbrousse@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 09:36:46 by mbrousse          #+#    #+#             */
-/*   Updated: 2024/10/24 11:07:50 by mbrousse         ###   ########.fr       */
+/*   Updated: 2024/10/24 11:30:04 by mbrousse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,35 +40,35 @@ void Server::init( void )
 {
     if (_socket.create() == false)
         throw std::exception();
-    if (_socket.bind("webserv.com", 8080) == false)
+    if (_socket.bind("webserv.com", 4242) == false)
         throw std::exception();
     if (_socket.listen() == false)
         throw std::exception();
     return ;
 }
-    char response[] = "HTTP/1.1 200 OK\r\n"
-"Content-Type: text/html; charset=UTF-8\r\n\r\n"
-"<!DOCTYPE html><html><head><title>Bye-bye baby bye-bye</title>"
-"<style>body { background-color: #111 }"
-"h1 { font-size:4cm; text-align: center; color: black;"
-" text-shadow: 0 0 2mm red}</style></head>"
-"<body><h1>Goodbye, world!</h1></body></html>\r\n";
 
 void Server::run( void )
 {
     
     bool running = true;
+    printf("waiting for connection\n\n");
     while(running){
         int client_fd = _socket.accept();
-        printf("got connection\n");
-        // char buffer[2048];
-        // int len = _socket.receive(, buffer, 2048);
-        // buffer[len] = 0;
-        // printf("%s\n", buffer);
+		_socket.receive(client_fd);
+		printf("got connection\n\n");
         if (_socket.getFd() == -1) {
-			perror("Can't accept");
+			perror("Can't accept\n");
 			continue;
 		}
+        //to remouve
+        std::ifstream file("www/main/index.html");
+	    if (!file.is_open()) {
+		err(1, "Can't open index.html");
+	    }
+	    std::string http_header = "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n";
+	    std::string response = http_header + std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+	    file.close();
+        ///
         _socket.send(client_fd, response);
         close(client_fd);
     }

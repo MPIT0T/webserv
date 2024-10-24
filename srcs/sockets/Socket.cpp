@@ -6,7 +6,7 @@
 /*   By: mbrousse <mbrousse@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:33:04 by mpitot            #+#    #+#             */
-/*   Updated: 2024/10/24 11:12:49 by mbrousse         ###   ########.fr       */
+/*   Updated: 2024/10/24 11:28:11 by mbrousse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,13 @@ bool Socket::send(const int clientSock, const std::string &data)
 	return (write(clientSock, data.c_str(), data.size() ) != -1);
 }
 
-int Socket::receive(int client_sock, char* buffer, const size_t bufferSize)
+int Socket::receive(int client_sock)
 {
-	return (read(client_sock, buffer, bufferSize));
+	char buffer[2048];
+	int len = recv(client_sock, buffer, 2048, 0);
+	buffer[len] = 0;
+	printf("%s\n", buffer);
+	return (0);
 }
 
 void Socket::closeSocket()
