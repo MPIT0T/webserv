@@ -6,7 +6,7 @@
 /*   By: mbrousse <mbrousse@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 09:36:46 by mbrousse          #+#    #+#             */
-/*   Updated: 2024/10/24 11:30:04 by mbrousse         ###   ########.fr       */
+/*   Updated: 2024/10/24 12:57:20 by mbrousse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,8 @@ void Server::run( void )
 		}
         //to remouve
         std::ifstream file("www/main/index.html");
-	    if (!file.is_open()) {
-		err(1, "Can't open index.html");
-	    }
+	    if (!file.is_open())
+		    err(1, "Can't open index.html");
 	    std::string http_header = "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n";
 	    std::string response = http_header + std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 	    file.close();
