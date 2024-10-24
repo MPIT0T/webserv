@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpitot <mpitot@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: mbrousse <mbrousse@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:33:04 by mpitot            #+#    #+#             */
-/*   Updated: 2024/10/22 14:09:56 by mpitot           ###   ########.fr       */
+/*   Updated: 2024/10/24 11:12:49 by mbrousse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,22 +49,34 @@ Socket &Socket::operator=(const Socket &src)
 /* Methods ****************************************************************** */
 bool Socket::create()
 {
+	int one = 1;
 	_fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (_fd == -1)		// if socket failed
+	if (_fd < 0)		// if socket failed
+	{
+		err(1, "can't open socket");
 		return (false);
+	}
+	setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
 	return (true);
 }
 
 bool Socket::bind(const std::string &ip, const int port) const
 {
-	sockaddr_in	addr = {};
-
+	struct sockaddr_in addr;
+	
+	(void)ip;
 	addr.sin_family = AF_INET;
-	addr.sin_addr.s_addr = inet_addr(ip.c_str());
+	// addr.sin_addr.s_addr = inet_addr(ip.c_str());
+	addr.sin_addr.s_addr = INADDR_ANY;
 	addr.sin_port = htons(port);
+	printf("http://%s:%i\n", inet_ntoa(addr.sin_addr), port);
+	// printf("http://%s:%i\n", ip.c_str(), port);
 
-	if (::bind(_fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
+	if (::bind(_fd, (struct sockaddr *) &addr, sizeof(addr)) == -1) {
+		close(_fd);
+		err(1, "Can't bind");
 		return (false);
+	}
 	return (true);
 }
 
@@ -75,15 +87,15 @@ bool Socket::listen() const
 
 int Socket::accept() const
 {
-	sockaddr_in client_addr = {};
-	socklen_t client_len = sizeof(client_addr);
-	const int client_sock = ::accept(_fd, reinterpret_cast<struct sockaddr*>(&client_addr), &client_len);
-	return client_sock;
+	struct sockaddr_in cli_addr;
+	socklen_t client_len = sizeof(cli_addr);
+	int client_fd = ::accept(_fd, (struct sockaddr *) &cli_addr, &client_len);
+	return client_fd;
 }
 
 bool Socket::send(const int clientSock, const std::string &data)
 {
-	return (write(clientSock, data.c_str(), data.size()) != -1);
+	return (write(clientSock, data.c_str(), data.size() ) != -1);
 }
 
 int Socket::receive(int client_sock, char* buffer, const size_t bufferSize)
@@ -100,6 +112,8 @@ void Socket::closeSocket()
 	}
 }
 
-
-
+int Socket::getFd() const
+{
+	return _fd;
+}
 
