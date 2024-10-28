@@ -37,7 +37,7 @@ int ClientInfo::port() const
 	return (_port);
 }
 
-std::string ClientInfo::ip() const
+std::string ClientInfo::IP() const
 {
 	return (_ip);
 }
