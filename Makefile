@@ -30,13 +30,13 @@ all		:	header .internal_separate1 ${NAME}
 
 ${OBJS}	:	${OBJ_D}%.o: ${SRC_D}%.cpp Makefile
 	@$(call print_progress,$<)
-	@${CC} ${CFLAGS} ${DFLAGS} -c $< -o $@
+	@${CC} ${CFLAGS} ${DFLAGS} ${HEAD} -c $< -o $@
 	@$(call update_progress,$<)
 
 -include $(OBJS:.o=.d)
 ${NAME}	:	${OBJ_D} ${OBJS}
 	@$(call print_progress,$(NAME))
-	@${CC} ${CFLAGS} ${OBJS} -o ${NAME}
+	@${CC} ${CFLAGS} ${OBJS} ${HEAD} -o ${NAME}
 	@$(eval CHANGED=1)
 	@$(call erase)
 	@$(call done_and_dusted,$(NAME))
