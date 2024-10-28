@@ -17,7 +17,7 @@ class Request
 		~Request();
 		Request &operator=(const Request &old);
 
-		void	getRequest(const std::string &request);
+		void	setRequest(const std::string &request);
 		const std::string &getType() const;
 		const std::string &getUri() const;
 		const std::vector<Header> &getHeaders() const;

@@ -32,7 +32,7 @@ Request &Request::operator=(const Request &old)
 	return *this;
 }
 
-void Request::getRequest(const std::string &request)
+void Request::setRequest(const std::string &request)
 {
 	std::string requestCpy(request);
 	Header		tmp;

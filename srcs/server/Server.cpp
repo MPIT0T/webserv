@@ -3,6 +3,7 @@
 /* ***************** */
 
 #include "Server.hpp"
+#include "Request.hpp"
 #include <err.h>
 
 Server::Server( void )
@@ -31,18 +32,15 @@ Server::~Server()
 
 void Server::init(void)
 {
-    if (_socket.create() == false)
-        throw std::exception();
-    if (_socket.bind("127.0.0.1", 4242) == false)
-        throw std::exception();
-    if (_socket.listen() == false)
-        throw std::exception();
-    return ;
+    _socket.create();
+    _socket.bind("127.0.0.1", 4242);
+    _socket.listen();
 }
 
 void Server::run(void)
 {
     ClientInfo  *client;
+    Request     *request;
     std::string response;
 
     std::cout << "Waiting for connection..." << std::endl << std::endl;
@@ -50,12 +48,13 @@ void Server::run(void)
     while (true)
     {
         client = _socket.accept();
-        _socket.receive(client);
+        request = _socket.receive(client);
         std::cout << "Client connected." << std::endl << std::endl;
         if (_socket.getFd() < 0)
         {
             std::cerr << "Can't accept client." << std::endl << std::endl;
             delete client;
+            delete request;
             continue ;
         }
 
@@ -69,6 +68,7 @@ void Server::run(void)
         } ///
 
         _socket.send(client, response);
+        delete request;
         delete client;
     }
 }

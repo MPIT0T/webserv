@@ -5,6 +5,7 @@
 #ifndef SOCKET_HPP
 # define SOCKET_HPP
 
+#include <Request.hpp>
 # include <string>
 # include <stdexcept>
 # include "ClientInfo.hpp"
@@ -21,12 +22,12 @@ public:
 	Socket &operator=(const Socket &src);
 
 /* Methods */
-	bool			create();
-	bool			bind(const std::string &ip, int port) const;
-	bool			listen() const;
+	void			create();
+	void			bind(const std::string &ip, int port) const;
+	void			listen() const;
 	ClientInfo		*accept() const;
 	static bool		send(ClientInfo *client, const std::string &data);
-	static int		receive(ClientInfo *client);
+	Request			*receive(ClientInfo *client);
 	void			closeSocket();
 	int 			getFd() const;
 
@@ -44,6 +45,18 @@ public:
 	};
 
 	class SocketListenException : public std::exception
+	{
+	public :
+		const char *what() const throw();
+	};
+
+	class SocketSendException : public std::exception
+	{
+	public :
+		const char *what() const throw();
+	};
+
+	class SocketReceiveException : public std::exception
 	{
 	public :
 		const char *what() const throw();
