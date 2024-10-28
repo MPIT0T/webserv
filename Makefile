@@ -44,6 +44,7 @@ ${NAME}	:	${OBJ_D} ${OBJS}
 ${OBJ_D}:
 	@mkdir -p ${OBJ_D}
 	@mkdir -p ${OBJ_D}/parsing
+	@mkdir -p ${OBJ_D}/sendResponse
 
 clean	:
 	@echo "Cleaning $(WHITE)[$(RED)$(NAME)$(WHITE)]...$(DEFAULT)"
