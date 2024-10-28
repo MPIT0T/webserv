@@ -49,9 +49,14 @@ Socket &Socket::operator=(const Socket &src)
 /* Methods ****************************************************************** */
 bool Socket::create()
 {
+	int one = 1;
 	_fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (_fd == -1)		// if socket failed
+	if (_fd < 0)		// if socket failed
+	{
+		err(1, "can't open socket");
 		return (false);
+	}
+	setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
 	return (true);
 }
 
@@ -63,8 +68,12 @@ bool Socket::bind(const std::string &ip, const int port) const
 	addr.sin_addr.s_addr = inet_addr(ip.c_str());
 	addr.sin_port = htons(port);
 
-	if (::bind(_fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
+	if (::bind(_fd, reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr)) == -1)
+	{
+		close(_fd);
+		err(1, "Can't bind");
 		return (false);
+	}
 	return (true);
 }
 
@@ -88,12 +97,16 @@ ClientInfo *Socket::accept() const
 
 bool Socket::send(const int clientSock, const std::string &data)
 {
-	return (write(clientSock, data.c_str(), data.size()) != -1);
+	return (write(clientSock, data.c_str(), data.size() ) != -1);
 }
 
-int Socket::receive(int client_sock, char* buffer, const size_t bufferSize)
+int Socket::receive(int client_sock)
 {
-	return (read(client_sock, buffer, bufferSize));
+	char buffer[2048];
+	int len = recv(client_sock, buffer, 2048, 0);
+	buffer[len] = 0;
+	printf("%s\n", buffer);
+	return (0);
 }
 
 void Socket::closeSocket()
@@ -105,6 +118,8 @@ void Socket::closeSocket()
 	}
 }
 
-
-
+int Socket::getFd() const
+{
+	return _fd;
+}
 

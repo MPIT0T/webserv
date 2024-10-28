@@ -15,6 +15,17 @@
 
 # include <string>
 # include "ClientInfo.hpp"
+#include <cstdio>
+#include <err.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <err.h>
 
 class Socket
 {
@@ -33,8 +44,10 @@ public:
 	bool			listen() const;
 	ClientInfo		*accept() const;
 	static bool		send(int clientSock, const std::string &data);
-	static int		receive(int clientSock, char *buffer, size_t bufferSize);
+	static int		receive(int clientSock);
 	void			closeSocket();
+	int 			getFd() const;
+
 
 private:
 	int		_fd;
