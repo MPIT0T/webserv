@@ -1,21 +1,30 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mpitot <mpitot@student.42lyon.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/21 15:20:02 by mpitot            #+#    #+#             */
-/*   Updated: 2024/10/21 15:41:08 by mpitot           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+/* ***************** */
+/*      WebServ      */
+/* ***************** */
 
-#include <iostream>
+#include "ManageArgs.hpp"
+#include "Server.hpp"
+#include <cstdlib>
 
-int	main(int argc, char **argv)
+Server *g_server;
+
+int main(int argc, char *argv[])
 {
-	(void) argc;
-	(void) argv;
-	std::cout << "Hello World" << std::endl;
-	return (0);
+	Server server;
+	g_server = &server;
+	ManageArgs args(argc, argv);
+
+	if (!args.checkArgs())
+		return (EXIT_FAILURE);
+	try{
+		if(server.parseConfigFile(args.getArgv()[1]) == false)
+			return (EXIT_FAILURE);
+		
+		server.init();
+		server.run();
+	}
+	catch(const std::exception& e){
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }
