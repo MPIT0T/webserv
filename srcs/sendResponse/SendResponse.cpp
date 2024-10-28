@@ -80,15 +80,14 @@ void SendResponse::getNewMessage()
 	size_t 			nbrRead = 1;
 	struct 	stat	messageStat;
 
-	if (fd <= 0 || stat(fileToSend.c_str(), &messageStat) < 0)
-		return ;
-
 	//clear old message
 	message.clear();
 
 	//get http version
 	message = version;
 
+	if (fd <= 0 || stat(fileToSend.c_str(), &messageStat) < 0)
+		code = INTERNAL_SERVER_ERROR;
 	//get http response status
 	message.push_back(' ');
 	message.append(ft_itoa(code));
@@ -118,6 +117,11 @@ void SendResponse::getNewMessage()
 
 	//get message body
 	message.append("\n\n");
+	if (fd <= 0 || stat(fileToSend.c_str(), &messageStat) < 0)
+	{
+		message.append("<!DOCTYPE html>\n\n<head>\n<title>ERROR</title>\n</head>\n\n<body>\n<h1>error 500, INTERNAL_SERVER_ERROR</h1>\n</body>");
+		return		;
+	}
 	while (nbrRead > 0)
 	{
 		nbrRead = read(fd, tab, 1023);
@@ -125,6 +129,7 @@ void SendResponse::getNewMessage()
 		message.append(tab);
 	}
 	close(fd);
+	return ;
 }
 
 const std::string &SendResponse::getMessage() const
