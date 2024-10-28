@@ -1,31 +1,13 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Socket.hpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mpitot <mpitot@student.42lyon.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/21 17:52:23 by mpitot            #+#    #+#             */
-/*   Updated: 2024/10/22 13:05:20 by mpitot           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+/* ***************** */
+/*      WebServ      */
+/* ***************** */
 
 #ifndef SOCKET_HPP
 # define SOCKET_HPP
 
 # include <string>
+# include <stdexcept>
 # include "ClientInfo.hpp"
-#include <cstdio>
-#include <err.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <err.h>
 
 class Socket
 {
@@ -43,16 +25,33 @@ public:
 	bool			bind(const std::string &ip, int port) const;
 	bool			listen() const;
 	ClientInfo		*accept() const;
-	static bool		send(int clientSock, const std::string &data);
-	static int		receive(int clientSock);
+	static bool		send(ClientInfo *client, const std::string &data);
+	static int		receive(ClientInfo *client);
 	void			closeSocket();
 	int 			getFd() const;
 
+/* Exceptions */
+	class SocketCreateException : public std::exception
+	{
+	public :
+		const char *what() const throw();
+	};
+
+	class SocketBindException : public std::exception
+	{
+	public :
+		const char *what() const throw();
+	};
+
+	class SocketListenException : public std::exception
+	{
+	public :
+		const char *what() const throw();
+	};
 
 private:
 	int		_fd;
 };
-
 
 
 #endif //SOCKET_HPP

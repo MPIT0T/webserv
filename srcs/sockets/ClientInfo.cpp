@@ -1,4 +1,9 @@
+/* ***************** */
+/*      WebServ      */
+/* ***************** */
+
 #include "ClientInfo.hpp"
+#include <unistd.h>
 
 /* Constructors ************************************************************* */
 ClientInfo::ClientInfo() {}
@@ -15,14 +20,17 @@ ClientInfo::ClientInfo(const ClientInfo &src)
 	*this = src;
 }
 
-ClientInfo::~ClientInfo() {}
+ClientInfo::~ClientInfo()
+{
+	close(_fd);
+}
 
 /* Operators **************************************************************** */
 ClientInfo &ClientInfo::operator=(const ClientInfo &src)
 {
 	_fd = src.fd();
 	_port = src.port();
-	_ip = src.ip();
+	_ip = src.IP();
 	return (*this);
 }
 

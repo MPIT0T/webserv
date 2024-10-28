@@ -1,26 +1,17 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Socket.cpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mpitot <mpitot@student.42lyon.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/21 17:33:04 by mpitot            #+#    #+#             */
-/*   Updated: 2024/10/22 14:09:56 by mpitot           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+/* ***************** */
+/*      WebServ      */
+/* ***************** */
 
 #include "Socket.hpp"
+#include <err.h>
+#include <cstdio>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <unistd.h>
 #include <cstring>
 #include <iostream>
-
-#include <functional>
 
 /* Constructors ************************************************************* */
 Socket::Socket()
@@ -53,7 +44,6 @@ bool Socket::create()
 	_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_fd < 0)		// if socket failed
 	{
-		err(1, "can't open socket");
 		return (false);
 	}
 	setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
@@ -70,9 +60,7 @@ bool Socket::bind(const std::string &ip, const int port) const
 
 	if (::bind(_fd, reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr)) == -1)
 	{
-		close(_fd);
-		err(1, "Can't bind");
-		return (false);
+
 	}
 	return (true);
 }
@@ -85,25 +73,31 @@ bool Socket::listen() const
 ClientInfo *Socket::accept() const
 {
 	sockaddr_in clientAddr = {};
-	socklen_t clientLen = sizeof(clientAddr);
-	const int clientSock = ::accept(_fd, reinterpret_cast<struct sockaddr*>(&clientAddr), &clientLen);
-	if (clientSock == -1)
+	socklen_t	clientLen = sizeof(clientAddr);
+	int			clientFD = ::accept(_fd, reinterpret_cast<struct sockaddr*>(&clientAddr), &clientLen);
+	std::string	clientIP;
+	int			clientPort;
+
+	if (clientFD < 0)
 		return (NULL);
-	std::string clientIP = inet_ntoa(clientAddr.sin_addr);
-	int			clientPort = ntohs(clientAddr.sin_port);
 
-	return new ClientInfo(clientSock, clientPort, clientIP);
+	clientIP = inet_ntoa(clientAddr.sin_addr);
+	clientPort = ntohs(clientAddr.sin_port);
+
+	return (new ClientInfo(clientFD, clientPort, clientIP));
 }
 
-bool Socket::send(const int clientSock, const std::string &data)
+bool Socket::send(ClientInfo *client, const std::string &data)
 {
-	return (write(clientSock, data.c_str(), data.size() ) != -1);
+	int		clientFD = reinterpret_cast<int>(client->fd());
+
+	return (write(clientFD, data.c_str(), data.size() ) != -1);
 }
 
-int Socket::receive(int client_sock)
+int Socket::receive(ClientInfo *client)
 {
 	char buffer[2048];
-	int len = recv(client_sock, buffer, 2048, 0);
+	int len = recv(client->fd(), buffer, 2048, 0);
 	buffer[len] = 0;
 	printf("%s\n", buffer);
 	return (0);
@@ -120,6 +114,21 @@ void Socket::closeSocket()
 
 int Socket::getFd() const
 {
-	return _fd;
+	return (_fd);
 }
 
+/* Exceptions *************************************************************** */
+const char *Socket::SocketCreateException::what() const throw()
+{
+	return ("Can't create socket.");
+}
+
+const char* Socket::SocketBindException::what() const throw()
+{
+	return ("Can't bind socket to port.");
+}
+
+const char* Socket::SocketListenException::what() const throw()
+{
+	return ("Can't listen to socket.");
+}
