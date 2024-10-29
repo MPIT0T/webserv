@@ -54,40 +54,34 @@ void Server::run(void)
 			std::cout << "Client connected." << std::endl << std::endl;
 			request = _socket.receive(client);
 			response = new SendResponse("HTTP/1.1", "keep-alive","webServ", "text/html",
-			"index.html", OK);
+			"www/main/index.html", OK);
+			_socket.send(client, response->getMessage());
+			delete request;
+			delete client;
+			delete response;
 		}
 		catch (Socket::SocketAcceptException &e) {
 			std::cerr << e.what() << std::endl;
-			continue ;
-		} catch (Socket::SocketReceiveException &e) {
+		}
+		catch (Socket::SocketReceiveException &e) {
 			delete client;
 			std::cerr << e.what() << std::endl; // TODO respond with the appropriate error
-			continue ;
 		}
-
-		{ /// to remove
-			std::ifstream file("www/main/index.html");
-			if (!file.is_open())
-				err(1, "Can't open index.html");
-			response = "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n";
-			response = response + std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-			file.close();
-		} ///
-
-		// response.getNewMessage();
-		_socket.send(client, response->getMessage());
-		delete request;
-		delete client;
-		delete response;
+		catch (Socket::SocketSendException &e) {
+			delete client;
+			delete response;
+			delete request;
+			std::cerr << e.what() << std::endl; // TODO respond with the appropriate error
+		}
  	}
 }
 
-void Server::stop( void )
+void Server::stop(void)
 {
 	return ;
 }
 
-bool Server::parseConfigFile( std::string configFile )
+bool Server::parseConfigFile(std::string configFile)
 {
 	(void)configFile;
 	return true;
