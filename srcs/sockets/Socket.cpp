@@ -3,6 +3,7 @@
 /* ***************** */
 
 #include "Socket.hpp"
+#include "colors.h"
 #include <err.h>
 #include <cstdio>
 #include <unistd.h>
@@ -38,19 +39,16 @@ Socket &Socket::operator=(const Socket &src)
 }
 
 /* Methods ****************************************************************** */
-bool Socket::create()
+void Socket::create()
 {
 	int one = 1;
 	_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_fd < 0)		// if socket failed
-	{
-		return (false);
-	}
+		throw SocketCreateException();
 	setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
-	return (true);
 }
 
-bool Socket::bind(const std::string &ip, const int port) const
+void Socket::bind(const std::string &ip, const int port) const
 {
 	sockaddr_in	addr = {};
 
@@ -59,15 +57,13 @@ bool Socket::bind(const std::string &ip, const int port) const
 	addr.sin_port = htons(port);
 
 	if (::bind(_fd, reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr)) == -1)
-	{
-
-	}
-	return (true);
+		throw SocketBindException();
 }
 
-bool Socket::listen() const
+void Socket::listen() const
 {
-	return ::listen(_fd, 5) != -1;
+	if (::listen(_fd, 5) < 0)
+		throw SocketListenException();
 }
 
 ClientInfo *Socket::accept() const
@@ -79,7 +75,7 @@ ClientInfo *Socket::accept() const
 	int			clientPort;
 
 	if (clientFD < 0)
-		return (NULL);
+		throw SocketAcceptException();
 
 	clientIP = inet_ntoa(clientAddr.sin_addr);
 	clientPort = ntohs(clientAddr.sin_port);
@@ -94,13 +90,36 @@ bool Socket::send(ClientInfo *client, const std::string &data)
 	return (write(clientFD, data.c_str(), data.size() ) != -1);
 }
 
-int Socket::receive(ClientInfo *client)
+Request *Socket::receive(ClientInfo *client)
 {
-	char buffer[2048];
-	int len = recv(client->fd(), buffer, 2048, 0);
-	buffer[len] = 0;
-	printf("%s\n", buffer);
-	return (0);
+	const ssize_t	tmp_size = 2048;
+	char			tmp[tmp_size];
+	ssize_t			len = 0;
+	size_t			lenTotal = 0;
+	std::string		buffer = "";
+	Request			*request = new Request();
+
+
+	while (42)
+	{
+		len = recv(client->fd(), tmp, tmp_size, 0);
+		if (len < 0)
+		{
+			delete request;
+			throw SocketReceiveException();
+		}
+
+		if (len == 0)
+			break ;
+
+		buffer.append(tmp);
+		lenTotal += len;
+
+		if (len < tmp_size)
+			break ;
+	}
+	request->setRequest(buffer);
+	return (request);
 }
 
 void Socket::closeSocket()
@@ -128,7 +147,23 @@ const char* Socket::SocketBindException::what() const throw()
 	return ("Can't bind socket to port.");
 }
 
-const char* Socket::SocketListenException::what() const throw()
+const char *Socket::SocketListenException::what() const throw()
 {
 	return ("Can't listen to socket.");
 }
+
+const char* Socket::SocketAcceptException::what() const throw()
+{
+	return ("Can't accept client.");
+}
+
+const char* Socket::SocketSendException::what() const throw()
+{
+	return ("Error sending packet.");
+}
+
+const char* Socket::SocketReceiveException::what() const throw()
+{
+	return ("Error receiving packet.");
+}
+

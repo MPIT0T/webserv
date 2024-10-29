@@ -32,7 +32,7 @@ Request &Request::operator=(const Request &old)
 	return *this;
 }
 
-void Request::getRequest(const std::string &request)
+void Request::setRequest(const std::string &request)
 {
 	std::string requestCpy(request);
 	Header		tmp;
@@ -43,12 +43,15 @@ void Request::getRequest(const std::string &request)
 	requestCpy.erase(0, requestCpy.find( ' ') + 1);
 	version  = requestCpy.substr(0, requestCpy.find( '\n'));
 	requestCpy.erase(0, requestCpy.find( '\n') + 1);
-	while (requestCpy.at(0) != '\n')
+	while (!requestCpy.empty() && requestCpy.at(0) != '\n')
 	{
-		tmp.setType(requestCpy.substr(0, requestCpy.find(':')));
-		requestCpy.erase(0, requestCpy.find( ':') + 2);
+		tmp.setType(requestCpy.substr(0, requestCpy.find(": ")));
+		requestCpy.erase(0, requestCpy.find( ": ") + 2);
 		tmp.setAttribute(requestCpy.substr(0, requestCpy.find( '\n')));
-		requestCpy.erase(0, requestCpy.find( '\n') + 1);
+		if (requestCpy.find('\n') > requestCpy.size())
+			requestCpy.clear();
+		else
+			requestCpy.erase(0, requestCpy.find( '\n') + 1);
 		headers.push_back(tmp);
 	}
 	requestCpy.erase(0, 1);

@@ -21,5 +21,5 @@ class Header
 
 private:
 		std::string	type;
-		std::string attribute;
+		std::string	attribute;
 };
