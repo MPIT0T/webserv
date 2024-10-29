@@ -50,3 +50,16 @@ jobs:
             git commit -m "Update TODO list [skip ci]"
             git push
           fi
+
+      - name: Send TODO list to Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          # Format the content for Discord by escaping backslashes and double quotes
+          TODO_CONTENT=$(sed 's/"/\\"/g' todo.md | sed 's/\\/\\\\/g' | tr '\n' '\\n')
+            
+          # Create JSON payload for Discord webhook
+          JSON_PAYLOAD=$(jq -n --arg content "$TODO_CONTENT" '{"content": $content}')
+            
+          # Send the JSON payload to the Discord webhook
+          curl -X POST -H "Content-Type: application/json" -d "$JSON_PAYLOAD" "$DISCORD_WEBHOOK_URL"
