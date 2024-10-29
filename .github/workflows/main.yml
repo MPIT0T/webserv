@@ -3,7 +3,9 @@ name: TODO Scanner and Discord Update
 on:
   push:
     branches:
-      - '**'
+      - '**'  # Run on all branches
+  schedule:
+    - cron: '0 0 * * *'  # Optional: daily scheduled run
 
 jobs:
   scan_todos:
@@ -28,7 +30,7 @@ jobs:
             --exclude=todo.md \
             --exclude-dir={.git,node_modules,build,.github} \
             . | while IFS=: read -r filepath line todo; do
-            echo "- [${{ env.branch_name }}] ${filepath}:${line} ${todo}" >> todo.md
+            echo "- ${filepath}:${line} ${todo}" >> todo.md
           done
           
           # Display the contents of todo.md for debugging
@@ -53,7 +55,16 @@ jobs:
           # Use the content of todo.md as the payload for the Discord message with Markdown formatting
           TODO_CONTENT=$(<todo.md)
           
-          # Send the JSON payload to the Discord webhook
-          curl -X POST -H "Content-Type: application/json" \
-            -d "$(jq -n --arg content "$TODO_CONTENT" '{content: $content}')" \
-            "$DISCORD_WEBHOOK_URL"
+          # Prepend branch name as the title
+          TITLE="**TODOs for branch: ${{ env.branch_name }}**\n\n"
+          
+          # Combine the title and the TODO content
+          FINAL_CONTENT="$TITLE$TODO_CONTENT"
+          
+          # Send the JSON payload to the Discord webhook and capture the message ID
+          RESPONSE=$(curl -X POST -H "Content-Type: application/json" \
+            -d "$(jq -n --arg content "$FINAL_CONTENT" '{content: $content}')" \
+            "$DISCORD_WEBHOOK_URL")
+          
+          # Save the last message ID for future deletion
+          echo $(echo "$RESPONSE" | jq -r '.id') > last_message_id.txt
