@@ -13,6 +13,7 @@ class Server{
 private:
     Socket _socket;
     
+    
 public:
     Server( void );
     Server( const Server &src );

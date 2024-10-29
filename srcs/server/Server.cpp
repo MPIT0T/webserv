@@ -34,7 +34,7 @@ void Server::init(void)
 {
     if (_socket.create() == false)
         throw std::exception();
-    if (_socket.bind("192.168.122.1", 4242) == false)
+    if (_socket.bind("0.0.0.0", 4242) == false)
         throw std::exception();
     if (_socket.listen() == false)
         throw std::exception();
