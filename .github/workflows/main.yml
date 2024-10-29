@@ -21,7 +21,6 @@ jobs:
 
       - name: Scan codebase for TODOs
         run: |
-          echo "# TODOs in the Codebase" > todo.md
           echo "" >> todo.md
           
           # Search for TODO comments, format them as bullet points, and append to todo.md
