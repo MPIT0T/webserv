@@ -78,7 +78,7 @@ void Server::run(void)
 
 void Server::stop(void)
 {
-	return ; // TODO implement a stop method
+	return ;
 }
 
 bool Server::parseConfigFile(std::string configFile)
