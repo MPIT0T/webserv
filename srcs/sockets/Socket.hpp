@@ -50,6 +50,12 @@ public:
 		const char *what() const throw();
 	};
 
+	class SocketAcceptException : public std::exception
+	{
+	public :
+		const char *what() const throw();
+	};
+
 	class SocketSendException : public std::exception
 	{
 	public :

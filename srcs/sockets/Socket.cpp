@@ -3,6 +3,7 @@
 /* ***************** */
 
 #include "Socket.hpp"
+#include "colors.h"
 #include <err.h>
 #include <cstdio>
 #include <unistd.h>
@@ -74,7 +75,7 @@ ClientInfo *Socket::accept() const
 	int			clientPort;
 
 	if (clientFD < 0)
-		return (NULL);
+		throw SocketAcceptException();
 
 	clientIP = inet_ntoa(clientAddr.sin_addr);
 	clientPort = ntohs(clientAddr.sin_port);
@@ -103,7 +104,10 @@ Request *Socket::receive(ClientInfo *client)
 	{
 		len = recv(client->fd(), tmp, tmp_size, 0);
 		if (len < 0)
-			return (NULL);	// TODO throw exception
+		{
+			delete request;
+			throw SocketReceiveException();
+		}
 
 		if (len == 0)
 			break ;
@@ -143,7 +147,23 @@ const char* Socket::SocketBindException::what() const throw()
 	return ("Can't bind socket to port.");
 }
 
-const char* Socket::SocketListenException::what() const throw()
+const char *Socket::SocketListenException::what() const throw()
 {
 	return ("Can't listen to socket.");
 }
+
+const char* Socket::SocketAcceptException::what() const throw()
+{
+	return ("Can't accept client.");
+}
+
+const char* Socket::SocketSendException::what() const throw()
+{
+	return ("Error sending packet.");
+}
+
+const char* Socket::SocketReceiveException::what() const throw()
+{
+	return ("Error receiving packet.");
+}
+
