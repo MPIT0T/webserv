@@ -21,7 +21,7 @@ jobs:
 
       - name: Scan codebase for TODOs
         run: |
-          echo "" > todo.md
+          echo "**TODO list**" > todo.md
           
           # Search for TODO comments, format them as bullet points, and append to todo.md
           grep -r -n "TODO" \
@@ -55,7 +55,7 @@ jobs:
           TODO_CONTENT=$(<todo.md)
           
           # Prepend branch name as the title
-          TITLE="**TODOs for branch: ${{ env.branch_name }}**\n\n"
+          TITLE="## Branch: ${{ env.branch_name }}\n\n"
           
           # Combine the title and the TODO content
           FINAL_CONTENT="$TITLE$TODO_CONTENT"
