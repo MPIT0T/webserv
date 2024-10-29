@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: mpitot <mpitot@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/07/14 10:00:31 by mpitot            #+#    #+#              #
-#    Updated: 2024/10/24 10:08:05 by mbrousse         ###   ########.fr        #
+#    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
+#    Updated: 2024/10/21 16:22:52 by mpitot           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,6 +45,7 @@ ${OBJ_D}:
 	@mkdir -p ${OBJ_D}
 	@mkdir -p ${OBJ_D}/sockets
 	@mkdir -p ${OBJ_D}/parsing
+	@mkdir -p ${OBJ_D}/sendResponse
 	@mkdir -p ${OBJ_D}/manage_args
 	@mkdir -p ${OBJ_D}/server
 

@@ -4,6 +4,7 @@
 
 #include "Server.hpp"
 #include "Request.hpp"
+#include "SendResponse.hpp"
 #include <err.h>
 #include <map>
 
@@ -40,9 +41,9 @@ void Server::init(void)
 
 void Server::run(void)
 {
-	ClientInfo  *client;
-	Request     *request;
-	std::string response;
+	ClientInfo		*client;
+	Request			*request;
+	SendResponse	*response;
 
 	std::cout << "Waiting for connection..." << std::endl << std::endl;
 
@@ -52,6 +53,8 @@ void Server::run(void)
 			client = _socket.accept();
 			std::cout << "Client connected." << std::endl << std::endl;
 			request = _socket.receive(client);
+			response = new SendResponse("HTTP/1.1", "keep-alive","webServ", "text/html",
+			"index.html", OK);
 		}
 		catch (Socket::SocketAcceptException &e) {
 			std::cerr << e.what() << std::endl;
@@ -71,9 +74,11 @@ void Server::run(void)
 			file.close();
 		} ///
 
-		_socket.send(client, response);
+		// response.getNewMessage();
+		_socket.send(client, response->getMessage());
 		delete request;
 		delete client;
+		delete response;
  	}
 }
 
