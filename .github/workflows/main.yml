@@ -27,8 +27,12 @@ jobs:
           echo "" >> todo.md
           
           # Use grep to search for TODO comments, format each line, and append to todo.md
-          grep -r -n "TODO" --exclude-dir={.git,node_modules,build} . | while IFS=: read -r filepath line todo; do
-            echo "[${{ env.branch_name }}] ${filepath}:${line} ${todo}" >> todo.md
+          grep -r -n "TODO" \
+          --exclude=*.yml \
+          --exclude=todo.md \
+          --exclude-dir={.git,node_modules,build,.github} \
+          . | while IFS=: read -r filepath line todo; do
+          echo "[${{ env.branch_name }}] ${filepath}:${line} ${todo}" >> todo.md
           done
           
           # Display the contents of todo.md for debugging
