@@ -48,8 +48,7 @@ void Server::run(void)
 
 	while (42)
 	{
-		try
-		{
+		try {
 			client = _socket.accept();
 			std::cout << "Client connected." << std::endl << std::endl;
 			request = _socket.receive(client);

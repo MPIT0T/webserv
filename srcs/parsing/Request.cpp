@@ -45,7 +45,6 @@ void Request::setRequest(const std::string &request)
 	requestCpy.erase(0, requestCpy.find( '\n') + 1);
 	while (!requestCpy.empty() && requestCpy.at(0) != '\n')
 	{
-		std::cout << requestCpy << std::endl << std::endl << std::endl;
 		tmp.setType(requestCpy.substr(0, requestCpy.find(": ")));
 		requestCpy.erase(0, requestCpy.find( ": ") + 2);
 		tmp.setAttribute(requestCpy.substr(0, requestCpy.find( '\n')));
