@@ -74,7 +74,6 @@ void Server::run(void)
 			std::cerr << e.what() << std::endl; // TODO respond with the appropriate error
 		}
  	}
-
 }
 
 void Server::stop(void)
