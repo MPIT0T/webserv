@@ -3,9 +3,7 @@ name: TODO Scanner and Discord Update
 on:
   push:
     branches:
-      - main
-  schedule:
-    - cron: '0 0 * * *'
+      - '**'
 
 jobs:
   scan_todos:
