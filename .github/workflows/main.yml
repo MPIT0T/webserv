@@ -44,14 +44,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
       
-          # Check if there are unstaged changes
-          if ! git diff --quiet; then
-          echo "Unstaged changes detected. Stashing..."
-          git stash -u  # Stash unstaged changes (including untracked files)
-          fi
-      
           # Pull changes with rebase
-          git pull --rebase origin ${{ github.ref }}
+          git pull -f
       
           # Check if todo.md has changes
           if [ -n "$(git status --porcelain)" ]; then
