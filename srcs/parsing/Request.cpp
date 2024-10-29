@@ -43,12 +43,16 @@ void Request::setRequest(const std::string &request)
 	requestCpy.erase(0, requestCpy.find( ' ') + 1);
 	version  = requestCpy.substr(0, requestCpy.find( '\n'));
 	requestCpy.erase(0, requestCpy.find( '\n') + 1);
-	while (requestCpy.at(0) != '\n')
+	while (!requestCpy.empty() && requestCpy.at(0) != '\n')
 	{
-		tmp.setType(requestCpy.substr(0, requestCpy.find(':')));
-		requestCpy.erase(0, requestCpy.find( ':') + 2);
+		std::cout << requestCpy << std::endl << std::endl << std::endl;
+		tmp.setType(requestCpy.substr(0, requestCpy.find(": ")));
+		requestCpy.erase(0, requestCpy.find( ": ") + 2);
 		tmp.setAttribute(requestCpy.substr(0, requestCpy.find( '\n')));
-		requestCpy.erase(0, requestCpy.find( '\n') + 1);
+		if (requestCpy.find('\n') > requestCpy.size())
+			requestCpy.clear();
+		else
+			requestCpy.erase(0, requestCpy.find( '\n') + 1);
 		headers.push_back(tmp);
 	}
 	requestCpy.erase(0, 1);
