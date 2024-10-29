@@ -1,4 +1,4 @@
-name: TODO Scanner
+name: TODO Scanner and Discord Update
 
 on:
   push:
@@ -19,20 +19,18 @@ jobs:
         id: vars
         run: echo "branch_name=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
 
-      - name: Debug Branch and TODO Collection
+      - name: Scan codebase for TODOs
         run: |
-          echo "Branch name: ${{ env.branch_name }}"
-          # Prepare the header for todo.md
           echo "# TODOs in the Codebase" > todo.md
           echo "" >> todo.md
           
-          # Use grep to search for TODO comments, format each line, and append to todo.md
+          # Search for TODO comments, format them as bullet points, and append to todo.md
           grep -r -n "TODO" \
-          --exclude=*.yml \
-          --exclude=todo.md \
-          --exclude-dir={.git,node_modules,build,.github} \
-          . | while IFS=: read -r filepath line todo; do
-          echo "- [${{ env.branch_name }}] ${filepath}:${line} ${todo}" >> todo.md
+            --exclude=*.yml \
+            --exclude=todo.md \
+            --exclude-dir={.git,node_modules,build,.github} \
+            . | while IFS=: read -r filepath line todo; do
+            echo "- [${{ env.branch_name }}] ${filepath}:${line} ${todo}" >> todo.md
           done
           
           # Display the contents of todo.md for debugging
@@ -42,7 +40,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Check if todo.md has any changes and commit if it does
           if [ -n "$(git status --porcelain)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -55,11 +52,10 @@ jobs:
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
-          # Format the content for Discord by escaping backslashes and double quotes
-          TODO_CONTENT=$(sed 's/"/\\"/g' todo.md | sed 's/\\/\\\\/g' | tr '\n' '\\n')
-            
-          # Create JSON payload for Discord webhook
-          JSON_PAYLOAD=$(jq -n --arg content "$TODO_CONTENT" '{"content": $content}')
-            
+          # Use the content of todo.md as the payload for the Discord message with Markdown formatting
+          TODO_CONTENT=$(<todo.md)
+          
           # Send the JSON payload to the Discord webhook
-          curl -X POST -H "Content-Type: application/json" -d "$JSON_PAYLOAD" "$DISCORD_WEBHOOK_URL"
+          curl -X POST -H "Content-Type: application/json" \
+            -d "$(jq -n --arg content "$TODO_CONTENT" '{content: $content}')" \
+            "$DISCORD_WEBHOOK_URL"
