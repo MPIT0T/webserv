@@ -44,7 +44,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
       
-          # Pull changes with rebase
+          # Force pull changes
           git pull -f
       
           # Check if todo.md has changes
