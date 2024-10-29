@@ -1,11 +1,9 @@
-name: TODO Scanner and Discord Update
+name: TODO Scanner
 
 on:
   push:
     branches:
-      - '**'  # Run on all branches
-  schedule:
-    - cron: '0 0 * * *'  # Optional: daily scheduled run
+      - '**'  # Trigger on all branches
 
 jobs:
   scan_todos:
@@ -13,18 +11,29 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      - name: Get branch name
-        id: vars
-        run: echo "branch_name=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+      - name: Set up Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Switch to todo-list branch
+        run: |
+          # Check if the todo-list branch exists, and create it if not
+          git fetch origin
+          if git show-ref --verify --quiet refs/heads/todo-list; then
+            git checkout todo-list
+          else
+            git checkout -b todo-list
+          fi
 
       - name: Scan codebase for TODOs
         run: |
-          echo "## Branch: ${{ env.branch_name }}" > todo.md
-          echo "**TODO list**" >> todo.md
+          echo "# TODOs in the Codebase" > todo.md
+          echo "" >> todo.md
           
-          # Search for TODO comments, format them as bullet points, and append to todo.md
+          # Search for TODO comments and append them to todo.md
           grep -r -n "TODO" \
             --exclude=*.yml \
             --exclude=todo.md \
@@ -32,39 +41,16 @@ jobs:
             . | while IFS=: read -r filepath line todo; do
             echo "- ${filepath}:${line} ${todo}" >> todo.md
           done
-          
-          # Display the contents of todo.md for debugging
-          cat todo.md
 
       - name: Commit and push todo.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Configure Git user
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-      
-          # Force pull changes
-          git pull -f
-      
-          # Check if todo.md has changes
+          # Check for changes in todo.md and commit
           if [ -n "$(git status --porcelain)" ]; then
-          # Add and commit todo.md
-          git add todo.md
-          git commit -m "Update TODO list [skip ci]"
+            git add todo.md
+            git commit -m "Update TODO list [skip ci]"
+            git push origin todo-list  # Push to the todo-list branch
+          else
+            echo "No changes in todo.md to commit."
           fi
-      
-          # Push changes
-          git push
-
-      - name: Send TODO list to Discord
-        env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: |
-          # Use the content of todo.md as the payload for the Discord message with Markdown formatting
-          TODO_CONTENT=$(<todo.md)
-          
-          # Send the JSON payload to the Discord webhook and capture the message ID
-          RESPONSE=$(curl -X POST -H "Content-Type: application/json" \
-            -d "$(jq -n --arg content "$TODO_CONTENT" '{content: $content}')" \
-            "$DISCORD_WEBHOOK_URL")
