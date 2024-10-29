@@ -5,7 +5,6 @@ servers:
       host: "127.0.0.1"
     server_name:               # Optional server name
       - "webserv.com"
-      - "example.com"
     default: true              # Indicates that this server is the default for the given host:port
 
     root: "./www/main"         # Default root directory for this server
