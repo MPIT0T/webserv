@@ -43,6 +43,7 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
+            git pull --rebase origin ${{ github.ref }}
             git add todo.md
             git commit -m "Update TODO list [skip ci]"
             git push
