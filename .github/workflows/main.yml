@@ -40,14 +40,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git pull --rebase origin ${{ github.ref }}
-            git add todo.md
-            git commit -m "Update TODO list [skip ci]"
-            git push
+          # Configure Git user
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+          # Check if there are unstaged changes
+          if ! git diff --quiet; then
+          echo "Unstaged changes detected. Stashing..."
+          git stash -u  # Stash unstaged changes (including untracked files)
           fi
+      
+          # Pull changes with rebase
+          git pull --rebase origin ${{ github.ref }}
+      
+          # Check if todo.md has changes
+          if [ -n "$(git status --porcelain)" ]; then
+          # Add and commit todo.md
+          git add todo.md
+          git commit -m "Update TODO list [skip ci]"
+          fi
+      
+          # Push changes
+          git push
 
       - name: Send TODO list to Discord
         env:
