@@ -21,7 +21,8 @@ jobs:
 
       - name: Scan codebase for TODOs
         run: |
-          echo "**TODO list**" > todo.md
+          echo "## Branch: ${{ env.branch_name }}" > todo.md
+          echo "**TODO list**" >> todo.md
           
           # Search for TODO comments, format them as bullet points, and append to todo.md
           grep -r -n "TODO" \
@@ -54,16 +55,7 @@ jobs:
           # Use the content of todo.md as the payload for the Discord message with Markdown formatting
           TODO_CONTENT=$(<todo.md)
           
-          # Prepend branch name as the title
-          TITLE="## Branch: ${{ env.branch_name }}\n\n"
-          
-          # Combine the title and the TODO content
-          FINAL_CONTENT="$TITLE$TODO_CONTENT"
-          
           # Send the JSON payload to the Discord webhook and capture the message ID
           RESPONSE=$(curl -X POST -H "Content-Type: application/json" \
-            -d "$(jq -n --arg content "$FINAL_CONTENT" '{content: $content}')" \
+            -d "$(jq -n --arg content "TODO_CONTENT" '{content: $content}')" \
             "$DISCORD_WEBHOOK_URL")
-          
-          # Save the last message ID for future deletion
-          echo $(echo "$RESPONSE" | jq -r '.id') > last_message_id.txt
