@@ -1,11 +1,11 @@
-name: TODO Scanner
+name: TODO Scanner and Discord Update
 
 on:
   push:
     branches:
-      - main
+      - '**'  # Run on all branches
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *'  # Optional: daily scheduled run
 
 jobs:
   scan_todos:
@@ -19,20 +19,18 @@ jobs:
         id: vars
         run: echo "branch_name=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
 
-      - name: Debug Branch and TODO Collection
+      - name: Scan codebase for TODOs
         run: |
-          echo "Branch name: ${{ env.branch_name }}"
-          # Prepare the header for todo.md
-          echo "# TODOs in the Codebase" > todo.md
-          echo "" >> todo.md
+          echo "## Branch: ${{ env.branch_name }}" > todo.md
+          echo "**TODO list**" >> todo.md
           
-          # Use grep to search for TODO comments, format each line, and append to todo.md
+          # Search for TODO comments, format them as bullet points, and append to todo.md
           grep -r -n "TODO" \
-          --exclude=*.yml \
-          --exclude=todo.md \
-          --exclude-dir={.git,node_modules,build,.github} \
-          . | while IFS=: read -r filepath line todo; do
-          echo "- [${{ env.branch_name }}] ${filepath}:${line} ${todo}" >> todo.md
+            --exclude=*.yml \
+            --exclude=todo.md \
+            --exclude-dir={.git,node_modules,build,.github} \
+            . | while IFS=: read -r filepath line todo; do
+            echo "- ${filepath}:${line} ${todo}" >> todo.md
           done
           
           # Display the contents of todo.md for debugging
@@ -42,11 +40,31 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Check if todo.md has any changes and commit if it does
+          # Configure Git user
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+          # Force pull changes
+          git pull -f
+      
+          # Check if todo.md has changes
           if [ -n "$(git status --porcelain)" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add todo.md
-            git commit -m "Update TODO list [skip ci]"
-            git push
+          # Add and commit todo.md
+          git add todo.md
+          git commit -m "Update TODO list [skip ci]"
           fi
+      
+          # Push changes
+          git push
+
+      - name: Send TODO list to Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          # Use the content of todo.md as the payload for the Discord message with Markdown formatting
+          TODO_CONTENT=$(<todo.md)
+          
+          # Send the JSON payload to the Discord webhook and capture the message ID
+          RESPONSE=$(curl -X POST -H "Content-Type: application/json" \
+            -d "$(jq -n --arg content "$TODO_CONTENT" '{content: $content}')" \
+            "$DISCORD_WEBHOOK_URL")
