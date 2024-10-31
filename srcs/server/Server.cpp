@@ -7,6 +7,7 @@
 #include "SendResponse.hpp"
 #include <err.h>
 #include <map>
+#include "utils.hpp"
 
 Server::Server( void )
 {
@@ -83,6 +84,22 @@ void Server::stop(void)
 
 bool Server::parseConfigFile(std::string configFile)
 {
-	(void)configFile;
+	std::string content;
+	std::vector<std::string> tokens;
+	std::vector<std::string> listenTokens;
+
+	try {
+		content = readFileContent(configFile);
+		tokens = tokenizeConfig(content);
+	}
+	catch (std::exception &e) {
+		std::cerr << e.what() << std::endl;
+		return false;
+	}
+
+	printTokens(tokens);
+	printListen(_listen);
+	
+
 	return true;
 }

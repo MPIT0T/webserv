@@ -10,12 +10,12 @@
 # include <unistd.h>
 # include <fstream>
 #include <vector>
-// #include "Listen.hpp"
+#include "Listen.hpp"
 class Server{
 private:
 	Socket _socket;
 
-	// std::vector<Listen> _listen; //TODO Finich before uncomenting
+	std::vector<Listen> _listen;
 	
 public:
 	Server( void );

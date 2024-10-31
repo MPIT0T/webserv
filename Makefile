@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mpitot <mpitot@student.42lyon.fr>          +#+  +:+       +#+         #
+#    By: mbrousse <mbrousse@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2024/10/21 16:22:52 by mpitot           ###   ########.fr        #
+#    Updated: 2024/10/30 16:24:04 by mbrousse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ ${OBJ_D}:
 	@mkdir -p ${OBJ_D}/sendResponse
 	@mkdir -p ${OBJ_D}/manage_args
 	@mkdir -p ${OBJ_D}/server
+	@mkdir -p ${OBJ_D}/utils
 
 
 clean	:

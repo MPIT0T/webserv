@@ -42,6 +42,8 @@ public:
 	int getMaxBodySize( void ) const;
 	std::string getHost( void ) const;
 	std::string getServerName( void ) const;
+	std::map<int, std::string> getErrorPages( void ) const;
+	std::map<std::string, Route> getRoutes( void ) const;
 };
 
 #endif // Listen_HPP

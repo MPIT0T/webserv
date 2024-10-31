@@ -35,6 +35,7 @@ public:
 
 	// Getters
 
+	
 	bool getDirectoryListing() const;
 	std::string getPath() const;
 	std::string getRoot() const;

@@ -67,21 +67,10 @@ std::string Listen::getServerName(void) const {
 	return _serverName;
 }
 
+std::map<int, std::string> Listen::getErrorPages(void) const {
+	return _errorPages;
+}
 
-
-#ifndef CLASS_NAME_HPP
-#define CLASS_NAME_HPP
-
-class CLASS_NAME{
-private:
-	
-public:
-	CLASS_NAME( void );
-	CLASS_NAME( const CLASS_NAME &src );
-	CLASS_NAME &operator=( const CLASS_NAME &src );
-	
-	~CLASS_NAME();
-	
-};
-
-#endif // CLASS_NAME_HPP
+std::map<std::string, Route> Listen::getRoutes(void) const {
+	return _routes;
+}
