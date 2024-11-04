@@ -45,4 +45,9 @@ Header &Header::operator=(const Header &old)
 	return *this;
 }
 
-
+std::ostream	&operator<<(std::ostream &OUT, const Header &header)
+{
+	OUT << header.getAttribute() << std::endl;
+	OUT << header.getType() << std::endl;
+	return (OUT);
+}

@@ -17,8 +17,8 @@ class Request
 		~Request();
 		Request &operator=(const Request &old);
 
-		void	setRequest(const std::string &request);
-		const std::string &getType() const;
+		void				setRequest(const std::string &request);
+		const std::string	&getType() const;
 		const std::string &getUri() const;
 		const std::vector<Header> &getHeaders() const;
 		const std::string &getVersion() const;
@@ -30,4 +30,8 @@ private:
 		std::vector<Header>			headers;
 		std::string					version;
 		std::string					body;
+		std::string					contentType;	// text/html or img
+		std::string					connection;		// keep alive ?
 };
+
+std::ostream	&operator<<(std::ostream &OUT, const Request &request);

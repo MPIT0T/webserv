@@ -23,3 +23,5 @@ private:
 		std::string	type;
 		std::string	attribute;
 };
+
+std::ostream	&operator<<(std::ostream &OUT, const Header &header);
