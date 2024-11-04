@@ -17,12 +17,12 @@ class Request
 		~Request();
 		Request &operator=(const Request &old);
 
-		void				setRequest(const std::string &request);
-		const std::string	&getType() const;
-		const std::string &getUri() const;
-		const std::vector<Header> &getHeaders() const;
-		const std::string &getVersion() const;
-		const std::string &getBody() const;
+		void						setRequest(const std::string &request);
+		const std::string			&getType() const;
+		const std::string			&getUri() const;
+		const std::vector<Header>	&getHeaders() const;
+		const std::string			&getVersion() const;
+		const std::string			&getBody() const;
 
 private:
 		std::string					type;
