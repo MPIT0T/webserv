@@ -53,8 +53,7 @@ void Server::run(void)
 			client = _socket.accept();
 			std::cout << "Client connected." << std::endl << std::endl;
 			request = _socket.receive(client);
-			response = new SendResponse("HTTP/1.1", "keep-alive","webServ", "text/html",
-			"www/main/index.html", OK);
+			response = new SendResponse("HTTP/1.1", "keep-alive","webServ", "text/html", "www/main/index.html", OK);
 			_socket.send(client, response->getMessage());
 			delete request;
 			delete client;
