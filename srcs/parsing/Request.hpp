@@ -30,8 +30,6 @@ private:
 		std::vector<Header>			headers;
 		std::string					version;
 		std::string					body;
-		std::string					contentType;	// text/html or img
-		std::string					connection;		// keep alive ?
 };
 
 std::ostream	&operator<<(std::ostream &OUT, const Request &request);
