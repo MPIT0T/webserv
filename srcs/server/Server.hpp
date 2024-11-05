@@ -29,10 +29,11 @@ public:
 	~Server();
 
 
-	bool parseConfigFile( std::string configFile );
-	void init( void );
-	void run( void );
-	void stop( void );
+	bool	parseConfigFile( std::string configFile );
+	int		checkContentErrors
+	void	init( void );
+	void	run( void );
+	void	stop( void );
 };
 
 #endif // Server_HPP
