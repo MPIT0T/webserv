@@ -87,3 +87,5 @@ private:
 		eHttpStatusCode		code;
 		int 				fdClient;
 };
+
+std::string mimeTypeOfFile(std::string fileToSend);
