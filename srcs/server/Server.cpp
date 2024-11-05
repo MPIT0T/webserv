@@ -36,7 +36,7 @@ Server::~Server()
 void Server::init(void)
 {
 	_socket.create();
-	_socket.bind("127.0.0.1", 4242);
+	_socket.bind("127.0.0.1", 8080);
 	_socket.listen();
 }
 
