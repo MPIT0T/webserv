@@ -6,7 +6,7 @@
 #    By: mbrousse <mbrousse@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2024/10/30 16:24:04 by mbrousse         ###   ########.fr        #
+#    Updated: 2024/11/05 15:40:04 by gberthol         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ SRC_D	=	srcs/
 OBJ_D	=	.objs/
 NAME	=	webserv
 CC		=	c++
-CFLAGS	=	-Wall -Wextra -Werror -std=c++98
+CFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g3
 DFLAGS	=	-MMD -MF $(@:.o=.d)
 
 AUTHORS	=	mpitot, gberthol, mbrousse
