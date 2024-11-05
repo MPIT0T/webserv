@@ -22,8 +22,7 @@ SRCS			=	$(MAIN)			\
 SRC_MAIN		=	main.cpp
 SRC_SOCK		=	Socket.cpp		\
 					ClientInfo.cpp
-SRC_PARSING 	=	Request.cpp		\
-					Header.cpp
+SRC_PARSING 	=	Request.cpp
 SRC_MANAGE_ARGS	=	ManageArgs.cpp	\
 					Listen.cpp		\
 					Route.cpp

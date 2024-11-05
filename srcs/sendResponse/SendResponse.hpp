@@ -67,7 +67,7 @@ class SendResponse
 		SendResponse();
 		SendResponse(const std::string &_version, const std::string &_connection,
 					 const std::string &_serverName, const std::string &_contentType,
-					 const std::string &_fileToSend, eHttpStatusCode _code);
+					 const std::string &_fileToSend, eHttpStatusCode _code, int fdClient);
 
 		SendResponse(const SendResponse &old);
 		~SendResponse();
@@ -85,4 +85,5 @@ private:
 		std::string			contentType;
 		std::string			fileToSend;
 		eHttpStatusCode		code;
+		int 				fdClient;
 };
