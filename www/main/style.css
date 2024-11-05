@@ -38,7 +38,7 @@ body{
 	margin: 0;
 	box-sizing: border-box;
 	font-family: 'Inter', sans-serif;
-	background-color: #f9f9f9;
+	background-color: #faeedc;
 }
 
 h1, h2, h3, h4, h5, h6{
@@ -131,13 +131,13 @@ h1, h2, h3, h4, h5, h6{
 	background-color: rgba(255, 255, 255, 0.277);
 }
 .features .wrapper{
-	background-color: #1e1e1e;
+	background-color: #281515;
 	color: white;
 }
 
 .features .button{
-	background-color: rgb(255, 255, 255);
-	color: #121212;
+	background-color: rgb(250, 238, 220);
+	color: #281515;
 }
 
 .features .subtitle{
@@ -145,27 +145,27 @@ h1, h2, h3, h4, h5, h6{
 }
 
 #mbrousse{
-	background-color: #AEE8FA;
+	background-color: #f69279;
 }
 
 #mbrousse .button{
-	background-color: #0A1E30;
+	background-color: #281515;
 }
 
-#loup{
-	background-color: #F9D3C1;
+#mpitot{
+	background-color: #a1f7f7;
 }
 
-#loup .button{
-	background-color: #3A1D1D;
+#mpitot .button{
+	background-color: #281515;
 }
 
-#louis{
-	background-color: #A2F6CE;
+#gberthol{
+	background-color: #c9b0d4;
 }
 
-#louis .button{
-	background-color: #0F270C;
+#gberthol .button{
+	background-color: #281515;
 }
 
 footer{
