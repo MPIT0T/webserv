@@ -7,6 +7,8 @@
 #include "SendResponse.hpp"
 #include <err.h>
 #include <map>
+#include <stack>
+
 #include "utils.hpp"
 
 Server::Server( void )
@@ -90,12 +92,10 @@ bool Server::parseConfigFile(std::string configFile)
 	std::vector<std::string> listenTokens;
 	std::vector<Listen> listen;
 
-
 	try {
-		content = readFileContent(configFile);
-		tokens = tokenizeConfig(content);
 		content = trimConfig(readFileContent(configFile));
-
+		checkJsonFormat(content);
+		setListen(content);
 	}
 	catch (std::exception &e) {
 		std::cerr << e.what() << std::endl;
@@ -104,9 +104,69 @@ bool Server::parseConfigFile(std::string configFile)
 	return true;
 }
 
-std::vector<Listen> Server::setListen(std::vector<std::string> tokens) {
-    (void)tokens;
-	return std::vector<Listen>();
+void Server::checkJsonFormat(const std::string& content)
+{
+	std::stack<char>	brackets;
+	char				c;
+	char				openBracket;
+
+	for (std::string::size_type i = 0; i < content.size(); ++i)
+	{
+		c = content[i];
+
+		if (c == '{' || c == '[' || c == '(')
+			brackets.push(c);
+		else if (c == '}' || c == ']' || c == ')')
+		{
+			if (brackets.empty())
+				throw ServerConfigJSONFormatException();
+
+			openBracket = brackets.top();
+			brackets.pop();
+
+			if ((c == '}' && openBracket != '{') ||
+				(c == ']' && openBracket != '[') ||
+				(c == ')' && openBracket != '('))
+				throw ServerConfigJSONFormatException();
+		}
+	}
+	if (!brackets.empty())
+		throw ServerConfigJSONFormatException();
+}
+
+std::vector<Listen> Server::setListen(std::string content)
+{
+	std::vector<Listen>			listens;
+	std::stack<char>			bracketStack;
+	std::string::size_type		begin;
+	std::string::size_type		end;
+	char						c;
+
+
+	while (42)
+	{
+		begin = content.find('{');
+		bracketStack.push(content.at(begin));
+		for (end = begin; !bracketStack.empty(); end++)
+		{
+			c = content.at(end);
+			if (c == '{' || c == '[' || c == '(')
+			{
+				bracketStack.push(c);
+				std::cout << bracketStack.top();
+			}
+			else if (c == '}' || c == ']' || c == ')')
+			{
+				std::cout << c;
+				bracketStack.pop();
+			}
+		}
+		std::cout << std::endl << std::endl;
+		listens.push_back(Listen(content.substr(begin, end - begin)));
+		std::cout << content << std::endl << std::endl;
+		content = content.substr(end, content.size() - end);
+		std::cout << content << std::endl << std::endl << std::endl;
+	}
 }
 
 std::string Server::trimConfig(const std::string& config) {
@@ -126,4 +186,11 @@ std::string Server::trimConfig(const std::string& config) {
     }
 
     return trimmed;
+}
+
+
+/* Exceptions *************************************************************** */
+const char* Server::ServerConfigJSONFormatException::what() const throw()
+{
+	return "JSON bracket format non valid";
 }

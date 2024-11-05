@@ -1,73 +1,83 @@
 {
 	"servers": [
-	  {
-		"listen": {
-		  "port": 4242,
-		  "host": "127.0.0.1"
-		},
-		"server_name": "webserv.com",
-		"default": true,
-		"root": "./www/main",
-		"error_pages": {
-		  "404": "/404.html",
-		  "500": "/500.html"
-		},
-		"client_max_body_size": "2M",
-		"routes": [
-		  {
-			"path": "/",
-			"allow_methods": ["GET", "POST"],
-			"root": "./www/main",
-			"directory_listing": false,
-			"default_file": "index.html"
-		  },
-		  {
-			"path": "/redirect",
-			"http_redirect": "https://anotherwebsite.com"
-		  },
-		  {
-			"path": "/kapouet",
-			"root": "/tmp/www",
-			"directory_listing": true
-		  },
-		  {
-			"path": "/cgi-bin",
-			"allow_methods": ["GET", "POST"],
-			"cgi": {
-			  "extension": ".php",
-			  "path": "/usr/bin/php-cgi",
-			  "upload_dir": "/var/uploads"
+		{
+			"listen": {
+				"port": 4242,
+				"host": "127.0.0.1"
 			},
-			"default_file": "index.php"
-		  },
-		  {
-			"path": "/files",
-			"allow_methods": ["POST"],
-			"upload_dir": "/var/uploads"
-		  }
-		]
-	  },
-	  {
-		"listen": {
-		  "port": 8080,
-		  "host": "127.0.0.1"
+			"server_name": "webserv.com",
+			"default": true,
+			"root": "./www/main",
+			"error_pages": {
+				"404": "/404.html",
+				"500": "/500.html"
+			},
+			"client_max_body_size": "2M",
+			"routes": [
+				{
+					"path": "/",
+					"allow_methods": [
+						"GET",
+						"POST"
+					],
+					"root": "./www/main",
+					"directory_listing": false,
+					"default_file": "index.html"
+				},
+				{
+					"path": "/redirect",
+					"http_redirect": "https://anotherwebsite.com"
+				},
+				{
+					"path": "/kapouet",
+					"root": "/tmp/www",
+					"directory_listing": true
+				},
+				{
+					"path": "/cgi-bin",
+					"allow_methods": [
+						"GET",
+						"POST"
+					],
+					"cgi": {
+						"extension": ".php",
+						"path": "/usr/bin/php-cgi",
+						"upload_dir": "/var/uploads"
+					},
+					"default_file": "index.php"
+				},
+				{
+					"path": "/files",
+					"allow_methods": [
+						"POST"
+					],
+					"upload_dir": "/var/uploads"
+				}
+			]
 		},
-		"server_name": "backup.webserv.com",
-		"root": "./backup",
-		"error_pages": {
-		  "404": "/backup_404.html",
-		  "403": "/backup_403.html"
-		},
-		"client_max_body_size": "1M",
-		"routes": [
-		  {
-			"path": "/",
-			"allow_methods": ["GET"],
-			"directory_listing": false,
-			"default_file": "index.html"
-		  }
-		]
-	  }
+		{
+			"listen": {
+				"port": 8080,
+				"host": "127.0.0.1"
+			},
+			"server_name": "backup.webserv.com",
+			"root": "./backup",
+			"error_pages": {
+				"404": "/backup_404.html",
+				"403": "/backup_403.html"
+			},
+			"client_max_body_size": "1M",
+			"routes": [
+				{
+					"path": "/",
+					"allow_methods": [
+						"GET"
+					],
+					"directory_listing": false,
+					"default_file": "index.html"
+				}
+			]
+		}
 	]
 }
   

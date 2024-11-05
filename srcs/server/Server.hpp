@@ -17,10 +17,13 @@ class Server
 private:
 	Socket _socket;
 
-	std::vector<Listen> _listen;
-	std::vector<Listen> setListen(std::vector<std::string> tokens);
+	std::vector<Listen>	_listen;
 
-	
+/* private method */
+	std::vector<Listen>	setListen(std::string content);
+	std::string			trimConfig(const std::string& content);
+	void				checkJsonFormat(const std::string &content);
+
 public:
 	Server( void );
 	Server( const Server &src );
@@ -32,9 +35,13 @@ public:
 	void init( void );
 	void run( void );
 	void stop( void );
+	bool				parseConfigFile( std::string configFile );
 
-	std::string trimConfig(const std::string& content);
-	bool parseConfigFile( std::string configFile );
+
+	class ServerConfigJSONFormatException : public std::exception
+	{
+		const char *what() const throw();
+	};
 };
 
 #endif // Server_HPP

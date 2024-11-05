@@ -17,7 +17,6 @@ public:
 	// Constructors
 
 	Route( void );
-	Route(std::string line);
 	Route( const Route &src );
 	Route &operator=( const Route &src );
 	

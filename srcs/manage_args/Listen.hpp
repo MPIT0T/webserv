@@ -22,7 +22,7 @@ public:
 	// Constructors
 	
 	Listen( void );
-	Listen(std::string line);
+	Listen(std::string content);
 	Listen( const Listen &src );
 	Listen &operator=( const Listen &src );
 	
