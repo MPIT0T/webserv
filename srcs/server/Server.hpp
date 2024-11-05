@@ -9,6 +9,7 @@
 #include "Socket.hpp"
 # include <unistd.h>
 # include <fstream>
+#include <cstdlib>
 #include <vector>
 #include "Listen.hpp"
 class Server{
@@ -16,6 +17,8 @@ private:
 	Socket _socket;
 
 	std::vector<Listen> _listen;
+	std::vector<Listen> setListen(std::vector<std::string> tokens);
+
 	
 public:
 	Server( void );
