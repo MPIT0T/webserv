@@ -36,7 +36,7 @@ Request &Request::operator=(const Request &old)
 void Request::setRequest(const std::string &request)
 {
 	std::string requestCpy(request);
-	Header		tmp;
+	std::string tmp;
 
 	type = requestCpy.substr(0, requestCpy.find( ' '));
 	requestCpy.erase(0, requestCpy.find( ' ') + 1);
@@ -48,14 +48,13 @@ void Request::setRequest(const std::string &request)
 	requestCpy.erase(0, requestCpy.find( '\n') + 1);
 	while (!requestCpy.empty() && requestCpy.at(0) != '\n')
 	{
-		tmp.setType(requestCpy.substr(0, requestCpy.find(": ")));
+		tmp = requestCpy.substr(0, requestCpy.find(": "));
 		requestCpy.erase(0, requestCpy.find( ": ") + 2);
-		tmp.setAttribute(requestCpy.substr(0, requestCpy.find( '\n')));
+		headers[tmp] = requestCpy.substr(0, requestCpy.find( '\n'));
 		if (requestCpy.find('\n') > requestCpy.size())
 			requestCpy.clear();
 		else
 			requestCpy.erase(0, requestCpy.find( '\n') + 1);
-		headers.push_back(tmp);
 	}
 	requestCpy.erase(0, 1);
 	body = requestCpy;
@@ -71,7 +70,7 @@ const std::string &Request::getUri() const
 	return uri;
 }
 
-const std::vector<Header> &Request::getHeaders() const
+const std::map<std::string, std::string>	&Request::getHeaders() const
 {
 	return headers;
 }
@@ -88,18 +87,14 @@ const std::string &Request::getBody() const
 
 std::ostream &operator<<(std::ostream &OUT, const Request& request)
 {
-	std::vector<Header>::const_iterator	end = request.getHeaders().end();
+	std::map<std::string, std::string>::const_iterator	end = request.getHeaders().end();
 
 	OUT << "Type: " << request.getType() << std::endl;
 	OUT << "URI: " << request.getUri() << std::endl;
 
-	for (std::vector<Header>::const_iterator begin = request.getHeaders().begin(); begin != end; begin++)
-	{
-		OUT << *begin << std::endl;
-	}
-
+	for (std::map<std::string, std::string>::const_iterator begin = request.getHeaders().begin(); begin != end; begin++)
+		OUT << begin->first << " " << begin->second << std::endl;
 	OUT << "Version: " << request.getVersion() << std::endl;
 	OUT << "body: " << request.getBody() << std::endl;
 	return (OUT);
 }
-

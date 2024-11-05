@@ -5,8 +5,7 @@
 #pragma once
 
 #include <iostream>
-#include <vector>
-#include "Header.hpp"
+#include <map>
 
 class Request
 {
@@ -17,19 +16,20 @@ class Request
 		~Request();
 		Request &operator=(const Request &old);
 
-		void						setRequest(const std::string &request);
-		const std::string			&getType() const;
-		const std::string			&getUri() const;
-		const std::vector<Header>	&getHeaders() const;
-		const std::string			&getVersion() const;
-		const std::string			&getBody() const;
+		void	setRequest(const std::string &request);
+
+		const std::string						&getType() const;
+		const std::string						&getUri() const;
+		const std::map<std::string, std::string>		&getHeaders() const;
+		const std::string						&getVersion() const;
+		const std::string						&getBody() const;
 
 private:
-		std::string					type;
-		std::string					uri;
-		std::vector<Header>			headers;
-		std::string					version;
-		std::string					body;
+		std::string								type;
+		std::string								uri;
+		std::map<std::string, std::string>		headers;
+		std::string								version;
+		std::string								body;
 };
 
 std::ostream	&operator<<(std::ostream &OUT, const Request &request);

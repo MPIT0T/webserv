@@ -10,6 +10,8 @@
 #include <map>
 #include <iostream>
 #include <ctime>
+#include <sstream>
+#include <stdio.h>
 
 static std::string getTimeFormat()
 {
@@ -44,8 +46,8 @@ static std::string getTimeFormat()
 
 std::string ft_itoa(unsigned int nbr)
 {
-	std::string result;
-	int			divide = 1;
+	std::string		result;
+	unsigned int	divide = 1;
 
 	for (; nbr / divide >= 10; divide *= 10);
 	for (; divide > 0; divide /= 10)
@@ -88,9 +90,10 @@ void SendResponse::getNewMessage()
 
 	if (fd <= 0 || stat(fileToSend.c_str(), &messageStat) < 0)
 		code = INTERNAL_SERVER_ERROR;
+
 	//get http response status
 	message.push_back(' ');
-	message.append(ft_itoa(code));
+	message.append(ft_itoa((unsigned  int)code)); // TODO save myself from satan
 	message.push_back(' ');
 	message.append(getStatusDescription(code));
 
@@ -109,7 +112,8 @@ void SendResponse::getNewMessage()
 
 	//get message length
 	message.append("\nContent-Length: ");
-	message.append(ft_itoa(messageStat.st_size));
+	if (code != INTERNAL_SERVER_ERROR && messageStat.st_size)
+		message.append(ft_itoa(messageStat.st_size));
 
 	//get connection
 	message.append("\nConnection: ");
@@ -122,11 +126,13 @@ void SendResponse::getNewMessage()
 		message.append("<!DOCTYPE html>\n\n<head>\n<title>ERROR</title>\n</head>\n\n<body>\n<h1>error 500, INTERNAL_SERVER_ERROR</h1>\n</body>");
 		return		;
 	}
+	// std::cout << "message: " << message << std::endl; // TODO satan might be here
+	write(fdClient, message.c_str(), message.size());
 	while (nbrRead > 0)
 	{
 		nbrRead = read(fd, tab, 1023);
 		tab[nbrRead] = 0;
-		message.append(tab);
+		write(fdClient, tab, nbrRead);
 	}
 	close(fd);
 	return ;
@@ -142,7 +148,7 @@ SendResponse::SendResponse(const std::string &_version,
 						   const std::string &_serverName,
 						   const std::string &_contentType,
 						   const std::string &_fileToSend,
-						   eHttpStatusCode _code)
+						   eHttpStatusCode _code, int _fdClient)
 {
 	version = _version;
 	connection = _connection;
@@ -150,6 +156,10 @@ SendResponse::SendResponse(const std::string &_version,
 	contentType = _contentType;
 	fileToSend = _fileToSend;
 	code = _code;
+	fdClient = _fdClient;
+
+	if (contentType == "image/avif") // TODO handle all MIME file
+		contentType = "image/png";
 }
 
 std::string getStatusDescription(eHttpStatusCode code)
