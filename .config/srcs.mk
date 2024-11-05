@@ -16,6 +16,7 @@ SRCS			=	$(MAIN)			\
 					$(ANSWER)		\
 					$(PARSING)		\
 					$(SERVER)		\
+					$(RMETHODS)		\
 					$(MANAGE_ARGS)	\
 					$(UTILS)
 
@@ -28,6 +29,7 @@ SRC_MANAGE_ARGS	=	ManageArgs.cpp	\
 					Route.cpp
 SRC_SERVER		=	Server.cpp
 SRC_ANSWER		=	SendResponse.cpp
+SRC_RMETHODS	=	PostMethod.cpp
 SRC_UTILS		=	utils.cpp
 
 MAIN			=	$(addprefix $(DIR_MAIN), $(SRC_MAIN))
@@ -36,6 +38,7 @@ PARSING			=	$(addprefix $(DIR_PARSING), $(SRC_PARSING))
 MANAGE_ARGS		=	$(addprefix $(DIR_MANAGE_ARGS), $(SRC_MANAGE_ARGS))
 SERVER			=	$(addprefix $(DIR_SERVER), $(SRC_SERVER))
 ANSWER			=	$(addprefix $(DIR_ANSWER), $(SRC_ANSWER))
+RMETHODS		=	$(addprefix $(DIR_RMETHODS), $(SRC_RMETHODS))
 UTILS			=	$(addprefix $(DIR_UTILS), $(SRC_UTILS))
 
 # Directories **************************************************************** #
@@ -46,8 +49,8 @@ DIR_PARSING 	=	parsing/
 DIR_MANAGE_ARGS =	manage_args/
 DIR_SERVER		=	server/
 DIR_ANSWER		=	sendResponse/
+DIR_RMETHODS	=	requestMethods/
 DIR_UTILS		=	utils/
-
 
 # Headers ******************************************************************** #
 HEAD			=	-Iincludes						\
@@ -56,4 +59,5 @@ HEAD			=	-Iincludes						\
 					-I$(SRC_D)$(DIR_MANAGE_ARGS)	\
 					-I$(SRC_D)$(DIR_SERVER)			\
 					-I$(SRC_D)$(DIR_ANSWER)			\
+					-I$(SRC_D)$(DIR_RMETHODS)
 					-I$(SRC_D)$(DIR_UTILS)

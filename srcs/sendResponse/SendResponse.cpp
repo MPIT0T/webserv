@@ -126,6 +126,7 @@ void SendResponse::getNewMessage()
 		message.append("<!DOCTYPE html>\n\n<head>\n<title>ERROR</title>\n</head>\n\n<body>\n<h1>error 500, INTERNAL_SERVER_ERROR</h1>\n</body>");
 		return		;
 	}
+	// std::cout << "message: " << message << std::endl; // TODO satan might be here
 	write(fdClient, message.c_str(), message.size());
 	while (nbrRead > 0)
 	{
