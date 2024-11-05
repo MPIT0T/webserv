@@ -12,29 +12,7 @@ std::string readFileContent(const std::string& filePath) {
     return buffer.str();
 }
 
-std::vector<std::string> tokenizeConfig(const std::string& config) 
-{
-    std::vector<std::string> tokens;
-    std::istringstream stream(config);
-    std::string line;
-    
-    while (std::getline(stream, line)) {
-        std::string cleanLine;
-        bool inComment = false;
-        
-        for (std::string::size_type i = 0; i < line.size(); ++i) {
-            if (line[i] == '#' && !inComment) {
-                inComment = true;
-                break;
-            }
-            cleanLine += line[i];
-        }
-        if (!cleanLine.empty()) {
-            tokens.push_back(cleanLine);
-        }
-    }
-    return tokens;
-}
+
 
 
 

@@ -12,6 +12,7 @@
 #include <cstdlib>
 #include <vector>
 #include "Listen.hpp"
+
 class Server{
 private:
 	Socket _socket;
@@ -28,10 +29,12 @@ public:
 	~Server();
 
 
-	bool parseConfigFile( std::string configFile );
 	void init( void );
 	void run( void );
 	void stop( void );
+
+	std::string trimConfig(const std::string& content);
+	bool parseConfigFile( std::string configFile );
 };
 
 #endif // Server_HPP
