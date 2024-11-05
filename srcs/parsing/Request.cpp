@@ -3,6 +3,7 @@
 //
 
 #include "Request.hpp"
+#include <vector>
 
 Request::Request()
 {
@@ -40,6 +41,8 @@ void Request::setRequest(const std::string &request)
 	type = requestCpy.substr(0, requestCpy.find( ' '));
 	requestCpy.erase(0, requestCpy.find( ' ') + 1);
 	uri  = requestCpy.substr(0, requestCpy.find( ' '));
+	if (uri == "/")
+		uri = uri + "index.html";
 	requestCpy.erase(0, requestCpy.find( ' ') + 1);
 	version  = requestCpy.substr(0, requestCpy.find( '\n'));
 	requestCpy.erase(0, requestCpy.find( '\n') + 1);
@@ -81,5 +84,22 @@ const std::string &Request::getVersion() const
 const std::string &Request::getBody() const
 {
 	return body;
+}
+
+std::ostream &operator<<(std::ostream &OUT, const Request& request)
+{
+	std::vector<Header>::const_iterator	end = request.getHeaders().end();
+
+	OUT << "Type: " << request.getType() << std::endl;
+	OUT << "URI: " << request.getUri() << std::endl;
+
+	for (std::vector<Header>::const_iterator begin = request.getHeaders().begin(); begin != end; begin++)
+	{
+		OUT << *begin << std::endl;
+	}
+
+	OUT << "Version: " << request.getVersion() << std::endl;
+	OUT << "body: " << request.getBody() << std::endl;
+	return (OUT);
 }
 

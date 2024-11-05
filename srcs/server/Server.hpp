@@ -21,12 +21,12 @@ public:
 	Server( void );
 	Server( const Server &src );
 	Server &operator=( const Server &src );
-	
+
 	~Server();
 
 
 	bool parseConfigFile( std::string configFile );
-	void init( void );    
+	void init( void );
 	void run( void );
 	void stop( void );
 };
