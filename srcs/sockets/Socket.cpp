@@ -85,7 +85,7 @@ ClientInfo *Socket::accept() const
 
 bool Socket::send(ClientInfo *client, const std::string &data)
 {
-	return (write(client->fd(), data.c_str(), data.size() ) != -1);
+	return (write(client->fd(), data.c_str(), data.size()) != -1);
 }
 
 Request *Socket::receive(ClientInfo *client)
