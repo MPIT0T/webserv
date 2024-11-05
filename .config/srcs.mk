@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    srcs.mk                                            :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mpitot <mpitot@student.42lyon.fr>          +#+  +:+       +#+         #
+#    By: mbrousse <mbrousse@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/21 15:46:19 by mpitot            #+#    #+#              #
-#    Updated: 2024/10/21 15:51:04 by mpitot           ###   ########.fr        #
+#    Updated: 2024/10/30 16:20:14 by mbrousse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,17 +17,20 @@ SRCS			=	$(MAIN)			\
 					$(PARSING)		\
 					$(SERVER)		\
 					$(RMETHODS)		\
-					$(MANAGE_ARGS)
+					$(MANAGE_ARGS)	\
+					$(UTILS)
 
 SRC_MAIN		=	main.cpp
 SRC_SOCK		=	Socket.cpp		\
 					ClientInfo.cpp
-SRC_PARSING 	=	Request.cpp		\
-					Header.cpp
-SRC_MANAGE_ARGS	=	ManageArgs.cpp
+SRC_PARSING 	=	Request.cpp
+SRC_MANAGE_ARGS	=	ManageArgs.cpp	\
+					Listen.cpp		\
+					Route.cpp
 SRC_SERVER		=	Server.cpp
 SRC_ANSWER		=	SendResponse.cpp
 SRC_RMETHODS	=	PostMethod.cpp
+SRC_UTILS		=	utils.cpp
 
 MAIN			=	$(addprefix $(DIR_MAIN), $(SRC_MAIN))
 SOCK			=	$(addprefix $(DIR_SOCK), $(SRC_SOCK))
@@ -36,6 +39,7 @@ MANAGE_ARGS		=	$(addprefix $(DIR_MANAGE_ARGS), $(SRC_MANAGE_ARGS))
 SERVER			=	$(addprefix $(DIR_SERVER), $(SRC_SERVER))
 ANSWER			=	$(addprefix $(DIR_ANSWER), $(SRC_ANSWER))
 RMETHODS		=	$(addprefix $(DIR_RMETHODS), $(SRC_RMETHODS))
+UTILS			=	$(addprefix $(DIR_UTILS), $(SRC_UTILS))
 
 # Directories **************************************************************** #
 SRC_D			=	srcs/
@@ -46,6 +50,7 @@ DIR_MANAGE_ARGS =	manage_args/
 DIR_SERVER		=	server/
 DIR_ANSWER		=	sendResponse/
 DIR_RMETHODS	=	requestMethods/
+DIR_UTILS		=	utils/
 
 # Headers ******************************************************************** #
 HEAD			=	-Iincludes						\
@@ -55,3 +60,4 @@ HEAD			=	-Iincludes						\
 					-I$(SRC_D)$(DIR_SERVER)			\
 					-I$(SRC_D)$(DIR_ANSWER)			\
 					-I$(SRC_D)$(DIR_RMETHODS)
+					-I$(SRC_D)$(DIR_UTILS)

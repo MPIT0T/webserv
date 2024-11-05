@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mpitot <mpitot@student.42lyon.fr>          +#+  +:+       +#+         #
+#    By: mbrousse <mbrousse@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2024/10/21 16:22:52 by mpitot           ###   ########.fr        #
+#    Updated: 2024/11/05 15:40:04 by gberthol         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ SRC_D	=	srcs/
 OBJ_D	=	.objs/
 NAME	=	webserv
 CC		=	c++
-CFLAGS	=	-Wall -Wextra -Werror -std=c++98
+CFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g3
 DFLAGS	=	-MMD -MF $(@:.o=.d)
 
 AUTHORS	=	mpitot, gberthol, mbrousse
@@ -49,6 +49,7 @@ ${OBJ_D}:
 	@mkdir -p ${OBJ_D}/manage_args
 	@mkdir -p ${OBJ_D}/server
 	@mkdir -p ${OBJ_D}/requestMethods
+	@mkdir -p ${OBJ_D}/utils
 
 
 clean	:

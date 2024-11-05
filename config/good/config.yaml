@@ -1,0 +1,65 @@
+# Main server configuration
+servers:
+  - listen:                    # Define the host and port of the server
+      port: 4242
+      host: "127.0.0.1"
+    server_name:               # Optional server name
+      - "webserv.com"
+    default: true              # Indicates that this server is the default for the given host:port
+
+    root: "./www/main"         # Default root directory for this server
+    error_pages:               # Define default error pages
+      404: "/404.html"
+      500: "/500.html"
+    client_max_body_size: 2M   # Limit client body size (e.g., 2 MB)
+
+    # Routes configuration
+    routes:
+      - path: "/"              # Root route configuration
+        allow_methods:         # Allowed HTTP methods for this route
+          - GET
+          - POST
+        root: "./www/main"     # Root directory specific to this route
+        directory_listing: false # Disable directory listing
+        default_file: "index.html" # Default file if the request is a directory
+
+      - path: "/redirect"       # Example of HTTP redirection
+        http_redirect: "https://anotherwebsite.com" # Redirects to another URL
+
+      - path: "/kapouet"        # Specific route with custom root directory
+        root: "/tmp/www"
+        directory_listing: true # Enable directory listing
+
+      - path: "/cgi-bin"        # CGI configuration
+        allow_methods:          # Allow GET and POST for CGI route
+          - GET
+          - POST
+        cgi:
+          extension: ".php"     # Execute CGI for .php files
+          path: "/usr/bin/php-cgi" # Path to the CGI binary
+          upload_dir: "/var/uploads" # Directory to save uploaded files
+        default_file: "index.php" # Default file if accessing a directory
+
+      - path: "/files"          # File upload route
+        allow_methods:
+          - POST
+        upload_dir: "/var/uploads" # Location for file uploads
+
+  - listen:
+      port: 8080               # Second server configuration on a different port
+      host: "127.0.0.1"
+    server_name:               # Optional: other server names
+      - "backup.webserv.com"
+
+    root: "./backup"           # Root directory for this backup server
+    error_pages:               # Custom error pages for this server
+      404: "/backup_404.html"
+      403: "/backup_403.html"
+    client_max_body_size: 1M   # Smaller body size limit for backup server
+
+    routes:
+      - path: "/"
+        allow_methods:
+          - GET
+        directory_listing: false
+        default_file: "index.html"
