@@ -98,9 +98,7 @@ bool Server::parseConfigFile(std::string configFile)
 		return false;
 	}
 
-	printTokens(tokens);
-	printListen(_listen);
-	
-
+	// printTokens(tokens);
+	// printListen(_listen);
 	return true;
 }

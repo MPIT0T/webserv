@@ -6,7 +6,7 @@
 /*   By: mbrousse <mbrousse@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 09:30:34 by mbrousse          #+#    #+#             */
-/*   Updated: 2024/10/30 16:29:54 by mbrousse         ###   ########.fr       */
+/*   Updated: 2024/11/05 11:03:00 by mbrousse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include <stdexcept>
 #include <vector>
 #include <iostream>
+#include <string>
+#include <sstream>
 #include "Listen.hpp"
 
 std::string readFileContent(const std::string& filePath);

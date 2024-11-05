@@ -1,7 +1,6 @@
 #include "utils.hpp"
 
 
-
 std::string readFileContent(const std::string& filePath) {
     std::ifstream file(filePath.c_str());
     if (!file.is_open()) {
@@ -13,27 +12,31 @@ std::string readFileContent(const std::string& filePath) {
     return buffer.str();
 }
 
-std::vector<std::string> tokenizeConfig(const std::string& content) {
+std::vector<std::string> tokenizeConfig(const std::string& config) 
+{
     std::vector<std::string> tokens;
-    std::istringstream stream(content);
+    std::istringstream stream(config);
     std::string line;
-
+    
     while (std::getline(stream, line)) {
-        // Remove comments
-        size_t commentPos = line.find('#');
-        if (commentPos != std::string::npos) {
-            line = line.substr(0, commentPos);
+        std::string cleanLine;
+        bool inComment = false;
+        
+        // Traverse the line, skip comments, and preserve indentation
+        for (std::string::size_type i = 0; i < line.size(); ++i) {
+            if (line[i] == '#' && !inComment) { // Start of a comment
+                inComment = true;
+                break;
+            }
+            // Add character if not in a comment
+            cleanLine += line[i];
         }
-
-        // Trim whitespace
-        line.erase(0, line.find_first_not_of(" \t\n\r"));
-        line.erase(line.find_last_not_of(" \t\n\r") + 1);
-
-        if (!line.empty()) {
-            tokens.push_back(line);
+        
+        // Only add non-empty lines to tokens
+        if (!cleanLine.empty()) {
+            tokens.push_back(cleanLine);
         }
     }
-
     return tokens;
 }
 
