@@ -1,6 +1,5 @@
 #include "utils.hpp"
 
-
 std::string readFileContent(const std::string& filePath) {
     std::ifstream file(filePath.c_str());
     if (!file.is_open()) {

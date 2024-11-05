@@ -7,7 +7,8 @@
 
 #include "Route.hpp"
 
-class Listen{
+class Listen
+{
 private:
 	int 							_port;
 	int 							_maxBodySize;
@@ -21,6 +22,7 @@ public:
 	// Constructors
 	
 	Listen( void );
+	Listen(std::string line);
 	Listen( const Listen &src );
 	Listen &operator=( const Listen &src );
 	

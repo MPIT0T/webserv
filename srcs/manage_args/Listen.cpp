@@ -19,6 +19,17 @@ Listen &Listen::operator=(const Listen &src) {
 	return *this;
 }
 
+Listen::Listen(std::string line)
+{
+	_port = 0;
+	_maxBodySize = 0;
+	_host = "";
+	_serverName = "";
+
+	while ()
+		_routes = Route(line.substr(...));
+}
+
 // Destructor
 Listen::~Listen() {}
 

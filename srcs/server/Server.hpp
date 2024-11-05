@@ -12,7 +12,8 @@
 #include <cstdlib>
 #include <vector>
 #include "Listen.hpp"
-class Server{
+class Server
+{
 private:
 	Socket _socket;
 
