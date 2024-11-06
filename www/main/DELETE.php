@@ -44,7 +44,7 @@
 <body>
     <div class="container">
         <h2>Delete a Resource</h2>
-        <form id="deleteForm">
+        <form id="deleteForm">``
             <label for="resource">Select a resource to delete:</label>
             <select id="resource" name="resource">
                 <?php
