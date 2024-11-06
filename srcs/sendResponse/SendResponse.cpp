@@ -10,8 +10,7 @@
 #include <map>
 #include <iostream>
 #include <ctime>
-#include <sstream>
-#include <stdio.h>
+
 
 static std::string getTimeFormat()
 {
@@ -153,13 +152,16 @@ SendResponse::SendResponse(const std::string &_version,
 	version = _version;
 	connection = _connection;
 	serverName = _serverName;
-	contentType = _contentType;
 	fileToSend = _fileToSend;
 	code = _code;
 	fdClient = _fdClient;
 
-	if (contentType == "image/avif") // TODO handle all MIME file
-		contentType = "image/png";
+	contentType = mimeTypeOfFile(fileToSend.substr(fileToSend.find_last_of('.'), fileToSend.size()));
+	if (_contentType.find(contentType) == std::string::npos)
+	{
+		std::cout << "error: " << contentType << std::endl;
+		std::cout << _contentType << std::endl;
+	}
 }
 
 std::string getStatusDescription(eHttpStatusCode code)
@@ -209,4 +211,54 @@ std::string getStatusDescription(eHttpStatusCode code)
 	statusDescriptions.insert(std::make_pair(INSUFFICIENT_STORAGE, "Insufficient Storage"));
 
 	return statusDescriptions[code];
+}
+
+std::string mimeTypeOfFile(std::string fileToSend)
+{
+	std::map<std::string, std::string> mimeTypes;
+
+	mimeTypes[".html"] = "text/html";
+	mimeTypes[".htm"] = "text/html";
+	mimeTypes[".css"] = "text/css";
+	mimeTypes[".js"] = "application/javascript";
+	mimeTypes[".json"] = "application/json";
+	mimeTypes[".xml"] = "application/xml";
+	mimeTypes[".jpg"] = "image/jpeg";
+	mimeTypes[".jpeg"] = "image/jpeg";
+	mimeTypes[".png"] = "image/png";
+	mimeTypes[".gif"] = "image/gif";
+	mimeTypes[".bmp"] = "image/bmp";
+	mimeTypes[".ico"] = "image/x-icon";
+	mimeTypes[".svg"] = "image/svg+xml";
+	mimeTypes[".webp"] = "image/webp";
+	mimeTypes[".tiff"] = "image/tiff";
+	mimeTypes[".tif"] = "image/tiff";
+	mimeTypes[".pdf"] = "application/pdf";
+	mimeTypes[".zip"] = "application/zip";
+	mimeTypes[".tar"] = "application/x-tar";
+	mimeTypes[".gz"] = "application/gzip";
+	mimeTypes[".rar"] = "application/vnd.rar";
+	mimeTypes[".7z"] = "application/x-7z-compressed";
+	mimeTypes[".txt"] = "text/plain";
+	mimeTypes[".csv"] = "text/csv";
+	mimeTypes[".mp3"] = "audio/mpeg";
+	mimeTypes[".wav"] = "audio/wav";
+	mimeTypes[".ogg"] = "audio/ogg";
+	mimeTypes[".mp4"] = "video/mp4";
+	mimeTypes[".m4v"] = "video/x-m4v";
+	mimeTypes[".mov"] = "video/quicktime";
+	mimeTypes[".avi"] = "video/x-msvideo";
+	mimeTypes[".flv"] = "video/x-flv";
+	mimeTypes[".mkv"] = "video/x-matroska";
+	mimeTypes[".webm"] = "video/webm";
+	mimeTypes[".woff"] = "font/woff";
+	mimeTypes[".woff2"] = "font/woff2";
+	mimeTypes[".ttf"] = "font/ttf";
+	mimeTypes[".otf"] = "font/otf";
+	mimeTypes[".eot"] = "application/vnd.ms-fontobject";
+	mimeTypes[".wasm"] = "application/wasm";
+	mimeTypes[".md"] = "text/markdown";
+	mimeTypes[".yaml"] = "application/x-yaml";
+	mimeTypes[".yml"] = "application/x-yaml";
+	return (mimeTypes[fileToSend]);
 }

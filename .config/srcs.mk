@@ -11,6 +11,7 @@
 # **************************************************************************** #
 
 # Sources ******************************************************************** #
+
 SRCS			=	$(MAIN)			\
 					$(SOCK)			\
 					$(ANSWER)		\
@@ -59,5 +60,5 @@ HEAD			=	-Iincludes						\
 					-I$(SRC_D)$(DIR_MANAGE_ARGS)	\
 					-I$(SRC_D)$(DIR_SERVER)			\
 					-I$(SRC_D)$(DIR_ANSWER)			\
-					-I$(SRC_D)$(DIR_RMETHODS)
+					-I$(SRC_D)$(DIR_RMETHODS)		\
 					-I$(SRC_D)$(DIR_UTILS)
