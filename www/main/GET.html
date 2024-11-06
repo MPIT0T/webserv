@@ -1,12 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MBROUSSE</title>
-    <link rel="stylesheet" href="style.css">
+	<meta charset="UTF-8">
+	<title>GET METHODE</title>
+	<style>
+	    		.container{
+			--max-width: 1000px;
+			--padding: 1rem;
+
+			width: min(var(--max-width), 100% - (var(--padding) * 1.2));
+			margin-inline: auto;
+		}
+		body {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			font-family: 'Inter', sans-serif;
+			background-color: #faeedc;
+		}
+		div {
+			font-size: 2rem;
+			font-weight: semibold;
+			color: #281515;
+			text-align: center;
+		}
+
+	</style>
 </head>
-<body class="body2">
-<h1 class="h12">MBROUSSE</h1>
+<body>
+	<div class="container">
+		Bravo, vous avez réussi à afficher cette page en utilisant la méthode <strong>GET</strong> !
+	</div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+<script>
+	const jsConfetti = new JSConfetti()
+
+	jsConfetti.addConfetti()
+</script>
 </html>
