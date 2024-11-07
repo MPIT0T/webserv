@@ -138,35 +138,49 @@ std::vector<Listen> Server::setListen(std::string content)
 {
 	std::vector<Listen>			listens;
 	std::stack<char>			bracketStack;
+	std::map<char, char>		bracketMap;
 	std::string::size_type		begin;
 	std::string::size_type		end;
 	char						c;
 
+	bracketMap.insert(std::make_pair('{', '}'));
+	bracketMap.insert(std::make_pair('[', ']'));
+	bracketMap.insert(std::make_pair('(', ')'));
 
-	while (42)
+
+	begin = content.find("{\"listen\":");
+	if (begin == std::string::npos)
+		throw std::exception();		//TODO throw good exception (no listen found)
+
+	std::cout << content.substr(begin, content.size());
+
+	begin += 10;
+	std::cout << content.at(begin) << std::endl << std::endl;
+	bracketStack.push(content.at(begin));
+	begin++;
+
+	// std::cout << content << std::endl << std::endl;
+	for (end = begin; !bracketStack.empty(); end++)
 	{
-		begin = content.find('{');
-		bracketStack.push(content.at(begin));
-		for (end = begin; !bracketStack.empty(); end++)
+		c = content.at(end);
+		// std::cout << c;
+		if (c == '{' || c == '[' || c == '(')
 		{
-			c = content.at(end);
-			if (c == '{' || c == '[' || c == '(')
-			{
-				bracketStack.push(c);
-				std::cout << bracketStack.top();
-			}
-			else if (c == '}' || c == ']' || c == ')')
-			{
-				std::cout << c;
-				bracketStack.pop();
-			}
+			bracketStack.push(c);
+			std::cout << bracketStack.top();
 		}
-		std::cout << std::endl << std::endl;
-		listens.push_back(Listen(content.substr(begin, end - begin)));
-		std::cout << content << std::endl << std::endl;
-		content = content.substr(end, content.size() - end);
-		std::cout << content << std::endl << std::endl << std::endl;
+		else if (c == bracketMap.at(bracketStack.top()))
+		{
+			std::cout << c;
+			bracketStack.pop();
+		}
 	}
+	std::cout << std::endl << std::endl;
+	listens.push_back(Listen(content.substr(begin, end - begin)));
+	std::cout << content << std::endl << std::endl;
+	content = content.substr(end, content.size() - end);
+	std::cout << content << std::endl << std::endl << std::endl;
+	return listens;
 }
 
 std::string Server::trimConfig(const std::string& config) {

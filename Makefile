@@ -19,7 +19,7 @@ SRC_D	=	srcs/
 OBJ_D	=	.objs/
 NAME	=	webserv
 CC		=	c++
-CFLAGS	=	-Wall -Wextra -Werror -std=c++98
+CFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g3
 DFLAGS	=	-MMD -MF $(@:.o=.d)
 
 AUTHORS	=	mpitot, gberthol, mbrousse
