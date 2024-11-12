@@ -61,7 +61,7 @@ Listen::Listen(std::string content)
         parseRoutes(routesStr);
     }
 
-	print_value();
+	// print_value();
 }
 
 // Destructor

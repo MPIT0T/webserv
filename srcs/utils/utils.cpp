@@ -70,8 +70,8 @@ void printListen(const Listen& listen) {
 // Fonction pour afficher le vecteur de Listen
 void printListenVector(const std::vector<Listen>& listenConfigs) {
     for (std::vector<Listen>::const_iterator it = listenConfigs.begin(); it != listenConfigs.end(); it++) {
-        printListen(*it);
-        std::cout << "-----------------------------" << std::endl;
+        //printListen(*it);
+        //std::cout << "-----------------------------" << std::endl;
     }
 }
 
