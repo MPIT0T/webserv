@@ -161,13 +161,10 @@ std::vector<Listen> Server::setListen(std::string content)
 				bracketStack.push(c);
 			else if (c == bracketMap.at(bracketStack.top()))
 				bracketStack.pop();
+			listens.push_back(Listen(content.substr(begin, end - begin)));
+			content = content.substr(end, content.size() - end);
 		}
 	}
-	std::cout << std::endl << std::endl;
-	listens.push_back(Listen(content.substr(begin, end - begin)));
-	std::cout << content << std::endl << std::endl;
-	content = content.substr(end, content.size() - end);
-	std::cout << content << std::endl << std::endl << std::endl;
 	return listens;
 }
 
