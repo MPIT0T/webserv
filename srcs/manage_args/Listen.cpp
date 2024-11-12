@@ -22,12 +22,9 @@ Listen &Listen::operator=(const Listen &src) {
 
 Listen::Listen(std::string content)
 {
-	// Manual parsing for demonstration. Not a robust JSON parser.
-    
-    // Parse basic fields like port, host, server_name, etc.
     std::size_t pos = 0;
     if ((pos = content.find("\"port\":")) != std::string::npos) {
-        pos += 7;  // Move past "port": 
+        pos += 7;
         _port = std::atoi(content.c_str() + pos);
     }
     if ((pos = content.find("\"host\":")) != std::string::npos) {
@@ -61,10 +58,11 @@ Listen::Listen(std::string content)
         pos += 9;
         std::size_t end = content.find(']', pos);
         std::string routesStr = content.substr(pos, end - pos);
+        printf("RoutesStr: %s\n", routesStr.c_str());
         parseRoutes(routesStr);
     }
 
-	print_value();
+	// print_value();
 }
 
 // Destructor
@@ -139,6 +137,7 @@ void Listen::parseRoutes(const std::string &routesStr) {
         std::string routeStr = routesStr.substr(pos, end - pos + 1);
         
         // Create and parse the Route object with routeStr
+        printf("Route: %s\n", routeStr.c_str());
         Route route(routeStr);
         _routes[route.getPath()] = route;
 

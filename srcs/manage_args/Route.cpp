@@ -21,6 +21,7 @@ Route &Route::operator=(const Route &src) {
 }
 
 Route::Route (std::string routeStr) {
+	printf("\n\nRouteStr: %s\n", routeStr.c_str());
 	std::size_t pos = 0;
     if ((pos = routeStr.find("\"path\":")) != std::string::npos) {
         pos += 7;
