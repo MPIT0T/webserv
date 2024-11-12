@@ -56,9 +56,8 @@ void Server::run(void)
 			client = _socket.accept();
 			std::cout << "Client connected." << std::endl << std::endl;
 			request = _socket.receive(client);
-			response = new SendResponse(request->getVersion(), request->getHeaders().at("Connection"),"WebServ", request->getHeaders().at("Accept"), "www/main" + request->getUri(), OK, client->fd()); // TODO replace the file to send with the root file
+			response = new SendResponse(request->getVersion(), request->getHeaders().at("Connection"),"WebServ", request->getHeaders().at("Accept"), "www/main" + request->getUri(), OK, client->fd()); // TODO replace the file to send with the root file AND change the "new"
 			response->getNewMessage();
-//			_socket.send(client, response->getMessage());
 			delete request;
 			delete client;
 			delete response;
