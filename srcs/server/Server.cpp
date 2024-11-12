@@ -148,38 +148,23 @@ std::vector<Listen> Server::setListen(std::string content)
 	bracketMap.insert(std::make_pair('(', ')'));
 
 
-	begin = content.find("{\"listen\":");
-	if (begin == std::string::npos)
-		throw std::exception();		//TODO throw good exception (no listen found)
-
-	std::cout << content.substr(begin, content.size());
-
-	begin += 10;
-	std::cout << content.at(begin) << std::endl << std::endl;
-	bracketStack.push(content.at(begin));
-	begin++;
-
-	// std::cout << content << std::endl << std::endl;
-	for (end = begin; !bracketStack.empty(); end++)
+	while (42)
 	{
-		c = content.at(end);
-		// std::cout << c;
-		if (c == '{' || c == '[' || c == '(')
+		begin = content.find("{\"listen\":");
+		if (begin == std::string::npos)
+			break ;
+		bracketStack.push(content.at(begin));
+		for (end = begin + 1; !bracketStack.empty(); end++)
 		{
-			bracketStack.push(c);
-			std::cout << bracketStack.top();
+			c = content.at(end);
+			if (c == '{' || c == '[' || c == '(')
+				bracketStack.push(c);
+			else if (c == bracketMap.at(bracketStack.top()))
+				bracketStack.pop();
 		}
-		else if (c == bracketMap.at(bracketStack.top()))
-		{
-			std::cout << c;
-			bracketStack.pop();
-		}
+		listens.push_back(Listen(content.substr(begin, end - begin)));
+		content = content.substr(end + 1, content.size() - end);
 	}
-	std::cout << std::endl << std::endl;
-	listens.push_back(Listen(content.substr(begin, end - begin)));
-	std::cout << content << std::endl << std::endl;
-	content = content.substr(end, content.size() - end);
-	std::cout << content << std::endl << std::endl << std::endl;
 	return listens;
 }
 
@@ -198,7 +183,6 @@ std::string Server::trimConfig(const std::string& config) {
             trimmed += c;
         }
     }
-
     return trimmed;
 }
 
