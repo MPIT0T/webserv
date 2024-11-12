@@ -9,14 +9,21 @@
 #include "Socket.hpp"
 # include <unistd.h>
 # include <fstream>
+#include <cstdlib>
 #include <vector>
 #include "Listen.hpp"
-class Server{
+class Server
+{
 private:
 	Socket _socket;
 
-	std::vector<Listen> _listen;
-	
+	std::vector<Listen>	_listen;
+
+/* private method */
+	std::vector<Listen>	setListen(std::string content);
+	std::string			trimConfig(const std::string& content);
+	void				checkJsonFormat(const std::string &content);
+
 public:
 	Server( void );
 	Server( const Server &src );
@@ -25,10 +32,16 @@ public:
 	~Server();
 
 
-	bool parseConfigFile( std::string configFile );
 	void init( void );
 	void run( void );
 	void stop( void );
+	bool				parseConfigFile( std::string configFile );
+
+
+	class ServerConfigJSONFormatException : public std::exception
+	{
+		const char *what() const throw();
+	};
 };
 
 #endif // Server_HPP

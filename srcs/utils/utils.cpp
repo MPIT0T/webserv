@@ -1,6 +1,5 @@
 #include "utils.hpp"
 
-
 std::string readFileContent(const std::string& filePath) {
     std::ifstream file(filePath.c_str());
     if (!file.is_open()) {
@@ -12,33 +11,7 @@ std::string readFileContent(const std::string& filePath) {
     return buffer.str();
 }
 
-std::vector<std::string> tokenizeConfig(const std::string& config) 
-{
-    std::vector<std::string> tokens;
-    std::istringstream stream(config);
-    std::string line;
-    
-    while (std::getline(stream, line)) {
-        std::string cleanLine;
-        bool inComment = false;
-        
-        // Traverse the line, skip comments, and preserve indentation
-        for (std::string::size_type i = 0; i < line.size(); ++i) {
-            if (line[i] == '#' && !inComment) { // Start of a comment
-                inComment = true;
-                break;
-            }
-            // Add character if not in a comment
-            cleanLine += line[i];
-        }
-        
-        // Only add non-empty lines to tokens
-        if (!cleanLine.empty()) {
-            tokens.push_back(cleanLine);
-        }
-    }
-    return tokens;
-}
+
 
 
 
@@ -49,19 +22,56 @@ void printTokens(const std::vector<std::string>& tokens) {
     std::cout << std::endl;
 }
 
-void printListen(const std::vector<Listen>& listen) {
-    for (std::vector<Listen>::const_iterator it = listen.begin(); it != listen.end(); ++it) {
-        std::cout << "Listen: " << std::endl;
-        std::cout << "Host: " << it->getHost() << ":" << it->getPort() << std::endl;
-        std::cout << "ServerName: " << it->getServerName() << std::endl;
-        std::cout << "MaxBodySize: " << it->getMaxBodySize() << std::endl;
-        std::cout << "ErrorPages: " << std::endl;
-        std::map<int, std::string> errorPages = it->getErrorPages();
-        for (std::map<int, std::string>::const_iterator it = errorPages.begin(); it != errorPages.end(); ++it) {
-            std::cout << it->first << ": " << it->second << std::endl;
+// Fonction pour afficher les détails d'une route
+void printRoute(const Route& route) {
+    std::cout << "  Route:" << std::endl;
+    std::cout << "    Path: " << route.getPath() << std::endl;
+    std::cout << "    Root: " << route.getRoot() << std::endl;
+    std::cout << "    Directory Listing: " << (route.getDirectoryListing() ? "true" : "false") << std::endl;
+    std::cout << "    HTTP Redirect: " << route.getHttpRedirect() << std::endl;
+
+    std::cout << "    Allowed Methods: ";
+    std::map<std::string, bool> methods = route.getAllowMethods();
+    for (std::map<std::string, bool>::const_iterator it = methods.begin(); it != methods.end(); ++it) {
+        if (it->second) {
+            std::cout << it->first << " ";
         }
-        std::cout << "Route: " << std::endl;
-        std::map<std::string, Route> routes = it->getRoutes();
     }
     std::cout << std::endl;
+
+    std::cout << "    CGI Settings:" << std::endl;
+    std::map<std::string, std::string> cgi = route.getCgi();
+    for (std::map<std::string, std::string>::const_iterator it = cgi.begin(); it != cgi.end(); ++it) {
+        std::cout << "      " << it->first << ": " << it->second << std::endl;
+    }
 }
+
+// Fonction pour afficher les détails d'un Listen
+void printListen(const Listen& listen) {
+    std::cout << "Listen Configuration:" << std::endl;
+    std::cout << "  Port: " << listen.getPort() << std::endl;
+    std::cout << "  Host: " << listen.getHost() << std::endl;
+    std::cout << "  Server Name: " << listen.getServerName() << std::endl;
+    std::cout << "  Max Body Size: " << listen.getMaxBodySize() << " bytes" << std::endl;
+
+    std::cout << "  Error Pages:" << std::endl;
+    std::map<int, std::string> errorPages = listen.getErrorPages();
+    for (std::map<int, std::string>::const_iterator it = errorPages.begin(); it != errorPages.end(); ++it) {
+        std::cout << "    " << it->first << ": " << it->second << std::endl;
+    }
+
+    std::cout << "  Routes:" << std::endl;
+    std::map<std::string, Route> routes = listen.getRoutes();
+    for (std::map<std::string, Route>::const_iterator it = routes.begin(); it != routes.end(); ++it) {
+        printRoute(it->second);
+    }
+}
+
+// Fonction pour afficher le vecteur de Listen
+void printListenVector(const std::vector<Listen>& listenConfigs) {
+    for (std::vector<Listen>::const_iterator it = listenConfigs.begin(); it != listenConfigs.end(); it++) {
+        printListen(*it);
+        std::cout << "-----------------------------" << std::endl;
+    }
+}
+

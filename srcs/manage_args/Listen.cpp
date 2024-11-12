@@ -19,6 +19,11 @@ Listen &Listen::operator=(const Listen &src) {
 	return *this;
 }
 
+Listen::Listen(std::string content)
+{
+	(void) content;
+}
+
 // Destructor
 Listen::~Listen() {}
 
