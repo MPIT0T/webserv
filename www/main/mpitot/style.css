@@ -15,14 +15,6 @@
 	text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 	animation: glow 2s infinite alternate;
 }
-@keyframes glow {
-	from {
-		text-shadow: 0 4px 10px rgba(255, 255, 255, 0.8);
-	}
-	to {
-		text-shadow: 0 4px 20px rgba(255, 255, 255, 1);
-	}
-}
 
 
 .container{
@@ -115,59 +107,6 @@ h1, h2, h3, h4, h5, h6{
 	background-color: #33333326;
 }
 
-.features{
-	gap: 1rem;
-	flex-wrap: wrap;
-}
-
-.subtitle{
-	font-size: 1.5rem;
-	margin-bottom: .5rem;
-	font-weight: 700;
-	color: #000000;
-}
-
-.features .line{
-	background-color: rgba(255, 255, 255, 0.277);
-}
-.features .wrapper{
-	background-color: #281515;
-	color: white;
-}
-
-.features .button{
-	background-color: rgb(250, 238, 220);
-	color: #281515;
-}
-
-.features .subtitle{
-	color: white;
-}
-
-#mbrousse{
-	background-color: #f69279;
-}
-
-#mbrousse .button{
-	background-color: #281515;
-}
-
-#mpitot{
-	background-color: #a1f7f7;
-}
-
-#mpitot .button{
-	background-color: #281515;
-}
-
-#gberthol{
-	background-color: #c9b0d4;
-}
-
-#gberthol .button{
-	background-color: #281515;
-}
-
 footer{
 	margin: 4rem 0 2rem 0;
 }
@@ -196,17 +135,11 @@ footer{
 	display: flex;
 }
 
-.titleSection h2{
-	background: #281515;
-	background-clip: text;
-}
 
-
-.logo42{
-	height: 50px;
-	left: 0;
-	transform: translate(-60%, -65%);
-	position: absolute;
+.image_max{
+    --max-width: 1015px;
+	--padding: 1rem;
+	position: relative;
 }
 
 .mainTitle{
@@ -216,16 +149,13 @@ footer{
 	position: relative;
 }
 
-.big-watermelon {
-	font-size: 4rem; /* Taille de l'emoji */
-	text-decoration: none;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	color: inherit;
-	cursor: pointer;
+#basic{
+	background-color: #6425adce;
 }
 
-.big-watermelon:hover {
-	transform: scale(1.1); /* Zoom au survol */
+.profile{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
