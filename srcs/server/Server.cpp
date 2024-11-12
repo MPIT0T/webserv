@@ -176,10 +176,26 @@ std::vector<Listen> Server::setListen(std::string content)
 		}
 	}
 	std::cout << std::endl << std::endl;
-	listens.push_back(Listen(content.substr(begin, end - begin)));
-	std::cout << content << std::endl << std::endl;
-	content = content.substr(end, content.size() - end);
-	std::cout << content << std::endl << std::endl << std::endl;
+	std::string jsonContent = "{\"listen\":{\"port\":4242,\"host\":\"127.0.0.1\"},"
+                          "\"server_name\":\"webserv.com\",\"default\":true,"
+                          "\"root\":\"./www/main\",\"error_pages\":{\"404\":\"/404.html\","
+                          "\"500\":\"/500.html\"},\"client_max_body_size\":\"2M\","
+                          "\"routes\":[{\"path\":\"/\",\"allow_methods\":[\"GET\",\"POST\"],"
+                          "\"root\":\"./www/main\",\"directory_listing\":false,"
+                          "\"default_file\":\"index.html\"},{\"path\":\"/redirect\","
+                          "\"http_redirect\":\"https://anotherwebsite.com\"},"
+                          "{\"path\":\"/kapouet\",\"root\":\"/tmp/www\",\"directory_listing\":true},"
+                          "{\"path\":\"/cgi-bin\",\"allow_methods\":[\"GET\",\"POST\"],"
+                          "\"cgi\":{\"extension\":\".php\",\"path\":\"/usr/bin/php-cgi\","
+                          "\"upload_dir\":\"/var/uploads\"},\"default_file\":\"index.php\"},"
+                          "{\"path\":\"/files\",\"allow_methods\":[\"POST\"],"
+                          "\"upload_dir\":\"/var/uploads\"}]}";
+	// listens.push_back(Listen(content.substr(begin, end - begin)));
+	std::cout << jsonContent << std::endl << std::endl;
+	listens.push_back(Listen(jsonContent));
+	// std::cout << content << std::endl << std::endl;
+	// content = content.substr(end, content.size() - end);
+	// std::cout << content << std::endl << std::endl << std::endl;
 	return listens;
 }
 

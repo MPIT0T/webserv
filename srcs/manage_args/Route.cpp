@@ -20,6 +20,20 @@ Route &Route::operator=(const Route &src) {
 	return *this;
 }
 
+Route::Route (std::string routeStr) {
+	std::size_t pos = 0;
+    if ((pos = routeStr.find("\"path\":")) != std::string::npos) {
+        pos += 7;
+        std::size_t end = routeStr.find('"', pos + 1);
+        _path = routeStr.substr(pos + 1, end - pos - 1);
+    }
+    if ((pos = routeStr.find("\"root\":")) != std::string::npos) {
+        pos += 7;
+        std::size_t end = routeStr.find('"', pos + 1);
+        _root = routeStr.substr(pos + 1, end - pos - 1);
+    }
+}
+
 // Destructor
 
 Route::~Route() {}
@@ -74,4 +88,21 @@ std::map<std::string, bool> Route::getAllowMethods() const {
 
 std::map<std::string, std::string> Route::getCgi() const {
 	return _cgi;
+}
+// Print method using printf
+
+void Route::print_arg() const{
+	printf("Path: %s\n", _path.c_str());
+	printf("Root: %s\n", _root.c_str());
+	printf("HTTP Redirect: %s\n", _http_redirect.c_str());
+	printf("Directory Listing: %s\n", _directory_listing ? "true" : "false");
+	printf("Allow Methods: ");
+	for (std::map<std::string, bool>::const_iterator it = _allow_methods.begin(); it != _allow_methods.end(); ++it) {
+		printf("%s: %s, ", it->first.c_str(), it->second ? "true" : "false");
+	}
+	printf("\nCGI: ");
+	for (std::map<std::string, std::string>::const_iterator it = _cgi.begin(); it != _cgi.end(); ++it) {
+		printf("%s: %s, ", it->first.c_str(), it->second.c_str());
+	}
+	printf("\n");
 }
