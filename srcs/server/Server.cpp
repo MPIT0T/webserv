@@ -95,7 +95,7 @@ bool Server::parseConfigFile(std::string configFile)
 	try {
 		content = trimConfig(readFileContent(configFile));
 		checkJsonFormat(content);
-		setListen(content);
+		_listen = setListen(content);
 	}
 	catch (std::exception &e) {
 		std::cerr << e.what() << std::endl;
