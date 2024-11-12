@@ -11,6 +11,7 @@ private:
 	std::string 						_path;
 	std::string							_root;
 	std::string 						_http_redirect;
+	std::string							_default_file;
 	std::map <std::string, bool> 		_allow_methods;
 	std::map <std::string, std::string> _cgi;
 

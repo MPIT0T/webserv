@@ -6,52 +6,58 @@
 				"host": "127.0.0.1"
 			},
 			"server_name": "webserv.com",
-			"default": true,
-			"root": "./www/main",
 			"error_pages": {
-				"404": "/404.html",
-				"500": "/500.html"
+				"404": "/www/error_pages/404.html",
+				"500": "/www/error_pages/500.html"
 			},
 			"client_max_body_size": "2M",
-			"routes": [
+			"routes":[
 				{
 					"path": "/",
 					"allow_methods": [
-						"GET",
-						"POST"
+						"GET"
 					],
-					"root": "./www/main",
-					"directory_listing": false,
+					"root": "/www/main",
 					"default_file": "index.html"
 				},
 				{
-					"path": "/redirect",
-					"http_redirect": "https://anotherwebsite.com"
+					"path": "/mbrousse",
+					"allow_methods": [
+						"GET"
+					],
+					"root": "/www/mbrousse",
+					"default_file": "mbrousse.html"
+
 				},
 				{
-					"path": "/kapouet",
-					"root": "/tmp/www",
-					"directory_listing": true
+					"path": "/mpitot",
+					"allow_methods": [
+						"GET"
+					],
+					"default_file": "mpitot.html",
+					"root": "/www/mpitot"
+				},
+				{
+					"path": "/gberthol",
+					"allow_methods": [
+						"GET"
+					],
+					"default_file": "gberthol.html",
+					"root": "/www/gberthol"
 				},
 				{
 					"path": "/cgi-bin",
 					"allow_methods": [
 						"GET",
-						"POST"
+						"POST",
+						"DELETE"
 					],
 					"cgi": {
 						"extension": ".php",
-						"path": "/usr/bin/php-cgi",
-						"upload_dir": "/var/uploads"
+						"path": "/www/cgi-bin",
+						"upload_dir": "/www/cgi-bin/uploads"
 					},
 					"default_file": "index.php"
-				},
-				{
-					"path": "/files",
-					"allow_methods": [
-						"POST"
-					],
-					"upload_dir": "/var/uploads"
 				}
 			]
 		},
@@ -61,10 +67,10 @@
 				"host": "127.0.0.1"
 			},
 			"server_name": "backup.webserv.com",
-			"root": "./backup",
+			"root": "/www/backup",
 			"error_pages": {
-				"404": "/backup_404.html",
-				"403": "/backup_403.html"
+				"404": "/www/error_pages/backup_404.html",
+				"403": "/www/error_pages/backup_403.html"
 			},
 			"client_max_body_size": "1M",
 			"routes": [
