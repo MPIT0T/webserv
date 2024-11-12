@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <cstdlib>
+
 
 #include "Route.hpp"
 
@@ -32,9 +34,9 @@ public:
 
 	// Setters
 
-	void setPort( int port );
-	void setMaxBodySize( int maxBodySize );
-	void setHost( std::string host );
+	void 		setPort( int port );
+	void 		setMaxBodySize( int maxBodySize );
+	void	setHost( std::string host );
 	void setServerName( std::string serverName );
 	void setErrorPages( std::map<int, std::string> errorPages );
 	void setRoutes( std::vector<Route> routes );
@@ -46,6 +48,14 @@ public:
 	std::string getServerName( void ) const;
 	std::map<int, std::string> getErrorPages( void ) const;
 	std::map<std::string, Route> getRoutes( void ) const;
+
+	//parsing
+	void 	parseRoutes(const std::string &routesStr);
+	void	parseErrorPages(const std::string &errorPagesStr );
+	int 	parseSize(const std::string &sizeStr);
+
+	//debug
+	void print_value();
 };
 
 #endif // Listen_HPP

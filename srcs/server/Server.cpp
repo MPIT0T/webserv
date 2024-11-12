@@ -94,7 +94,7 @@ bool Server::parseConfigFile(std::string configFile)
 	try {
 		content = trimConfig(readFileContent(configFile));
 		checkJsonFormat(content);
-		setListen(content);
+		_listen = setListen(content);
 	}
 	catch (std::exception &e) {
 		std::cerr << e.what() << std::endl;
@@ -162,7 +162,7 @@ std::vector<Listen> Server::setListen(std::string content)
 				bracketStack.pop();
 		}
 		listens.push_back(Listen(content.substr(begin, end - begin)));
-		content = content.substr(end + 1, content.size() - end);
+		content = content.substr(end, content.size() - end);
 	}
 	return listens;
 }

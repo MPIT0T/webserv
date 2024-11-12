@@ -3,6 +3,7 @@
 
 #include <string>
 #include <map>
+#include <cstdio>
 
 class Route{
 private:
@@ -17,6 +18,7 @@ public:
 	// Constructors
 
 	Route( void );
+	Route( std::string routeStr );
 	Route( const Route &src );
 	Route &operator=( const Route &src );
 	
@@ -42,6 +44,9 @@ public:
 	std::string getHttpRedirect() const;
 	std::map<std::string, bool> getAllowMethods() const;
 	std::map<std::string, std::string> getCgi() const;
+
+	//debug
+	void print_arg() const;
 };
 
 #endif // Route_HPP
