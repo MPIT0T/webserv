@@ -161,9 +161,9 @@ std::vector<Listen> Server::setListen(std::string content)
 				bracketStack.push(c);
 			else if (c == bracketMap.at(bracketStack.top()))
 				bracketStack.pop();
-			listens.push_back(Listen(content.substr(begin, end - begin)));
-			content = content.substr(end, content.size() - end);
 		}
+		listens.push_back(Listen(content.substr(begin, end - begin)));
+		content = content.substr(end, content.size() - end);
 	}
 	return listens;
 }
