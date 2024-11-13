@@ -60,8 +60,7 @@ Listen::Listen(std::string content)
         std::string routesStr = content.substr(pos, end - pos);
         parseRoutes(routesStr);
     }
-
-	print_value();
+	// print_value();
 }
 
 // Destructor

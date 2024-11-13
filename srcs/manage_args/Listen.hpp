@@ -36,10 +36,10 @@ public:
 
 	void 		setPort( int port );
 	void 		setMaxBodySize( int maxBodySize );
-	void	setHost( std::string host );
-	void setServerName( std::string serverName );
-	void setErrorPages( std::map<int, std::string> errorPages );
-	void setRoutes( std::vector<Route> routes );
+	void		setHost( std::string host );
+	void		setServerName( std::string serverName );
+	void		setErrorPages( std::map<int, std::string> errorPages );
+	void		setRoutes( std::vector<Route> routes );
 
 	// Getters
 	int getPort( void ) const;
