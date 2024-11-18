@@ -10,14 +10,15 @@
 # include <unistd.h>
 # include <fstream>
 #include <cstdlib>
+#include <Signal.hpp>
 #include <vector>
 #include "Listen.hpp"
 class Server
 {
 private:
-	Socket _socket;
-
+	Socket				_socket;
 	std::vector<Listen>	_listen;
+	Signal				_signals;
 
 /* private method */
 	std::vector<Listen>	setListen(std::string content);
