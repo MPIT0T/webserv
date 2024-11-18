@@ -1,0 +1,64 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: #E0E0E0;
+    background-color: #1a2d3f; /* Dark petrol blue */
+    overflow-x: hidden;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #f4a261; /* Brown accent color */
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+}
+
+/* Section Styling */
+section {
+    padding: 50px 20px;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #f4a261; /* Brown accent */
+}
+
+.about, .projects, .contact {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 1s, transform 1s;
+}
+
+.project {
+    margin-bottom: 20px;
+}
+
+.contact p {
+    font-size: 1rem;
+}
+
+/* Scroll Animation Trigger */
+.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
