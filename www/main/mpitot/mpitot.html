@@ -1,35 +1,53 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Max Page</title>
+    <title>Your Portfolio</title>
     <link rel="stylesheet" href="style.css">
-	<link rel="icon" href="/favicon.svg" type="image/svg">
-
 </head>
 <body>
-    <header>
-        <div class="mainTitle"><h1 class="title">Titre</h1></div>
-    </header>
-    <div class="profile">
-        <img class="image" src="mbrousse.jpg" alt="image">
-        <div class="wrapper">
-            <p>Étudiant à l'école 42</p>
-            <p>Je suis un étudiant à l'école 42, je suis passionné par l'informatique et le développement web.</p>
-        </div>
-    </div>
-    <div class="bigLine"></div>
-    <div class="portfolios">
-        <div class="wrapper" id="basic">bobo</div>
-        <div class="wrapper" id="basic">lolo</div>
-        <div class="wrapper" id="basic">lala</div>
-        <div class="wrapper" id="basic">caca</div>
-    </div>
-    <div class="bigLine"></div>
 
-    <footer>
-        <div class="footer"><p>&copy; 2024 Maximilien De Gersigny.</p></div>
-    </footer>
+<!-- Hero Section -->
+<section class="hero">
+    <h1>Mathis Pitot</h1>
+    <p>Tech lover</p>
+</section>
+
+<!-- About Section -->
+<section class="about" id="about">
+    <h2>About Me</h2>
+    <p>Born in Mauritius, I love everything about nature and the sea. I fell in love with code when preparing my Baccalaureate at Lycee Labourdonnais. I went for coding as main subject and got 100% for the final exam. I then joined 42 Lyon for the piscine in september 2023, and got selected. I am currently in my 2nd year as a 42 student, and proud to be dev.</p>
+</section>
+
+<!-- Projects Section -->
+<section class="projects" id="projects">
+    <h2 class="projects-title">Main School Projects</h2>
+    <div class="project">
+        <h3>Minishell</h3>
+        <p>We coded a mini-bash. We handled bash-like parsing, program execution, etc.</p>
+        <button onclick="window.location.href='https://github.com/MPIT0T/minishell'">View on GitHub</button>
+    </div>
+    <div class="project">
+        <h3>Cub3D</h3>
+        <p>We created a simple RayCaster, recreating the 3D engine used to wolfenstein3D. We coded everything from scratch, using the C minilibX to render pixels to a window and parse images.</p>
+        <button onclick="window.location.href='https://github.com/MPIT0T/cub3d'">View on GitHub</button>
+    </div>
+    <div class="project">
+        <h3>WebServ</h3>
+        <p>The current project, we are coded a http server using c sockets and c++ classes. We managed requests such as GET, POST, DELETE and maybe more.</p>
+        <button onclick="window.location.href='https://github.com/MPIT0T/webserv'">View on GitHub</button>
+    </div>
+    <!-- Add more projects as needed -->
+</section>
+
+<!-- Contact Section -->
+<section class="contact" id="contact">
+    <h2>Contact Me</h2>
+    <p>Email: mathispitot@gmail.com</p>
+    <p>LinkedIn: your-linkedin-profile</p>
+</section>
+
+<script src="scripts.js"></script>
 </body>
 </html>
