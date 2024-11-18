@@ -6,9 +6,10 @@
 #include "Request.hpp"
 #include "SendResponse.hpp"
 #include <err.h>
+#include <poll.h>
 #include <map>
 #include <stack>
-
+#include <algorithm>
 #include "utils.hpp"
 
 Server::Server( void )
@@ -42,41 +43,96 @@ void Server::init(void)
 	_socket.listen();
 }
 
+template <typename T, typename Predicate>		//TODO deplacer
+typename std::vector<T>::iterator remove_if_custom(std::vector<T>& vec, Predicate pred) {
+	typename std::vector<T>::iterator it = vec.begin();
+	while (it != vec.end()) {
+		if (pred(*it)) {
+			it = vec.erase(it);  // Erase and get the next iterator
+		} else {
+			++it;
+		}
+	}
+	return it;  // Return the iterator pointing to the new end
+}
+
+
+struct FDChecker {
+	bool operator()(const pollfd& p) const {
+		return p.fd == -1;
+	}
+};
+
 void Server::run(void)
 {
-	ClientInfo		*client;
-	Request			*request;
-	SendResponse	*response;
+	std::vector<pollfd>				fds;
+	std::map<int, ClientInfo*>		clients;
+	pollfd							listen_fd;
+
+	listen_fd.fd = _socket.getFd();
+	listen_fd.events = POLLIN;
+	fds.push_back(listen_fd);
 
 	std::cout << "Waiting for connection..." << std::endl << std::endl;
 
 	while (42)
 	{
-		try {
-			client = _socket.accept();
-			// std::cout << "Client connected." << std::endl << std::endl;
-			request = _socket.receive(client);
-			// std::cout << *request << std::endl;
-			response = new SendResponse(request->getVersion(), request->getHeaders().at("Connection"),"WebServ", request->getHeaders().at("Accept"), "www/main" + request->getUri(), OK, client->fd()); // TODO replace the file to send with the root file
-			response->getNewMessage();
-//			_socket.send(client, response->getMessage());
-			delete request;
-			delete client;
-			delete response;
+		int ret = poll(&fds[0], fds.size(), -1);
+		if (ret < 0)
+		{
+			std::cerr << "Poll error" << std::endl;
+			break ;
 		}
-		catch (Socket::SocketAcceptException &e) {
-			std::cerr << e.what() << std::endl;
+		for (size_t i = 0; i < fds.size(); ++i)
+		{
+			if (fds[i].fd == listen_fd.fd && (fds[i].revents & POLLIN))
+			{
+				try
+				{
+					ClientInfo *client = _socket.accept();
+					std::cout << "Client connected." << std::endl;
+
+					pollfd client_fd;
+					client_fd.fd = client->fd();
+					client_fd.events = POLLIN;
+					fds.push_back(client_fd);
+					clients.insert(std::make_pair(client_fd.fd, client));
+				}
+				catch (Socket::SocketAcceptException &e)
+				{
+					std::cerr << e.what() << std::endl;
+				}
+			}
+			else if (fds[i].revents & POLLIN)
+			{
+				int client_fd = fds[i].fd;
+				ClientInfo *client = clients[client_fd];
+
+				try
+				{
+					Request *request = _socket.receive(client);
+					std::cout << "Request received from client " << client_fd << std::endl;
+
+					SendResponse *response = new SendResponse(request->getVersion(),
+															  request->getHeaders().at("Connection"),
+															  "WebServ",
+															  request->getHeaders().at("Accept"),
+															  "www/main" + request->getUri(),
+															  OK,
+															  client->fd());
+					response->getNewMessage();
+				}
+				catch (Socket::SocketReceiveException &e)
+				{
+					std::cerr << e.what() << std::endl;
+					close(client_fd);
+					fds[i].fd = -1;
+					delete client;
+					clients.erase(client_fd);
+				}
+			}
 		}
-		catch (Socket::SocketReceiveException &e) {
-			delete client;
-			std::cerr << e.what() << std::endl; // TODO respond with the appropriate error
-		}
-		catch (Socket::SocketSendException &e) {
-			delete client;
-			delete response;
-			delete request;
-			std::cerr << e.what() << std::endl; // TODO respond with the appropriate error
-		}
+		fds.erase(remove_if_custom(fds, FDChecker()), fds.end());
  	}
 }
 

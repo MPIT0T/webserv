@@ -1,161 +1,119 @@
-.body2 {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 100vh;
+/* Basic Reset */
+* {
 	margin: 0;
-	font-family: Arial, sans-serif;
-	background: linear-gradient(135deg, #f06, #4a90e2);
-	color: #ffffff;
-}
-.h12 {
-	font-size: 4rem;
-	font-weight: bold;
-	letter-spacing: 0.2rem;
-	text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-	animation: glow 2s infinite alternate;
-}
-
-
-.container{
-	--max-width: 1015px;
-	--padding: 1rem;
-
-	width: min(var(--max-width), 100% - (var(--padding) * 1.2));
-	margin-inline: auto;
-}
-
-body{
 	padding: 0;
-	margin: 0;
 	box-sizing: border-box;
-	font-family: 'Inter', sans-serif;
-	background-color: #faeedc;
 }
 
-h1, h2, h3, h4, h5, h6{
-	margin: 0;
+body {
+	font-family: Arial, sans-serif;
+	color: #E0E0E0;
+	background-color: #1a2d3f; /* Dark petrol blue */
+	overflow-x: hidden;
 }
 
-
-.wrapperAll{
+/* Hero Section */
+.hero {
+	height: 100vh;
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
 	align-items: center;
-	flex-direction: column;
-}
-
-
-.button{
-	margin-top: .5rem;
-	color: white;
-	padding: 1rem 2rem;
-	border-radius: 10px;
-	display: flex;
-	cursor: pointer;
 	justify-content: center;
-}
-
-.link{
-	text-decoration: none;
-}
-
-.button:hover{
-	opacity: .9;
-}
-
-.title{
-	margin-top: 3rem;
-	font-size: 5rem;
-	font-weight: semibold;
-	color: black;
-	margin-bottom: 2rem;
-}
-
-.portfolios,
-.features {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	gap: 2rem;
-	width: 100%;
-	line-height: 23px;
-}
-
-.bigLine{
-	width: 80%;
-	margin: 2rem 0;
-	height: 1px;
-	background-color: #33333326;
-}
-
-.portfolios .button{
-	background-color: #121212;
-	color: white;
-}
-
-.wrapper{
-	border-radius: 20px;
-	padding: 2rem 3rem;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-}
-
-.line{
-	width: 100%;
-	height: 1px;
-	background-color: #33333326;
-}
-
-footer{
-	margin: 4rem 0 2rem 0;
-}
-
-.footer{
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	flex-direction: column;
 	text-align: center;
-	line-height: 27px;
+	color: #f4a261; /* Brown accent color */
 }
 
-.footer a{
-	color: #281515;
-	font-weight: 700;
-	cursor: pointer;
+.hero h1 {
+	font-size: 3rem;
+	margin-bottom: 1rem;
 }
 
-.titleSection{
+.hero p {
+	font-size: 1.2rem;
+}
+
+/* Section Styling */
+section {
+	padding: 50px 20px;
+}
+
+h2 {
+	font-size: 2rem;
+	margin-bottom: 20px;
+	color: #f4a261; /* Brown accent */
+}
+
+.projects-title {
 	width: 100%;
-	font-weight: 400;
-	font-size: 1.3rem;
-	margin-bottom: 2rem;
-	justify-content: center;
+	text-align: center;
+	margin-bottom: 30px;
+	color: #f4a261;
+}
+
+/* Project Box Layout */
+.projects {
 	display: flex;
-}
-
-
-.image_max{
-    --max-width: 1015px;
-	--padding: 1rem;
-	position: relative;
-}
-
-.mainTitle{
-	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
 	justify-content: center;
-	align-items: center;
-	position: relative;
 }
 
-#basic{
-	background-color: #6425adce;
+.project {
+	background-color: #243447; /* Darker petrol blue for contrast */
+	padding: 20px;
+	border-radius: 8px;
+	width: 300px; /* Fixed width for consistent sizing */
+	text-align: center;
+	box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+	transition: transform 0.3s;
 }
 
-.profile{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+.project h3 {
+	color: #f4a261; /* Brown accent for title */
+	margin-bottom: 10px;
+}
+
+.project p {
+	color: #E0E0E0;
+	margin-bottom: 15px;
+}
+
+.project button {
+	background-color: #f4a261; /* Brown button color */
+	color: #1a2d3f; /* Petrol blue text for contrast */
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+.project button:hover {
+	background-color: #e07a3f; /* Darker shade for hover */
+}
+
+.project:hover {
+	transform: translateY(-5px); /* Slight lift effect on hover */
+}
+
+
+.about, .contact {
+	opacity: 0;
+	transform: translateY(50px);
+	transition: opacity 1s, transform 1s;
+	text-align: center;
+}
+
+.project {
+	margin-bottom: 20px;
+}
+
+.contact p {
+	font-size: 1rem;
+}
+
+/* Scroll Animation Trigger */
+.visible {
+	opacity: 1;
+	transform: translateY(0);
 }
