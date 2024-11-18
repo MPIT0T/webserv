@@ -14,13 +14,13 @@
 
 Server::Server( void )
 {
-	return ;
+	_signals = Signal();
+	_socket = Socket();
 }
 
 Server::Server( const Server &src )
 {
 	*this = src;
-	return ;
 }
 
 Server &Server::operator=( const Server &src )
@@ -71,6 +71,7 @@ void Server::run(void)
 
 	listen_fd.fd = _socket.getFd();
 	listen_fd.events = POLLIN;
+	listen_fd.revents = 0;
 	fds.push_back(listen_fd);
 
 	std::cout << "Waiting for connection..." << std::endl << std::endl;
@@ -95,6 +96,7 @@ void Server::run(void)
 					pollfd client_fd;
 					client_fd.fd = client->fd();
 					client_fd.events = POLLIN;
+					client_fd.revents = 0;
 					fds.push_back(client_fd);
 					clients.insert(std::make_pair(client_fd.fd, client));
 				}
@@ -121,6 +123,8 @@ void Server::run(void)
 															  OK,
 															  client->fd());
 					response->getNewMessage();
+
+					delete response;
 				}
 				catch (Socket::SocketReceiveException &e)
 				{
