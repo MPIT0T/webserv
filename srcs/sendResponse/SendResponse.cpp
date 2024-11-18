@@ -157,11 +157,9 @@ SendResponse::SendResponse(const std::string &_version,
 	fdClient = _fdClient;
 
 	contentType = mimeTypeOfFile(fileToSend.substr(fileToSend.find_last_of('.'), fileToSend.size()));
-	if (_contentType.find(contentType) == std::string::npos)
-	{
+	if (_contentType.find(contentType) == std::string::npos &&
+		_contentType.find(contentType.substr(0, contentType.find('/') + 1) + "*") == std::string::npos)
 		std::cout << "error: " << contentType << std::endl;
-		std::cout << _contentType << std::endl;
-	}
 }
 
 std::string getStatusDescription(eHttpStatusCode code)
