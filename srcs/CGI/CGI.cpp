@@ -37,7 +37,7 @@ void CGI::execCGI()
 	{
 		if (access(_path.c_str(), X_OK) == 0)
 			execve(_path.c_str(), _args, _env);
-		free_all();
+		//free_all(); //TODO create free_all();
 		return ;
 	}
 	waitpid(0, &status, 0);
