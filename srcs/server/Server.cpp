@@ -6,11 +6,12 @@
 #include "Request.hpp"
 #include "SendResponse.hpp"
 #include <err.h>
-#include <poll.h>
+#include <sys/epoll.h>
 #include <map>
 #include <stack>
 #include <algorithm>
 #include "utils.hpp"
+#include <sys/poll.h>
 
 Server::Server( void )
 {
@@ -65,79 +66,84 @@ struct FDChecker {
 
 void Server::run(void)
 {
-	std::vector<pollfd>				fds;
-	std::map<int, ClientInfo*>		clients;
-	pollfd							listen_fd;
+	const int MAX_EVENTS = 1000; // Maximum number of events to handle at once
+    int epoll_fd = epoll_create1(0); // Create an epoll instance
+    if (epoll_fd == -1) {
+		throw std::runtime_error("Failed to create epoll instance");
+    }
 
-	listen_fd.fd = _socket.getFd();
-	listen_fd.events = POLLIN;
-	listen_fd.revents = 0;
-	fds.push_back(listen_fd);
+    std::map<int, ClientInfo*> clients; // Track clients by their file descriptor
+    struct epoll_event ev, events[MAX_EVENTS];
 
-	std::cout << "Waiting for connection..." << std::endl << std::endl;
+    // Add the listening socket to the epoll instance
+    ev.events = EPOLLIN;
+    ev.data.fd = _socket.getFd();
+    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, _socket.getFd(), &ev) == -1) {
+		throw std::runtime_error("Failed to add listening socket to epoll instance");
+    }
 
-	while (42)
-	{
-		int ret = poll(&fds[0], fds.size(), -1);
-		if (ret < 0)
-		{
-			std::cerr << "Poll error" << std::endl;
-			break ;
-		}
-		for (size_t i = 0; i < fds.size(); ++i)
-		{
-			if (fds[i].fd == listen_fd.fd && (fds[i].revents & POLLIN))
-			{
-				try
-				{
-					ClientInfo *client = _socket.accept();
-					std::cout << "Client connected." << std::endl;
+    std::cout << "The Server is UP !!" << std::endl << std::endl;
 
-					pollfd client_fd;
-					client_fd.fd = client->fd();
-					client_fd.events = POLLIN;
-					client_fd.revents = 0;
-					fds.push_back(client_fd);
-					clients.insert(std::make_pair(client_fd.fd, client));
-				}
-				catch (Socket::SocketAcceptException &e)
-				{
-					std::cerr << e.what() << std::endl;
-				}
-			}
-			else if (fds[i].revents & POLLIN)
-			{
-				int client_fd = fds[i].fd;
-				ClientInfo *client = clients[client_fd];
+    while (true) {
+        int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1); // Wait for events
+        if (nfds == -1) {
+            break;
+        }
 
-				try
-				{
-					Request *request = _socket.receive(client);
-					std::cout << "Request received from client " << client_fd << std::endl;
+        for (int i = 0; i < nfds; ++i) {
+            int event_fd = events[i].data.fd;
 
-					SendResponse *response = new SendResponse(request->getVersion(),
-															  request->getHeaders().at("Connection"),
-															  "WebServ",
-															  request->getHeaders().at("Accept"),
-															  "www/main" + request->getUri(),
-															  OK,
-															  client->fd());
-					response->getNewMessage();
+            if (event_fd == _socket.getFd()) {
+                // Handle new client connections
+                try {
+                    ClientInfo *client = _socket.accept();
+                    std::cout << "Client connected." << std::endl;
 
-					delete response;
-				}
-				catch (Socket::SocketReceiveException &e)
-				{
-					std::cerr << e.what() << std::endl;
-					close(client_fd);
-					fds[i].fd = -1;
-					delete client;
-					clients.erase(client_fd);
-				}
-			}
-		}
-		fds.erase(remove_if_custom(fds, FDChecker()), fds.end());
- 	}
+                    ev.events = EPOLLIN;
+                    ev.data.fd = client->fd();
+                    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client->fd(), &ev) == -1) {
+                        perror("epoll_ctl: client_fd");
+                        delete client; // Cleanup on failure
+                        continue;
+                    }
+                    clients.insert(std::make_pair(client->fd(), client));
+                } catch (Socket::SocketAcceptException &e) {
+                    std::cerr << e.what() << std::endl;
+                }
+            } else if (events[i].events & EPOLLIN) {
+                // Handle data from an existing client
+                ClientInfo *client = clients[event_fd];
+                try {
+                    Request *request = _socket.receive(client);
+                    std::cout << "Request received from client " << event_fd << std::endl;
+
+                    SendResponse *response = new SendResponse(
+                        request->getVersion(),
+                        request->getHeaders().at("Connection"),
+                        "WebServ",
+                        request->getHeaders().at("Accept"),
+                        "www/main" + request->getUri(),
+                        OK,
+                        client->fd()
+                    );
+                    response->getNewMessage();
+                    delete response;
+                } catch (Socket::SocketReceiveException &e) {
+                    std::cerr << e.what() << std::endl;
+                    close(event_fd);
+                    epoll_ctl(epoll_fd, EPOLL_CTL_DEL, event_fd, NULL); // Remove from epoll
+                    delete client;
+                    clients.erase(event_fd);
+                }
+            }
+        }
+    }
+
+    // Cleanup
+    close(epoll_fd);
+    for (std::map<int, ClientInfo*>::iterator it = clients.begin(); it != clients.end(); ++it) {
+        delete it->second;
+    }
 }
 
 void Server::stop(void)
