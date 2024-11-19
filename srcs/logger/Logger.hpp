@@ -1,7 +1,6 @@
 #ifndef LOGGER_HPP
 #define LOGGER_HPP
 
-#include "Defines.hpp"
 #include <map>
 #include <string>
 #include <iostream>
@@ -14,11 +13,6 @@
 #include <cerrno>
 #include <cstring>
 #include <cstdlib>
-
-/* DEFAULT PARAMETERS */
-#define DEFAULT_LOG_STATE true
-#define DEFAULT_LOG_FILE_STATE false
-#define DEFAULT_LOG_DEBUG_STATE false
 
 class Logger
 {
