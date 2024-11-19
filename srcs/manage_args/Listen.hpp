@@ -5,6 +5,7 @@
 #include <string>
 #include <map>
 #include <cstdlib>
+#include <Socket.hpp>
 
 
 #include "Route.hpp"
@@ -12,6 +13,7 @@
 class Listen
 {
 private:
+	Socket							_socket;
 	int 							_port;
 	int 							_maxBodySize;
 	std::string 					_host;
@@ -34,6 +36,7 @@ public:
 
 	// Setters
 
+	void		setSocket(const std::string& hostName, int port);
 	void 		setPort( int port );
 	void 		setMaxBodySize( int maxBodySize );
 	void		setHost( std::string host );
@@ -41,13 +44,15 @@ public:
 	void		setErrorPages( std::map<int, std::string> errorPages );
 	void		setRoutes( std::vector<Route> routes );
 
+
 	// Getters
-	int getPort( void ) const;
-	int getMaxBodySize( void ) const;
-	std::string getHost( void ) const;
-	std::string getServerName( void ) const;
-	std::map<int, std::string> getErrorPages( void ) const;
-	std::map<std::string, Route> getRoutes( void ) const;
+	Socket							getSocket() const;
+	int								getPort( void ) const;
+	int								getMaxBodySize( void ) const;
+	std::string						getHost( void ) const;
+	std::string						getServerName( void ) const;
+	std::map<int, std::string>		getErrorPages( void ) const;
+	std::map<std::string, Route>	getRoutes( void ) const;
 
 	//parsing
 	void 	parseRoutes(const std::string &routesStr);

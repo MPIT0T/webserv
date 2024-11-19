@@ -16,8 +16,7 @@
 class Server
 {
 private:
-	Socket				_socket;
-	std::vector<Listen>	_listen;
+	std::vector<Listen>	_listens;
 	Signal				_signals;
 
 /* private method */

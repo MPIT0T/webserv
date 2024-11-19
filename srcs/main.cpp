@@ -10,10 +10,10 @@ Server *g_server;
 
 int main(int argc, char *argv[])
 {
-	Server server;
-	g_server = &server;
-	ManageArgs args(argc, argv);
+	Server		server;
+	ManageArgs	args(argc, argv);
 
+	g_server = &server;
 	if (!args.checkArgs())
 		return (EXIT_FAILURE);
 	try
