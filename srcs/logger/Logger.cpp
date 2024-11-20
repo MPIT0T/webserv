@@ -139,6 +139,8 @@ std::string Logger::getLogLevelStr(LogLevel level)
         return "TRACE";
     case DEBUG:
         return "DEBUG";
+    case CONNECTION:
+        return "CONNECTION";
     default:
         return "UNKNOWN";
     }
@@ -160,6 +162,8 @@ std::string Logger::getLogLevelColor(LogLevel level)
         return "\033[0;34m";
     case DEBUG:
         return "\033[0;36m";
+    case CONNECTION:
+        return "\033[0;35m";
     default:
         return "\033[0m";
     }

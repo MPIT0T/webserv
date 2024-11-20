@@ -29,6 +29,7 @@ public:
 		FATAL = 0,
 		ERROR,
 		WARNING,
+		CONNECTION,
 		INFO,
 		TRACE,
 		DEBUG,

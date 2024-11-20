@@ -100,7 +100,7 @@ void Server::run(void)
                 // Handle new client connections
                 try {
                     ClientInfo *client = _socket.accept();
-					log.log( log.TRACE, "Client connected.");
+					log.log( log.CONNECTION, "Client connected.");
 
                     ev.events = EPOLLIN;
                     ev.data.fd = client->fd();
@@ -118,7 +118,7 @@ void Server::run(void)
                 ClientInfo *client = clients[event_fd];
                 try {
                     Request *request = _socket.receive(client);
-                    std::cout << "Request received from client " << event_fd << std::endl;
+					log.log( log.TRACE, ("Metode : " + request->getType() + " --> " + request->getUri()).c_str());
 
                     SendResponse *response = new SendResponse(
                         request->getVersion(),
