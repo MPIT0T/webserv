@@ -1,4 +1,5 @@
 #include "Logger.hpp"
+#include <cstdarg>
 
 bool Logger::_logState = true;
 bool Logger::_logFileState = true;
