@@ -8,14 +8,14 @@
 #include <map>
 #include <vector>
 #include <csignal>
-#include "Server.hpp"
+// #include "Server.hpp"
 
 class Signal
 {
 public:
 /* Constructors */
 	Signal( void );
-	Signal( Server *server );
+	// Signal( Server *server ); #TODO FAIRE MARCHER CETTE LIGNE
 	Signal(const Signal &src);
 	~Signal();
 

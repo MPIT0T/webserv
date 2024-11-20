@@ -4,15 +4,15 @@
 
 #include "Signal.hpp"
 
-Server *g_server;
+// Server *g_server;
 
 /* Constructors ************************************************************* */
 Signal::Signal() {}
 
-Signal::Signal(Server *server)
-{
-	g_server = server;
-}
+// Signal::Signal(Server *server)
+// {
+// 	g_server = server;
+// }
 
 Signal::Signal(const Signal &src)
 {
@@ -32,9 +32,9 @@ Signal &Signal::operator=(const Signal &src)
 
 static void	handleSIGINT(int sig)
 {
-	delete g_server;
+	// delete g_server;
 	(void)sig;
-	exit(130);
+	// exit(130);
 }
 
 int Signal::setSignal(const int sig)

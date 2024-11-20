@@ -15,7 +15,8 @@
 
 Server::Server( void )
 {
-	_signals = Signal(this);
+	_signals = Signal();
+	// _signals = Signal(this);
 	_socket = Socket();
 }
 
@@ -66,7 +67,7 @@ struct FDChecker {
 
 void Server::run(void)
 {
-	Logger log;
+	Logger log( this->getEnv() );
 	Signal signal;
 	const int MAX_EVENTS = 1000; // Maximum number of events to handle at once
     int epoll_fd = epoll_create1(0); // Create an epoll instance

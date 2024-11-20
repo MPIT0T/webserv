@@ -1,11 +1,56 @@
 #include "Logger.hpp"
 
 bool Logger::_logState = true;
-bool Logger::_logFileState = false;
+bool Logger::_logFileState = true;
 bool Logger::_logDebugState = false;
-std::string Logger::_logFileName = "logfile.log";
+std::string Logger::_logFileNameTermination = ".log";
 
-#include <ctime>
+std::string Logger::_path = "";
+
+Logger::Logger()
+{
+}
+
+Logger::Logger( char **envp )
+{
+    if (envp)
+    {
+        for (int i = 0; envp[i]; i++)
+        {
+            std::string env = envp[i];
+            if (env.find("PWD=") != std::string::npos)
+            {
+                _path = env.substr(4);
+                break;
+            }
+        }
+    }
+    else
+    {
+        _path = "";
+    }
+}
+
+Logger::Logger(const Logger &src)
+{
+    *this = src;
+}
+
+Logger &Logger::operator=(const Logger &src)
+{
+    if (this != &src)
+    {
+        _logState = src._logState;
+        _logFileState = src._logFileState;
+        _logDebugState = src._logDebugState;
+        _logFileNameTermination = src._logFileNameTermination;
+    }
+    return *this;
+}
+
+Logger::~Logger()
+{
+}
 
 void Logger::log(LogLevel level, const char *msg, ...)
 {
@@ -27,7 +72,10 @@ void Logger::log(LogLevel level, const char *msg, ...)
 
     if (_logFileState)
     {
-        FILE *file = fopen(_logFileName.c_str(), "a");
+        char dateStr[11];
+        std::strftime(dateStr, sizeof(dateStr), "%Y-%m-%d", std::localtime(&now));
+        std::string fileName = _path + "/log/" + std::string(dateStr) + _logFileNameTermination;
+        FILE *file = fopen(fileName.c_str(), "a");
         if (file)
         {
             fprintf(file, "[%s] [%s] ", timeStr, logLevelStr.c_str());
@@ -70,9 +118,9 @@ bool Logger::getLogDebugState(void)
     return _logDebugState;
 }
 
-std::string Logger::getLogFileName(void)
+std::string Logger::getLogFileNameTermination(void)
 {
-    return _logFileName;
+    return _logFileNameTermination;
 }
 
 std::string Logger::getLogLevelStr(LogLevel level)
