@@ -28,11 +28,7 @@ Server &Server::operator=( const Server &src )
 
 Server::~Server()
 {
-	for(std::map<int, ClientInfo*>::iterator it = clients.begin(); it != clients.end(); ++it)
-	{
-		delete it->second;
-	}
-	return ;
+	
 }
 
 void Server::init(void)
@@ -119,6 +115,7 @@ void Server::run(void)
                     );
                     response->getNewMessage();
                     delete response;
+					delete request;
                 } catch (Socket::SocketReceiveException &e) {
                     std::cerr << e.what() << std::endl;
                     close(event_fd);
