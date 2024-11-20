@@ -1,4 +1,11 @@
-[2024-11-20 14:54:27] [SERVER] The Server is UP !!
-[2024-11-20 14:54:34] [SERVER] Server is shutting down...
-[2024-11-20 14:55:53] [SERVER] The Server is UP !!
-[2024-11-20 14:55:54] [SERVER] Server is shutting down...
+[2024-11-20 15:10:01] [SERVER] The Server is UP !!
+[2024-11-20 15:10:04] [CONNECTION] Client connected.
+[2024-11-20 15:10:04] [CONNECTION] Client connected.
+[2024-11-20 15:10:04] [TRACE] Metode : GET --> /GET.html
+[2024-11-20 15:10:05] [TRACE] Metode : GET --> /POST.html
+[2024-11-20 15:10:06] [TRACE] Metode : GET --> /DELETE.html
+[2024-11-20 15:10:07] [TRACE] Metode : GET --> /POST.html
+[2024-11-20 15:10:08] [TRACE] Metode : GET --> /GET.html
+[2024-11-20 15:10:10] [TRACE] Metode : GET --> /POST.html
+[2024-11-20 15:10:11] [TRACE] Metode : GET --> /DELETE.html
+[2024-11-20 15:10:14] [SERVER] Server is shutting down...
