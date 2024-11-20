@@ -14,6 +14,8 @@
 #include <cstring>
 #include <cstdlib>
 
+#include "colors.h"
+
 class Logger
 {
 private:
@@ -33,6 +35,7 @@ public:
 		INFO,
 		TRACE,
 		DEBUG,
+		SERVER,
 	};
 	// logInstance
 	Logger();

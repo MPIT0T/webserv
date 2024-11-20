@@ -3,21 +3,14 @@
 /* ***************** */
 
 #include "Server.hpp"
-#include "Request.hpp"
-#include "SendResponse.hpp"
-#include <err.h>
-#include <sys/epoll.h>
-#include <map>
-#include <stack>
-#include <algorithm>
-#include "utils.hpp"
-#include <sys/poll.h>
+
+bool Server::_signals = false;
 
 Server::Server( void )
 {
-	_signals = Signal();
-	// _signals = Signal(this);
-	_socket = Socket();
+	// Signal signal;
+	signal(SIGINT, &handleSIGINT);
+	signal(SIGQUIT, &handleSIGINT);
 }
 
 Server::Server( const Server &src )
@@ -35,6 +28,10 @@ Server &Server::operator=( const Server &src )
 
 Server::~Server()
 {
+	for(std::map<int, ClientInfo*>::iterator it = clients.begin(); it != clients.end(); ++it)
+	{
+		delete it->second;
+	}
 	return ;
 }
 
@@ -45,20 +42,6 @@ void Server::init(void)
 	_socket.listen();
 }
 
-template <typename T, typename Predicate>		//TODO deplacer
-typename std::vector<T>::iterator remove_if_custom(std::vector<T>& vec, Predicate pred) {
-	typename std::vector<T>::iterator it = vec.begin();
-	while (it != vec.end()) {
-		if (pred(*it)) {
-			it = vec.erase(it);  // Erase and get the next iterator
-		} else {
-			++it;
-		}
-	}
-	return it;  // Return the iterator pointing to the new end
-}
-
-
 struct FDChecker {
 	bool operator()(const pollfd& p) const {
 		return p.fd == -1;
@@ -68,14 +51,13 @@ struct FDChecker {
 void Server::run(void)
 {
 	Logger log( this->getEnv() );
-	Signal signal;
 	const int MAX_EVENTS = 1000; // Maximum number of events to handle at once
     int epoll_fd = epoll_create1(0); // Create an epoll instance
     if (epoll_fd == -1) {
 		throw std::runtime_error("Failed to create epoll instance");
     }
 
-    std::map<int, ClientInfo*> clients; // Track clients by their file descriptor
+     // Track clients by their file descriptor
     struct epoll_event ev, events[MAX_EVENTS];
 
     // Add the listening socket to the epoll instance
@@ -85,13 +67,19 @@ void Server::run(void)
 		throw std::runtime_error("Failed to add listening socket to epoll instance");
     }
 
-    log.log( log.INFO, "The Server is UP !!");
+    log.log( log.SERVER, "The Server is UP !!");
 
-    while (true) {
-        int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1); // Wait for events
-        if (nfds == -1) {
+    while (_signals == false) {
+        int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
+        if ((nfds  == -1) && _signals == false) {
+			log.log( log.ERROR, "Failed to wait for events");
             break;
         }
+		else if (_signals == true)
+		{
+			log.log( log.SERVER, "Server is shutting down...");
+			break;
+		}
 
         for (int i = 0; i < nfds; ++i) {
             int event_fd = events[i].data.fd;
@@ -105,7 +93,7 @@ void Server::run(void)
                     ev.events = EPOLLIN;
                     ev.data.fd = client->fd();
                     if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client->fd(), &ev) == -1) {
-                        perror("epoll_ctl: client_fd");
+                        log.log( log.ERROR, "Failed to add client to epoll instance");
                         delete client; // Cleanup on failure
                         continue;
                     }
@@ -270,4 +258,11 @@ void Server::setEnv(char **env)
 char **Server::getEnv(void)
 {
 	return _env;
+}
+
+void	Server::handleSIGINT(int sig)
+{
+	(void)sig;
+	std::cout << "\r";
+	Server::_signals = true;
 }
