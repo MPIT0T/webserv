@@ -19,7 +19,7 @@ void Logger::log(LogLevel level, const char *msg, ...)
     std::string logLevelColor = getLogLevelColor(level);
 
     // Get current time
-    std::time_t now = std::time(nullptr);
+    std::time_t now = std::time(NULL);
     char timeStr[20];
     std::strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", std::localtime(&now));
 

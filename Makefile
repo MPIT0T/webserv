@@ -51,6 +51,7 @@ ${OBJ_D}:
 	@mkdir -p ${OBJ_D}/requestMethods
 	@mkdir -p ${OBJ_D}/utils
 	@mkdir -p ${OBJ_D}/signals
+	@mkdir -p ${OBJ_D}/logger
 
 
 clean	:

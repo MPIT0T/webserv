@@ -5,14 +5,17 @@
 #ifndef SIGNAL_HPP
 # define SIGNAL_HPP
 
-# include <map>
+#include <map>
 #include <vector>
+#include <csignal>
+#include "Server.hpp"
 
 class Signal
 {
 public:
 /* Constructors */
-	Signal();
+	Signal( void );
+	Signal( Server *server );
 	Signal(const Signal &src);
 	~Signal();
 

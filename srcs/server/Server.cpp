@@ -15,7 +15,7 @@
 
 Server::Server( void )
 {
-	_signals = Signal();
+	_signals = Signal(this);
 	_socket = Socket();
 }
 
@@ -66,6 +66,8 @@ struct FDChecker {
 
 void Server::run(void)
 {
+	Logger log;
+	Signal signal;
 	const int MAX_EVENTS = 1000; // Maximum number of events to handle at once
     int epoll_fd = epoll_create1(0); // Create an epoll instance
     if (epoll_fd == -1) {
@@ -82,7 +84,7 @@ void Server::run(void)
 		throw std::runtime_error("Failed to add listening socket to epoll instance");
     }
 
-    std::cout << "The Server is UP !!" << std::endl << std::endl;
+    log.log( log.INFO, "The Server is UP !!");
 
     while (true) {
         int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1); // Wait for events
@@ -97,7 +99,7 @@ void Server::run(void)
                 // Handle new client connections
                 try {
                     ClientInfo *client = _socket.accept();
-                    std::cout << "Client connected." << std::endl;
+					log.log( log.TRACE, "Client connected.");
 
                     ev.events = EPOLLIN;
                     ev.data.fd = client->fd();
@@ -257,4 +259,14 @@ std::string Server::trimConfig(const std::string& config) {
 const char* Server::ServerConfigJSONFormatException::what() const throw()
 {
 	return "JSON bracket format non valid";
+}
+
+void Server::setEnv(char **env)
+{
+	_env = env;
+}
+
+char **Server::getEnv(void)
+{
+	return _env;
 }

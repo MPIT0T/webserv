@@ -12,6 +12,7 @@
 #include <cstdlib>
 #include <Signal.hpp>
 #include <vector>
+#include "Logger.hpp"
 #include "Listen.hpp"
 class Server
 {
@@ -19,6 +20,7 @@ private:
 	Socket				_socket;
 	std::vector<Listen>	_listen;
 	Signal				_signals;
+	char				**_env;
 
 /* private method */
 	std::vector<Listen>	setListen(std::string content);
@@ -37,6 +39,8 @@ public:
 	void run( void );
 	void stop( void );
 	bool				parseConfigFile( std::string configFile );
+	void				setEnv(char **env);
+	char				**getEnv(void);
 
 
 	class ServerConfigJSONFormatException : public std::exception
