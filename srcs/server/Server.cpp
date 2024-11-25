@@ -46,17 +46,14 @@ struct FDChecker {
 
 void Server::run(void)
 {
-	Logger log( this->getEnv() );
-	const int MAX_EVENTS = 1000; // Maximum number of events to handle at once
-    int epoll_fd = epoll_create1(0); // Create an epoll instance
+	const int MAX_EVENTS = 100;
+    int epoll_fd = epoll_create1(0);
     if (epoll_fd == -1) {
 		throw std::runtime_error("Failed to create epoll instance");
     }
 
-     // Track clients by their file descriptor
     struct epoll_event ev, events[MAX_EVENTS];
 
-    // Add the listening socket to the epoll instance
     ev.events = EPOLLIN;
     ev.data.fd = _socket.getFd();
     if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, _socket.getFd(), &ev) == -1) {
@@ -81,7 +78,6 @@ void Server::run(void)
             int event_fd = events[i].data.fd;
 
             if (event_fd == _socket.getFd()) {
-                // Handle new client connections
                 try {
                     ClientInfo *client = _socket.accept();
 					log.log( log.CONNECTION, "Client connected.");
@@ -90,7 +86,7 @@ void Server::run(void)
                     ev.data.fd = client->fd();
                     if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client->fd(), &ev) == -1) {
                         log.log( log.ERROR, "Failed to add client to epoll instance");
-                        delete client; // Cleanup on failure
+                        delete client;
                         continue;
                     }
                     clients.insert(std::make_pair(client->fd(), client));
@@ -98,7 +94,6 @@ void Server::run(void)
 					log.log( log.ERROR, e.what());
                 }
             } else if (events[i].events & EPOLLIN) {
-                // Handle data from an existing client
                 ClientInfo *client = clients[event_fd];
                 try {
                     Request *request = _socket.receive(client);
@@ -119,15 +114,13 @@ void Server::run(void)
                 } catch (Socket::SocketReceiveException &e) {
 					log.log( log.ERROR, e.what());
                     close(event_fd);
-                    epoll_ctl(epoll_fd, EPOLL_CTL_DEL, event_fd, NULL); // Remove from epoll
+                    epoll_ctl(epoll_fd, EPOLL_CTL_DEL, event_fd, NULL);
                     delete client;
                     clients.erase(event_fd);
                 }
             }
         }
     }
-
-    // Cleanup
     close(epoll_fd);
     for (std::map<int, ClientInfo*>::iterator it = clients.begin(); it != clients.end(); ++it) {
         delete it->second;
@@ -152,7 +145,7 @@ bool Server::parseConfigFile(std::string configFile)
 		_listen = setListen(content);
 	}
 	catch (std::exception &e) {
-		std::cerr << e.what() << std::endl;
+		log.log( log.ERROR, e.what());
 		return false;
 	}
 	return true;

@@ -42,6 +42,7 @@ private:
 	void				checkJsonFormat(const std::string &content);
 
 public:
+	Logger				log;
 	static bool			_signals;
 	Server( void );
 	Server( const Server &src );
