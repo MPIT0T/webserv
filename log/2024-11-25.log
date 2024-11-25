@@ -1,0 +1,8 @@
+[2024-11-25 14:12:30] [SERVER] The Server is UP !!
+[2024-11-25 14:12:39] [CONNECTION] Client connected.
+[2024-11-25 14:12:39] [TRACE] Metode : GET --> /index.html
+[2024-11-25 14:12:39] [CONNECTION] Client connected.
+[2024-11-25 14:12:39] [TRACE] Metode : GET --> /style.css
+[2024-11-25 14:12:39] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 14:12:40] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 14:12:55] [TRACE] Metode : GET --> /kjsdsdkfjh
