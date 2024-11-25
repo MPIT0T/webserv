@@ -4,7 +4,10 @@
 
 #pragma once
 
+#include "Request.hpp"
 #include <iostream>
+#include "ClientInfo.hpp"
+#include "Listen.hpp"
 
 enum eHttpStatusCode {
 	// 1xx: Informational responses
@@ -65,17 +68,18 @@ class SendResponse
 {
 	public:
 		SendResponse();
-		SendResponse(const std::string &_version, const std::string &_connection,
-					 const std::string &_serverName, const std::string &_contentType,
-					 const std::string &_fileToSend, eHttpStatusCode _code, int fdClient);
-
+		SendResponse(const Request &request, const Listen &_listen, const ClientInfo &clientInfo);
 		SendResponse(const SendResponse &old);
 		~SendResponse();
 		SendResponse &operator=(const SendResponse &old);
 
 
-		void					getNewMessage();
+		void					makeMessageHeader();
+		void					sendMessage();
 		const std::string	 	&getMessage() const;
+		void					generateMIME(const std::string &_contentType, const std::string &_fileToSend);
+
+		void					errorMessage(eHttpStatusCode errorCode);
 
 private:
 		std::string			message;
@@ -85,7 +89,9 @@ private:
 		std::string			contentType;
 		std::string			fileToSend;
 		eHttpStatusCode		code;
+		std::string			bodyMessage;
 		int 				fdClient;
+		Listen				listen;
 };
 
-std::string mimeTypeOfFile(std::string fileToSend);
+std::string mimeTypeOfFile(const std::string &fileToSend);

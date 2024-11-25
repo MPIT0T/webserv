@@ -115,14 +115,8 @@ void Server::run(void)
 					Request *request = _socket.receive(client);
 					std::cout << "Request received from client " << client_fd << std::endl;
 
-					SendResponse *response = new SendResponse(request->getVersion(),
-															  request->getHeaders().at("Connection"),
-															  "WebServ",
-															  request->getHeaders().at("Accept"),
-															  "www/main" + request->getUri(),
-															  OK,
-															  client->fd());
-					response->getNewMessage();
+					SendResponse *response = new SendResponse(*request, _listen.at(0), *client);
+					response->makeMessageHeader();
 
 					delete response;
 				}

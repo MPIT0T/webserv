@@ -35,6 +35,8 @@ void CGI::execCGI()
 	pid = fork();
 	if (!pid)
 	{
+		for (int i = 3; i < 1024; i++)
+			close(i);
 		if (access(_path.c_str(), X_OK) == 0)
 			execve(_path.c_str(), _args, _env);
 		//free_all(); //TODO create free_all();
