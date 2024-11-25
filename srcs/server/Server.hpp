@@ -6,18 +6,33 @@
 #define SERVER_HPP
 
 #include <iostream>
-#include "Socket.hpp"
-# include <unistd.h>
-# include <fstream>
-#include <cstdlib>
-#include <Signal.hpp>
+#include <unistd.h>
+#include <sys/poll.h>
+#include <sys/epoll.h>
 #include <vector>
+#include <stack>
+#include <algorithm>
+#include <map>
+#include <err.h>
+#include <fstream>
+#include <cstdlib>
+#include <csignal>
+
+#include "Logger.hpp"
 #include "Listen.hpp"
+#include "Request.hpp"
+#include "SendResponse.hpp"
+#include "Socket.hpp"
+#include "utils.hpp"
+
+class Signal;
+
 class Server
 {
 private:
 	std::vector<Listen>	_listens;
-	Signal				_signals;
+	char				**_env;
+	std::map<int, ClientInfo *> clients;
 
 /* private method */
 	std::vector<Listen>	setListen(std::string content);
@@ -25,6 +40,8 @@ private:
 	void				checkJsonFormat(const std::string &content);
 
 public:
+	Logger				log;
+	static bool			_signals;
 	Server( void );
 	Server( const Server &src );
 	Server &operator=( const Server &src );
@@ -36,12 +53,16 @@ public:
 	void run( void );
 	void stop( void );
 	bool				parseConfigFile( std::string configFile );
+	void				setEnv(char **env);
+	char				**getEnv(void);
 
 
 	class ServerConfigJSONFormatException : public std::exception
 	{
 		const char *what() const throw();
 	};
+
+	static void	handleSIGINT(int sig);
 };
 
 #endif // Server_HPP

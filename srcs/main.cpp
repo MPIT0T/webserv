@@ -6,14 +6,15 @@
 #include "Server.hpp"
 #include <cstdlib>
 
-Server *g_server;
-
-int main(int argc, char *argv[])
+int main(int argc, char *argv[], char *env[])
 {
-	Server		server;
-	ManageArgs	args(argc, argv);
+	Server server;
+	server.setEnv(env);
+	ManageArgs args(argc, argv);
+	Logger log( env );
+	server.log = log;
 
-	g_server = &server;
+
 	if (!args.checkArgs())
 		return (EXIT_FAILURE);
 	try
@@ -26,7 +27,7 @@ int main(int argc, char *argv[])
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << std::endl;
+		server.log.log( Logger::ERROR, e.what());
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);

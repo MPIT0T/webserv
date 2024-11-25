@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"></html>
+<head>
+    <meta charset="UTF-8">
+    <title>Informations de l'Utilisateur</title>
+    <style>
+        .container {
+            --max-width: 1000px;
+            --padding: 1rem;
+            width: min(var(--max-width), 100% - (var(--padding) * 1.2));
+            margin-inline: auto;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background-color: #faeedc;
+        }
+        div {
+            font-size: 2rem;
+            font-weight: semibold;
+            color: #281515;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Informations de l'Utilisateur</h2>
+        <form id="uploadForm" action="./cgi-bin/upload.py" method="post" enctype="multipart/form-data">
+            <label for="file">Choisir un fichier à envoyer:</label>
+            <input type="file" id="file" name="file">
+            <button type="submit">Envoyer</button>
+        </form>
+    </div>
+</body>
+</html>

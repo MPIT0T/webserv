@@ -1,8 +1,205 @@
-[2024-11-25 14:12:30] [SERVER] The Server is UP !!
-[2024-11-25 14:12:39] [CONNECTION] Client connected.
-[2024-11-25 14:12:39] [TRACE] Metode : GET --> /index.html
-[2024-11-25 14:12:39] [CONNECTION] Client connected.
-[2024-11-25 14:12:39] [TRACE] Metode : GET --> /style.css
-[2024-11-25 14:12:39] [TRACE] Metode : GET --> /42-logo.png
-[2024-11-25 14:12:40] [TRACE] Metode : GET --> /favicon.svg
-[2024-11-25 14:12:55] [TRACE] Metode : GET --> /kjsdsdkfjh
+[2024-11-25 09:09:14] [SERVER] The Server is UP !!
+[2024-11-25 09:09:15] [SERVER] Server is shutting down...
+[2024-11-25 09:09:20] [SERVER] The Server is UP !!
+[2024-11-25 09:09:21] [SERVER] Server is shutting down...
+[2024-11-25 09:14:09] [SERVER] The Server is UP !!
+[2024-11-25 09:14:10] [SERVER] Server is shutting down...
+[2024-11-25 09:14:58] [SERVER] The Server is UP !!
+[2024-11-25 09:14:59] [SERVER] Server is shutting down...
+[2024-11-25 09:16:29] [SERVER] The Server is UP !!
+[2024-11-25 09:16:30] [SERVER] Server is shutting down...
+[2024-11-25 09:16:32] [ERROR] Unable to open file: config/good/config.jso
+[2024-11-25 09:16:39] [SERVER] The Server is UP !!
+[2024-11-25 09:16:41] [SERVER] Server is shutting down...
+[2024-11-25 09:16:57] [ERROR] JSON bracket format non valid
+[2024-11-25 09:17:05] [SERVER] The Server is UP !!
+[2024-11-25 09:17:06] [SERVER] Server is shutting down...
+[2024-11-25 09:20:40] [SERVER] The Server is UP !!
+[2024-11-25 09:20:42] [SERVER] Server is shutting down...
+[2024-11-25 10:24:53] [SERVER] The Server is UP !!
+[2024-11-25 10:24:58] [CONNECTION] Client connected.
+[2024-11-25 10:24:58] [TRACE] Metode : GET --> /index.html
+[2024-11-25 10:24:58] [CONNECTION] Client connected.
+[2024-11-25 10:24:58] [TRACE] Metode : GET --> /style.css
+[2024-11-25 10:24:58] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 10:24:59] [TRACE] Metode : GET --> /POST.html
+[2024-11-25 10:25:07] [TRACE] Metode : POST --> /cgi-bin/post.py
+[2024-11-25 10:25:07] [TRACE] Metode : GET --> /favicon.ico
+[2024-11-25 10:25:21] [SERVER] Server is shutting down...
+[2024-11-25 10:29:30] [SERVER] The Server is UP !!
+[2024-11-25 10:29:38] [CONNECTION] Client connected.
+[2024-11-25 10:29:38] [TRACE] Metode : POST --> /cgi-bin/post.py
+[2024-11-25 10:29:38] [CONNECTION] Client connected.
+[2024-11-25 10:29:38] [TRACE] Metode : GET --> /favicon.ico
+[2024-11-25 10:30:53] [SERVER] Server is shutting down...
+[2024-11-25 10:41:23] [SERVER] The Server is UP !!
+[2024-11-25 10:41:27] [CONNECTION] Client connected.
+[2024-11-25 10:41:27] [TRACE] Metode : GET --> /index.html
+[2024-11-25 10:41:27] [CONNECTION] Client connected.
+[2024-11-25 10:41:27] [TRACE] Metode : GET --> /style.css
+[2024-11-25 10:41:27] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 10:41:28] [TRACE] Metode : GET --> /DELETE.html
+[2024-11-25 10:41:31] [TRACE] Metode : DELETE --> /cgi-bin/delete.py?resource=
+[2024-11-25 10:41:39] [SERVER] Server is shutting down...
+[2024-11-25 10:42:25] [SERVER] The Server is UP !!
+[2024-11-25 10:42:27] [CONNECTION] Client connected.
+[2024-11-25 10:42:27] [CONNECTION] Client connected.
+[2024-11-25 10:42:27] [TRACE] Metode : GET --> /DELETE.html
+[2024-11-25 10:42:27] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 10:42:30] [TRACE] Metode : DELETE --> /cgi-bin/delete.py?resource=bobo.txt
+[2024-11-25 10:42:37] [SERVER] Server is shutting down...
+[2024-11-25 10:44:51] [SERVER] The Server is UP !!
+[2024-11-25 10:44:56] [CONNECTION] Client connected.
+[2024-11-25 10:44:56] [TRACE] Metode : GET --> /index.html
+[2024-11-25 10:44:56] [CONNECTION] Client connected.
+[2024-11-25 10:44:56] [TRACE] Metode : GET --> /style.css
+[2024-11-25 10:44:56] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 10:44:56] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 10:45:02] [TRACE] Metode : GET --> /UPLOAD.html
+[2024-11-25 10:45:04] [TRACE] Metode :  --> 
+[2024-11-25 10:45:04] [ERROR] map::at
+[2024-11-25 11:32:27] [SERVER] The Server is UP !!
+[2024-11-25 11:32:38] [CONNECTION] Client connected.
+[2024-11-25 11:32:38] [TRACE] Metode : GET --> /DELETE.html
+[2024-11-25 11:32:38] [CONNECTION] Client connected.
+[2024-11-25 11:32:38] [TRACE] Metode : GET --> /cgi-bin/uploads
+[2024-11-25 11:32:38] [ERROR] basic_string::substr: __pos (which is 18446744073709551615) > this->size() (which is 24)
+[2024-11-25 11:34:01] [SERVER] The Server is UP !!
+[2024-11-25 11:34:02] [CONNECTION] Client connected.
+[2024-11-25 11:34:02] [TRACE] Metode : GET --> /DELETE.html
+[2024-11-25 11:34:02] [CONNECTION] Client connected.
+[2024-11-25 11:34:02] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 11:35:12] [TRACE] Metode :  --> 
+[2024-11-25 11:35:12] [ERROR] map::at
+[2024-11-25 11:35:47] [SERVER] The Server is UP !!
+[2024-11-25 11:35:55] [CONNECTION] Client connected.
+[2024-11-25 11:35:55] [TRACE] Metode : GET --> /DOWNLOAD.html
+[2024-11-25 11:35:55] [CONNECTION] Client connected.
+[2024-11-25 11:35:56] [TRACE] Metode :  --> 
+[2024-11-25 11:35:56] [ERROR] map::at
+[2024-11-25 11:42:49] [SERVER] The Server is UP !!
+[2024-11-25 11:42:52] [CONNECTION] Client connected.
+[2024-11-25 11:42:52] [TRACE] Metode : GET --> /DELETE.html
+[2024-11-25 11:42:52] [CONNECTION] Client connected.
+[2024-11-25 11:42:56] [TRACE] Metode : GET --> /index.html
+[2024-11-25 11:42:56] [TRACE] Metode : GET --> /style.css
+[2024-11-25 11:42:56] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 11:42:56] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 11:43:19] [TRACE] Metode : GET --> /index.html
+[2024-11-25 11:43:19] [TRACE] Metode : GET --> /style.css
+[2024-11-25 11:43:19] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 11:43:19] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 11:44:18] [TRACE] Metode : GET --> /index.html
+[2024-11-25 11:44:18] [TRACE] Metode : GET --> /style.css
+[2024-11-25 11:44:18] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 11:44:18] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 11:49:20] [TRACE] Metode :  --> 
+[2024-11-25 11:49:20] [ERROR] map::at
+[2024-11-25 11:49:59] [SERVER] The Server is UP !!
+[2024-11-25 11:50:01] [CONNECTION] Client connected.
+[2024-11-25 11:50:01] [TRACE] Metode : GET --> /index.html
+[2024-11-25 11:50:01] [CONNECTION] Client connected.
+[2024-11-25 11:50:01] [TRACE] Metode : GET --> /style.css
+[2024-11-25 11:50:01] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 11:50:01] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 11:50:01] [TRACE] Metode : GET --> /index.html
+[2024-11-25 11:50:01] [TRACE] Metode : GET --> /style.css
+[2024-11-25 11:50:01] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 11:50:01] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 11:50:02] [TRACE] Metode : GET --> /index.html
+[2024-11-25 11:50:02] [TRACE] Metode : GET --> /style.css
+[2024-11-25 11:50:02] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 11:50:02] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 11:52:03] [TRACE] Metode : GET --> /index.html
+[2024-11-25 11:52:03] [TRACE] Metode : GET --> /style.css
+[2024-11-25 11:52:03] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 11:52:03] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 11:52:18] [TRACE] Metode : GET --> /index.html
+[2024-11-25 11:52:18] [TRACE] Metode : GET --> /style.css
+[2024-11-25 11:52:18] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 11:52:18] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 11:52:19] [TRACE] Metode : GET --> /index.html
+[2024-11-25 11:52:19] [TRACE] Metode : GET --> /style.css
+[2024-11-25 11:52:19] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 11:52:19] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 11:52:43] [TRACE] Metode : GET --> /POST.html
+[2024-11-25 11:52:47] [TRACE] Metode : POST --> /cgi-bin/post.py
+[2024-11-25 11:52:47] [TRACE] Metode : GET --> /favicon.ico
+[2024-11-25 11:54:00] [SERVER] Server is shutting down...
+[2024-11-25 11:54:52] [SERVER] The Server is UP !!
+[2024-11-25 11:54:55] [SERVER] Server is shutting down...
+[2024-11-25 11:55:45] [SERVER] The Server is UP !!
+[2024-11-25 11:55:59] [CONNECTION] Client connected.
+[2024-11-25 11:55:59] [CONNECTION] Client connected.
+[2024-11-25 11:55:59] [TRACE] Metode : GET --> /index.html
+[2024-11-25 11:55:59] [TRACE] Metode : GET --> /style.css
+[2024-11-25 11:55:59] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 11:55:59] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 11:55:59] [TRACE] Metode : GET --> /index.html
+[2024-11-25 11:55:59] [TRACE] Metode : GET --> /style.css
+[2024-11-25 11:55:59] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 11:56:00] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 11:56:00] [TRACE] Metode : GET --> /DELETE.html
+[2024-11-25 12:02:11] [TRACE] Metode :  --> 
+[2024-11-25 12:02:11] [ERROR] map::at
+[2024-11-25 12:06:47] [SERVER] The Server is UP !!
+[2024-11-25 12:06:49] [CONNECTION] Client connected.
+[2024-11-25 12:06:49] [TRACE] Metode : GET --> /index.html
+[2024-11-25 12:06:49] [CONNECTION] Client connected.
+[2024-11-25 12:06:49] [TRACE] Metode : GET --> /style.css
+[2024-11-25 12:06:49] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 12:06:50] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 12:06:50] [TRACE] Metode : GET --> /index.html
+[2024-11-25 12:06:50] [TRACE] Metode : GET --> /style.css
+[2024-11-25 12:06:50] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 12:06:50] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 12:06:51] [TRACE] Metode : GET --> /DELETE.html
+[2024-11-25 12:06:53] [TRACE] Metode : DELETE --> /cgi-bin/delete.py?resource=bobo.txt
+[2024-11-25 12:06:58] [SERVER] Server is shutting down...
+[2024-11-25 12:07:52] [SERVER] The Server is UP !!
+[2024-11-25 12:07:55] [CONNECTION] Client connected.
+[2024-11-25 12:07:55] [CONNECTION] Client connected.
+[2024-11-25 12:07:55] [TRACE] Metode : GET --> /DOWNLOAD.html
+[2024-11-25 12:07:55] [TRACE] Metode : GET --> /styles.css
+[2024-11-25 12:08:11] [TRACE] Metode :  --> 
+[2024-11-25 12:08:11] [ERROR] map::at
+[2024-11-25 12:08:22] [SERVER] The Server is UP !!
+[2024-11-25 12:08:25] [CONNECTION] Client connected.
+[2024-11-25 12:08:25] [TRACE] Metode : GET --> /index.html
+[2024-11-25 12:08:25] [CONNECTION] Client connected.
+[2024-11-25 12:08:25] [TRACE] Metode : GET --> /style.css
+[2024-11-25 12:08:25] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 12:08:25] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 12:08:26] [TRACE] Metode : GET --> /DOWNLOAD.html
+[2024-11-25 12:08:26] [TRACE] Metode : GET --> /styles.css
+[2024-11-25 12:09:00] [SERVER] Server is shutting down...
+[2024-11-25 12:09:35] [SERVER] The Server is UP !!
+[2024-11-25 12:09:42] [CONNECTION] Client connected.
+[2024-11-25 12:09:42] [TRACE] Metode : GET --> /DOWNLOAD.html
+[2024-11-25 12:09:42] [CONNECTION] Client connected.
+[2024-11-25 12:09:42] [TRACE] Metode : GET --> /styles.css
+[2024-11-25 12:09:59] [TRACE] Metode : GET --> /DOWNLOAD.html
+[2024-11-25 12:09:59] [TRACE] Metode :  --> 
+[2024-11-25 12:09:59] [ERROR] map::at
+[2024-11-25 12:10:04] [SERVER] The Server is UP !!
+[2024-11-25 12:10:05] [CONNECTION] Client connected.
+[2024-11-25 12:10:05] [TRACE] Metode : GET --> /DOWNLOAD.html
+[2024-11-25 12:10:05] [CONNECTION] Client connected.
+[2024-11-25 12:10:05] [TRACE] Metode : GET --> /style.css
+[2024-11-25 12:10:05] [TRACE] Metode : GET --> /favicon.ico
+[2024-11-25 12:10:09] [TRACE] Metode : GET --> /UPLOAD.html
+[2024-11-25 12:10:29] [TRACE] Metode : GET --> /favicon.ico
+[2024-11-25 12:10:30] [CONNECTION] Client connected.
+[2024-11-25 12:10:30] [TRACE] Metode : POST --> /cgi-bin/upload.py
+[2024-11-25 12:10:30] [TRACE] Metode : ------WebKitFormBoundaryYHDrzh1fHecYsJJH
+Content-Disposition: --> form-data;
+[2024-11-25 12:10:30] [ERROR] map::at
+[2024-11-25 12:11:04] [SERVER] The Server is UP !!
+[2024-11-25 12:11:06] [CONNECTION] Client connected.
+[2024-11-25 12:11:06] [CONNECTION] Client connected.
+[2024-11-25 12:11:06] [TRACE] Metode : GET --> /favicon.ico
+[2024-11-25 12:11:27] [TRACE] Metode : POST --> /cgi-bin/upload.py
+[2024-11-25 12:11:27] [TRACE] Metode : ------WebKitFormBoundaryBdPcFV6bO6x1wxzV
+Content-Disposition: --> form-data;
+[2024-11-25 12:11:27] [ERROR] map::at
+[2024-11-25 14:46:27] [ERROR] Failed to add listening socket to epoll instance

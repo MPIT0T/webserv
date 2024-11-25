@@ -47,36 +47,19 @@
 <body>
     <div class="container">
         <h2>Create file.txt on the server</h2>
-        <div class="wrapper">
-            <label for="filename">Nom du fichier:</label>
-            <input type="text" id="filename" name="filename" >
-        </div>
-        <div class="wrapper">
-            <label for="content">Contenu du fichier :</label>
-            <textarea id="content" name="content" rows="3" cols="50" ></textarea>
-        </div>
-        <button classe="button" onclick="submitInfo()">Create file</button>
+        <form action="./cgi-bin/post.py" method="post">
+			<label for="filename">Nom du fichier :</label>
+			<input type="text" id="filename" name="filename" required>
+			<br>
+			<label for="content">Contenu du fichier :</label>
+			<textarea id="content" name="content" rows="2" cols="50" required></textarea>
+			<br>
+			<input class="button" type="submit" value="Create file">
+		</form>
     </div>
 
     <script>
-        function submitInfo() {
-            const filename = document.getElementById('filename').value;
-            const content = document.getElementById('content').value;
-            console.log('Nom du fichier:', filename);
-            console.log('Contenu:', content);
-        }
     </script>
 </body>
 </section>
 </html>
-
-<!-- 
-<form action="./cgi-bin/create_file.py" method="post">
-    <label for="filename">Nom du fichier :</label>
-    <input type="text" id="filename" name="filename" required>
-    <br>
-    <label for="content">Contenu du fichier :</label>
-    <textarea id="content" name="content" rows="2" cols="50" required></textarea>
-    <br>
-    <input class="button" type="submit" value="Create file">
-</form> -->

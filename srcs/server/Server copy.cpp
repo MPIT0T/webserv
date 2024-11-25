@@ -42,29 +42,23 @@ void Server::init(void)
 void Server::run(void)
 {
 	const int MAX_EVENTS = 100;
-	int epoll_fd = epoll_create1(0);
+    int epoll_fd = epoll_create1(0);
     if (epoll_fd == -1) {
 		throw std::runtime_error("Failed to create epoll instance");
     }
 
-	struct epoll_event	ev;
-	struct epoll_event	events[MAX_EVENTS];
+    struct epoll_event ev, events[MAX_EVENTS];
 
-	ev.events = EPOLLIN;
-	for (std::vector<Listen>::iterator it = _listens.begin(); it != _listens.end(); ++it)
-	{
-		ev.data.fd = it->getSocket().getFd();
-		if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, it->getSocket().getFd(), &ev) == -1)
-		{
-			throw std::runtime_error("Failed to add listening socket to epoll instance");
-		}
-	}
+    ev.events = EPOLLIN;
+    ev.data.fd = _socket.getFd();
+    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, _socket.getFd(), &ev) == -1) {
+		throw std::runtime_errort("Failed to add listening socket to epoll instance");
+    }
 
-	log.log( log.SERVER, "The Server is UP !!");
+    og.olog.log( log.SERVER, "The Server is UP !!");
 
-	while (_signals == false)
-	{
-		int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
+    while (_signals == false) {
+        int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
         if ((nfds  == -1) && _signals == false) {
 			log.log( log.ERROR, "Failed to wait for events");
             break;
@@ -75,70 +69,59 @@ void Server::run(void)
 			break;
 		}
 
-		for (int i = 0; i < nfds; ++i)
+        for (int i = 0; i < nfds; ++i)
 		{
-        	int event_fd = events[i].data.fd;
+            int event_fd = events[i].data.fd;
 
-            for (std::vector<Listen>::iterator it = _listens.begin(); it != _listens.end(); ++it)
-			{
-				if (event_fd == it->getSocket().getFd())
-				{
-					try
-					{
-						ClientInfo *client = it->getSocket().accept();
-						log.log( log.CONNECTION, "Client connected."); //TODO ajouter details connection
+            if (event_fd == _socket.getFd()) {
+            try {
+                    ClientInfo *client = _socket.accept();
+					log.log( log.CONNECTION, "Client connected.");
 
-						ev.events = EPOLLIN;
-						ev.data.fd = client->fd();
-						if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client->fd(), &ev) == -1)
-						{
-							log.log( log.ERROR, "Failed to add client to epoll instance");
-							delete client;
-							continue;
-						}
-						clients.insert(std::make_pair(client->fd(), client));
-					}
-					catch (Socket::SocketAcceptException &e) {
-						log.log( log.ERROR, e.what());
-					}
-				}
-			}
-			if (events[i].events & EPOLLIN)
-			{
-				ClientInfo *client = clients.at(event_fd);
-				int listenID = 0;
-
-				for (std::vector<Listen>::iterator it = _listens.begin(); it != _listens.end(); ++it)
-				{
-					listenID++;
-					if (it->getPort() == client->port())
-						break ;
-				}
-
-				try {
-					Request *request = _listens.at(listenID).getSocket().receive(client);
+                    ev.events = EPOLLIN;
+                    ev.data.fd = client->fd();
+                    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client->fd(), &ev) == -1) {
+                        log.log( log.ERROR, "Failed to add client to epoll instance");
+                        delete client;
+                        continue;
+                    }
+                    clients.insert(std::make_pair(client->fd(), client));
+                } catch (Socket::SocketAcceptException &e) {
+					log.log( log.ERROR, e.what());
+                }
+            } else if (events[i].events & EPOLLIN) {
+                ClientInfo *client = clients[event_fd];
+                try {
+                    Request *request = _socket.receive(client);
 					log.log( log.TRACE, ("Metode : " + request->getType() + " --> " + request->getUri()).c_str());
 
-                    // SendResponse *response = new SendResponse(request, listen, client);
-
-					// response->getNewMessage();//TODO A VOIR !!!
-                    // delete response;
+                    SendResponse *response = new SendResponse(
+                        request->getVersion(),
+                        request->getHeaders().at("Connection"),
+                        "WebServ",
+                        request->getHeaders().at("Accept"),
+                        "www/main" + request->getUri(),
+                        OK,
+                        client->fd()
+                    );
+                    response->getNewMessage();
+                    delete response;
 					delete request;
-				}
-				catch (Socket::SocketReceiveException &e) {
+                } catch (Socket::SocketReceiveException &e) {
 					log.log( log.ERROR, e.what());
-					close(event_fd);
-					epoll_ctl(epoll_fd, EPOLL_CTL_DEL, event_fd, NULL);
-					delete client;
-					clients.erase(event_fd);
-				}
-			}
-		}
-
-	}
+                    close(event_fd);
+                    epoll_ctl(epoll_fd, EPOLL_CTL_DEL, event_fd, NULL);
+                    delete client;
+                    clients.erase(event_fd);
+                }
+            }
+        }
+    }
+    close(epoll_fd);
+    for (std::map<int, ClientInfo*>::iterator it = clients.begin(); it != clients.end(); ++it) {
+        delete it->second;
+    }
 }
-
-
 
 void Server::stop(void)
 {

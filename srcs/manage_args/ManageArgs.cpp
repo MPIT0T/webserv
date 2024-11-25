@@ -40,7 +40,7 @@ bool ManageArgs::checkArgs( void ) const
 {
     if (this->_argc < 2)
     {
-        std::cerr << "Usage: " << this->_argv[0] << " [configuration file]" << std::endl;
+        std::cerr << "\033[3;32mUsage: ./webserv <config_file>\033[0m" << std::endl;
         return false;
     }
     return true;

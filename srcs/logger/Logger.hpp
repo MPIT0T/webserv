@@ -1,7 +1,6 @@
 #ifndef LOGGER_HPP
 #define LOGGER_HPP
 
-#include "Defines.hpp"
 #include <map>
 #include <string>
 #include <iostream>
@@ -15,13 +14,16 @@
 #include <cstring>
 #include <cstdlib>
 
-/* DEFAULT PARAMETERS */
-#define DEFAULT_LOG_STATE true
-#define DEFAULT_LOG_FILE_STATE false
-#define DEFAULT_LOG_DEBUG_STATE false
+#include "colors.h"
 
 class Logger
 {
+private:
+	static bool _logState;
+	static bool _logFileState;
+	static bool _logDebugState;
+	static std::string _logFileNameTermination;
+	static std::string _path;
 public:
 	/* ENUMs */
 	enum LogLevel
@@ -29,11 +31,19 @@ public:
 		FATAL = 0,
 		ERROR,
 		WARNING,
+		CONNECTION,
 		INFO,
 		TRACE,
 		DEBUG,
+		SERVER,
 	};
 	// logInstance
+	Logger();
+	Logger( char **envp );
+	Logger(const Logger &src);
+	Logger &operator=(const Logger &src);
+	
+	~Logger();
 
 	/* MAIN */
 	static void log(LogLevel level, const char *msg, ...);
@@ -47,18 +57,13 @@ public:
 	static bool getLogState(void);
 	static bool getLogFileState(void);
 	static bool getLogDebugState(void);
-	static std::string getLogFileName(void);
+	static std::string getLogFileNameTermination(void);
 	static std::string getLogLevelStr(LogLevel level);
 	static std::string getLogLevelColor(LogLevel level);
 
 	/* CLEANUP */
 	// static void cleanup(void);
 
-private:
-	static bool _logState;
-	static bool _logFileState;
-	static bool _logDebugState;
-	static std::string _logFileName;
 };
 
 #endif // LOGGER_HPP
