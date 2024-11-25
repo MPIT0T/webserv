@@ -2,20 +2,3 @@
 [2024-11-20 14:54:34] [SERVER] Server is shutting down...
 [2024-11-20 14:55:53] [SERVER] The Server is UP !!
 [2024-11-20 14:55:54] [SERVER] Server is shutting down...
-[2024-11-20 15:18:37] [SERVER] The Server is UP !!
-[2024-11-20 15:18:43] [CONNECTION] Client connected.
-[2024-11-20 15:18:43] [TRACE] Metode : GET --> /index.html
-[2024-11-20 15:18:43] [CONNECTION] Client connected.
-[2024-11-20 15:18:43] [TRACE] Metode : GET --> /style.css
-[2024-11-20 15:18:43] [TRACE] Metode : GET --> /42-logo.png
-[2024-11-20 15:18:45] [TRACE] Metode : GET --> /mpitot/mpitot.html
-[2024-11-20 15:18:45] [TRACE] Metode : GET --> /mpitot/style.css
-[2024-11-20 15:18:45] [TRACE] Metode : GET --> /mpitot/scripts.js
-[2024-11-20 15:18:46] [TRACE] Metode :  --> 
-[2024-11-20 15:19:28] [SERVER] The Server is UP !!
-[2024-11-20 15:19:33] [CONNECTION] Client connected.
-[2024-11-20 15:19:33] [TRACE] Metode : GET --> /mpitot/mpitot.html
-[2024-11-20 15:19:33] [CONNECTION] Client connected.
-[2024-11-20 15:19:33] [TRACE] Metode : GET --> /mpitot/style.css
-[2024-11-20 15:19:33] [TRACE] Metode : GET --> /mpitot/scripts.js
-[2024-11-20 15:19:33] [TRACE] Metode :  --> 
