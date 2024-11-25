@@ -95,7 +95,7 @@ void Server::run(void)
                     }
                     clients.insert(std::make_pair(client->fd(), client));
                 } catch (Socket::SocketAcceptException &e) {
-                    std::cerr << e.what() << std::endl;
+					log.log( log.ERROR, e.what());
                 }
             } else if (events[i].events & EPOLLIN) {
                 // Handle data from an existing client
@@ -117,7 +117,7 @@ void Server::run(void)
                     delete response;
 					delete request;
                 } catch (Socket::SocketReceiveException &e) {
-                    std::cerr << e.what() << std::endl;
+					log.log( log.ERROR, e.what());
                     close(event_fd);
                     epoll_ctl(epoll_fd, EPOLL_CTL_DEL, event_fd, NULL); // Remove from epoll
                     delete client;
