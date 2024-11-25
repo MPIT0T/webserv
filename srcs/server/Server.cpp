@@ -33,16 +33,11 @@ Server::~Server()
 
 void Server::init(void)
 {
-	_socket.create();
-	_socket.bind("127.0.0.1", 8080);
-	_socket.listen();
-}
-
-struct FDChecker {
-	bool operator()(const pollfd& p) const {
-		return p.fd == -1;
+	for (std::vector<Listen>::iterator it = _listens.begin(); it != _listens.end(); ++it)
+	{
+		it->setSocket(it->getHost(), it->getPort());
 	}
-};
+}
 
 void Server::run(void)
 {
@@ -142,7 +137,7 @@ bool Server::parseConfigFile(std::string configFile)
 	try {
 		content = trimConfig(readFileContent(configFile));
 		checkJsonFormat(content);
-		_listen = setListen(content);
+		_listens = setListen(content);
 	}
 	catch (std::exception &e) {
 		log.log( log.ERROR, e.what());
@@ -216,21 +211,21 @@ std::vector<Listen> Server::setListen(std::string content)
 }
 
 std::string Server::trimConfig(const std::string& config) {
-    std::string trimmed;
-    bool inQuotes = false;
+	std::string trimmed;
+	bool inQuotes = false;
 
-    for (std::string::size_type i = 0; i < config.size(); ++i) {
-        char c = config[i];
+	for (std::string::size_type i = 0; i < config.size(); ++i) {
+		char c = config[i];
 
-        if (c == '"') {
-            inQuotes = !inQuotes;
-            trimmed += c;
-        }
-        else if (inQuotes || (c != ' ' && c != '\t' && c != '\n')) {
-            trimmed += c;
-        }
-    }
-    return trimmed;
+		if (c == '"') {
+			inQuotes = !inQuotes;
+			trimmed += c;
+		}
+		else if (inQuotes || (c != ' ' && c != '\t' && c != '\n')) {
+			trimmed += c;
+		}
+	}
+	return trimmed;
 }
 
 
