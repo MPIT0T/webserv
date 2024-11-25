@@ -1,0 +1,51 @@
+[2024-11-25 14:24:16] [SERVER] The Server is UP !!
+[2024-11-25 14:24:21] [CONNECTION] Client connected.
+[2024-11-25 14:24:21] [TRACE] Metode : GET --> /mbrousse/mbroussds
+[2024-11-25 14:25:02] [SERVER] The Server is UP !!
+[2024-11-25 14:25:04] [CONNECTION] Client connected.
+[2024-11-25 14:25:04] [TRACE] Metode : GET --> /index.html
+[2024-11-25 14:25:04] [CONNECTION] Client connected.
+[2024-11-25 14:25:04] [TRACE] Metode : GET --> /style.css
+[2024-11-25 14:25:04] [TRACE] Metode : GET --> /42-logo.png
+[2024-11-25 14:25:04] [TRACE] Metode : GET --> /favicon.svg
+[2024-11-25 14:25:06] [TRACE] Metode : GET --> /mbrousse/mbrousse.html
+[2024-11-25 14:25:06] [TRACE] Metode : GET --> /mbrousse/style.css
+[2024-11-25 14:25:06] [CONNECTION] Client connected.
+[2024-11-25 14:25:06] [CONNECTION] Client connected.
+[2024-11-25 14:25:06] [CONNECTION] Client connected.
+[2024-11-25 14:25:06] [CONNECTION] Client connected.
+[2024-11-25 14:25:06] [TRACE] Metode : GET --> /mbrousse/mbrousse.jpg
+[2024-11-25 14:25:06] [TRACE] Metode : GET --> /mbrousse/facebook-svgrepo-com.svg
+[2024-11-25 14:25:06] [TRACE] Metode : GET --> /mbrousse/linkedin-svgrepo-com.svg
+[2024-11-25 14:25:06] [TRACE] Metode : GET --> /mbrousse/adalabs-logo.jpeg
+[2024-11-25 14:25:06] [TRACE] Metode : GET --> /mbrousse/42_Logo.png
+[2024-11-25 14:25:06] [TRACE] Metode : GET --> /mbrousse/shole.png
+[2024-11-25 14:25:06] [TRACE] Metode : GET --> /mbrousse/colege.png
+[2024-11-25 14:25:06] [TRACE] Metode : GET --> /mbrousse/manger.jpg
+[2024-11-25 14:25:06] [TRACE] Metode : GET --> /mbrousse/cuisine.jpg
+[2024-11-25 14:25:06] [TRACE] Metode : GET --> /mbrousse/jeux.jpeg
+[2024-11-25 14:25:06] [TRACE] Metode : GET --> /mbrousse/livre.jpg
+[2024-11-25 14:25:06] [TRACE] Metode : GET --> /mbrousse/qr.png
+[2024-11-25 14:25:06] [TRACE] Metode : GET --> /mbrousse/PHOTO-CLUSTER-VIDE-1024x681.png
+[2024-11-25 14:25:29] [TRACE] Metode : GET --> /mbrousse/mbrousse.html
+[2024-11-25 14:25:29] [TRACE] Metode : GET --> /mbrousse/style.css
+[2024-11-25 14:25:29] [TRACE] Metode : GET --> /mbrousse/mbrousse.jpg
+[2024-11-25 14:25:29] [TRACE] Metode : GET --> /mbrousse/facebook-svgrepo-com.svg
+[2024-11-25 14:25:29] [TRACE] Metode : GET --> /mbrousse/linkedin-svgrepo-com.svg
+[2024-11-25 14:25:29] [TRACE] Metode : GET --> /mbrousse/adalabs-logo.jpeg
+[2024-11-25 14:25:29] [TRACE] Metode : GET --> /mbrousse/42_Logo.png
+[2024-11-25 14:25:29] [TRACE] Metode : GET --> /mbrousse/shole.png
+[2024-11-25 14:25:29] [TRACE] Metode : GET --> /mbrousse/colege.png
+[2024-11-25 14:25:29] [TRACE] Metode : GET --> /mbrousse/manger.jpg
+[2024-11-25 14:25:29] [TRACE] Metode : GET --> /mbrousse/cuisine.jpg
+[2024-11-25 14:25:29] [TRACE] Metode : GET --> /mbrousse/jeux.jpeg
+[2024-11-25 14:25:29] [TRACE] Metode : GET --> /mbrousse/livre.jpg
+[2024-11-25 14:25:29] [TRACE] Metode : GET --> /mbrousse/PHOTO-CLUSTER-VIDE-1024x681.png
+[2024-11-25 14:25:29] [TRACE] Metode : GET --> /mbrousse/qr.png
+[2024-11-25 14:25:38] [TRACE] Metode : GET --> /GET.html
+[2024-11-25 14:25:41] [TRACE] Metode : GET --> /POST.html
+[2024-11-25 14:25:52] [TRACE] Metode : GET --> /DELETE.html
+[2024-11-25 14:25:55] [TRACE] Metode : GET --> /POST.html
+[2024-11-25 14:26:15] [TRACE] Metode : GET --> /POST.html
+[2024-11-25 14:26:20] [TRACE] Metode : GET --> /POST.html
+[2024-11-25 14:33:17] [SERVER] Server is shutting down...

@@ -8,10 +8,11 @@
 
 Server *g_server;
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[], char *env[])
 {
 	Server server;
 	g_server = &server;
+	g_server->setEnv(env);
 	ManageArgs args(argc, argv);
 
 	if (!args.checkArgs())

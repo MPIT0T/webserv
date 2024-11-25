@@ -3,19 +3,14 @@
 /* ***************** */
 
 #include "Server.hpp"
-#include "Request.hpp"
-#include "SendResponse.hpp"
-#include <err.h>
-#include <poll.h>
-#include <map>
-#include <stack>
-#include <algorithm>
-#include "utils.hpp"
+
+bool Server::_signals = false;
 
 Server::Server( void )
 {
-	_signals = Signal();
-	_socket = Socket();
+	// Signal signal;
+	signal(SIGINT, &handleSIGINT);
+	signal(SIGQUIT, &handleSIGINT);
 }
 
 Server::Server( const Server &src )
@@ -43,20 +38,6 @@ void Server::init(void)
 	_socket.listen();
 }
 
-template <typename T, typename Predicate>		//TODO deplacer
-typename std::vector<T>::iterator remove_if_custom(std::vector<T>& vec, Predicate pred) {
-	typename std::vector<T>::iterator it = vec.begin();
-	while (it != vec.end()) {
-		if (pred(*it)) {
-			it = vec.erase(it);  // Erase and get the next iterator
-		} else {
-			++it;
-		}
-	}
-	return it;  // Return the iterator pointing to the new end
-}
-
-
 struct FDChecker {
 	bool operator()(const pollfd& p) const {
 		return p.fd == -1;
@@ -65,73 +46,86 @@ struct FDChecker {
 
 void Server::run(void)
 {
-	std::vector<pollfd>				fds;
-	std::map<int, ClientInfo*>		clients;
-	pollfd							listen_fd;
+	Logger log( this->getEnv() );
+	const int MAX_EVENTS = 1000; // Maximum number of events to handle at once
+    int epoll_fd = epoll_create1(0); // Create an epoll instance
+    if (epoll_fd == -1) {
+		throw std::runtime_error("Failed to create epoll instance");
+    }
 
-	listen_fd.fd = _socket.getFd();
-	listen_fd.events = POLLIN;
-	listen_fd.revents = 0;
-	fds.push_back(listen_fd);
+     // Track clients by their file descriptor
+    struct epoll_event ev, events[MAX_EVENTS];
 
-	std::cout << "Waiting for connection..." << std::endl << std::endl;
+    // Add the listening socket to the epoll instance
+    ev.events = EPOLLIN;
+    ev.data.fd = _socket.getFd();
+    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, _socket.getFd(), &ev) == -1) {
+		throw std::runtime_error("Failed to add listening socket to epoll instance");
+    }
 
-	while (42)
-	{
-		int ret = poll(&fds[0], fds.size(), -1);
-		if (ret < 0)
+    log.log( log.SERVER, "The Server is UP !!");
+
+    while (_signals == false) {
+        int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
+        if ((nfds  == -1) && _signals == false) {
+			log.log( log.ERROR, "Failed to wait for events");
+            break;
+        }
+		else if (_signals == true)
 		{
-			std::cerr << "Poll error" << std::endl;
-			break ;
+			log.log( log.SERVER, "Server is shutting down...");
+			break;
 		}
-		for (size_t i = 0; i < fds.size(); ++i)
-		{
-			if (fds[i].fd == listen_fd.fd && (fds[i].revents & POLLIN))
-			{
-				try
-				{
-					ClientInfo *client = _socket.accept();
-					std::cout << "Client connected." << std::endl;
 
-					pollfd client_fd;
-					client_fd.fd = client->fd();
-					client_fd.events = POLLIN;
-					client_fd.revents = 0;
-					fds.push_back(client_fd);
-					clients.insert(std::make_pair(client_fd.fd, client));
-				}
-				catch (Socket::SocketAcceptException &e)
-				{
-					std::cerr << e.what() << std::endl;
-				}
-			}
-			else if (fds[i].revents & POLLIN)
-			{
-				int client_fd = fds[i].fd;
-				ClientInfo *client = clients[client_fd];
+        for (int i = 0; i < nfds; ++i) {
+            int event_fd = events[i].data.fd;
 
-				try
-				{
-					Request *request = _socket.receive(client);
-					std::cout << "Request received from client " << client_fd << std::endl;
+            if (event_fd == _socket.getFd()) {
+                // Handle new client connections
+                try {
+                    ClientInfo *client = _socket.accept();
+					log.log( log.CONNECTION, "Client connected.");
+
+                    ev.events = EPOLLIN;
+                    ev.data.fd = client->fd();
+                    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client->fd(), &ev) == -1) {
+                        log.log( log.ERROR, "Failed to add client to epoll instance");
+                        delete client; // Cleanup on failure
+                        continue;
+                    }
+                    clients.insert(std::make_pair(client->fd(), client));
+                } catch (Socket::SocketAcceptException &e) {
+                    std::cerr << e.what() << std::endl;
+                }
+            } else if (events[i].events & EPOLLIN) {
+                // Handle data from an existing client
+                ClientInfo *client = clients[event_fd];
+                try {
+                    Request *request = _socket.receive(client);
+					log.log( log.TRACE, ("Metode : " + request->getType() + " --> " + request->getUri()).c_str());
 
 					SendResponse *response = new SendResponse(*request, _listen.at(0), *client);
 					response->makeMessageHeader();
 
-					delete response;
-				}
-				catch (Socket::SocketReceiveException &e)
-				{
-					std::cerr << e.what() << std::endl;
-					close(client_fd);
-					fds[i].fd = -1;
-					delete client;
-					clients.erase(client_fd);
-				}
-			}
-		}
-		fds.erase(remove_if_custom(fds, FDChecker()), fds.end());
- 	}
+
+                    delete response;
+					delete request;
+                } catch (Socket::SocketReceiveException &e) {
+                    std::cerr << e.what() << std::endl;
+                    close(event_fd);
+                    epoll_ctl(epoll_fd, EPOLL_CTL_DEL, event_fd, NULL); // Remove from epoll
+                    delete client;
+                    clients.erase(event_fd);
+                }
+            }
+        }
+    }
+
+    // Cleanup
+    close(epoll_fd);
+    for (std::map<int, ClientInfo*>::iterator it = clients.begin(); it != clients.end(); ++it) {
+        delete it->second;
+    }
 }
 
 void Server::stop(void)
@@ -245,4 +239,21 @@ std::string Server::trimConfig(const std::string& config) {
 const char* Server::ServerConfigJSONFormatException::what() const throw()
 {
 	return "JSON bracket format non valid";
+}
+
+void Server::setEnv(char **env)
+{
+	_env = env;
+}
+
+char **Server::getEnv(void)
+{
+	return _env;
+}
+
+void	Server::handleSIGINT(int sig)
+{
+	(void)sig;
+	std::cout << "\r";
+	Server::_signals = true;
 }
