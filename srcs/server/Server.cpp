@@ -53,16 +53,11 @@ void Server::run(void)
 	for (std::vector<Listen>::iterator it = _listens.begin(); it != _listens.end(); ++it)
 	{
 		std::stringstream ss;
-		ss << "Listening on port http://" << it->getHost() << ":" << it->getPort() << std::endl;
+		ss << "Listening on port http://" << it->getHost() << ":" << it->getPort();
 		log.log(log.SERVER, ss.str().c_str());
 		ev.data.fd = it->getSocket().getFd();
-		ss << "ev.data.fd : " << ev.data.fd;
-		log.log(log.SERVER, ss.str().c_str());
 		if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, it->getSocket().getFd(), &ev) == -1)
-		{
-			perror("");
 			throw std::runtime_error("Failed to add listening socket to epoll instance");
-		}
 	}
 
 	log.log( log.SERVER, "The Server is UP !!");
@@ -92,7 +87,6 @@ void Server::run(void)
 					{
 						ClientInfo *client = it->getSocket().accept();
 						log.log( log.CONNECTION, "Client connected."); //TODO ajouter details connection
-
 						ev.events = EPOLLIN;
 						ev.data.fd = client->fd();
 						if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client->fd(), &ev) == -1)
@@ -104,6 +98,7 @@ void Server::run(void)
 						clients.insert(std::make_pair(client->fd(), client));
 					}
 					catch (Socket::SocketAcceptException &e) {
+						log.log(log.ERROR, "Failed to accept client");
 						log.log(log.ERROR, e.what());
 					}
 				}
@@ -132,6 +127,7 @@ void Server::run(void)
 				}
 				catch (Socket::SocketReceiveException &e)
 				{
+					log.log( log.ERROR, "Failed to receive data from client");
 					log.log( log.ERROR, e.what());
 					close(event_fd);
 					epoll_ctl(epoll_fd, EPOLL_CTL_DEL, event_fd, NULL);
