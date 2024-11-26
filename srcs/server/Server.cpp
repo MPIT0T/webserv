@@ -116,7 +116,7 @@ void Server::run(void)
 					Request *request = _listens.at(client->listenID()).getSocket().receive(client);
 					log.log(log.TRACE, ("Metode : " + request->getType() + " --> " + request->getUri()).c_str());
 
-					client->setRouteAccess(request->getUri(), _listens.at(listenID - 1).getRoutes());
+					client->setRouteAccess(request->getUri(), _listens.at(client->listenID()).getRoutes());
 					log.log(log.TRACE, ("Route Access : " + client->getRouteAccess()).c_str());
 
 					SendResponse *response = new SendResponse(*request, _listens.at(client->listenID()), *client);
