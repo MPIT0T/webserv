@@ -10,6 +10,10 @@
 # include <stdexcept>
 # include "ClientInfo.hpp"
 
+class Listen;
+
+class ClientInfo;
+
 class Socket
 {
 public:

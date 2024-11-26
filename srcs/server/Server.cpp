@@ -97,6 +97,7 @@ void Server::run(void)
 							delete client;
 							continue;
 						}
+						client->setRouteAccess("/", it->getRoutes());
 						clients.insert(std::make_pair(client->fd(), client));
 					}
 					catch (Socket::SocketAcceptException &e) {
@@ -121,6 +122,9 @@ void Server::run(void)
 				try {
 					Request *request = _listens.at(listenID - 1).getSocket().receive(client);
 					log.log(log.TRACE, ("Metode : " + request->getType() + " --> " + request->getUri()).c_str());
+
+					client->setRouteAccess(request->getUri(), _listens.at(listenID - 1).getRoutes());
+					log.log(log.TRACE, ("Route Access : " + client->getRouteAccess()).c_str());
 
 					SendResponse *response = new SendResponse(*request, _listens.at(listenID - 1), *client);
 					response->makeMessageHeader();

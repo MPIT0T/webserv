@@ -3,7 +3,7 @@
 /* ***************** */
 
 #include "ClientInfo.hpp"
-#include <unistd.h>
+
 
 /* Constructors ************************************************************* */
 ClientInfo::ClientInfo() {}
@@ -13,6 +13,7 @@ ClientInfo::ClientInfo(int fd, int port, std::string ip)
 	_fd = fd;
 	_port = port;
 	_ip = ip;
+	_routeAccess = "/";
 }
 
 ClientInfo::ClientInfo(const ClientInfo &src)
@@ -63,4 +64,21 @@ void ClientInfo::setPort(const int port)
 void ClientInfo::setIP(const std::string &ip)
 {
 	_ip = ip;
+}
+
+void ClientInfo::setRouteAccess(const std::string &routeAccess, const std::map<std::string, Route> &routes)
+{
+	for (std::map<std::string, Route>::const_iterator it = routes.begin(); it != routes.end(); ++it)
+	{
+		if (routeAccess == it->first)
+		{
+			_routeAccess = it->second.getRoot();
+			return ;
+		}
+	}
+}
+
+std::string ClientInfo::getRouteAccess()
+{
+	return (_routeAccess);
 }
