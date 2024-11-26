@@ -122,7 +122,7 @@ void Server::run(void)
 					Request *request = _listens.at(listenID - 1).getSocket().receive(client);
 					log.log(log.TRACE, ("Metode : " + request->getType() + " --> " + request->getUri()).c_str());
 
-					SendResponse *response = new SendResponse(*request, _listen.at(0), *client);
+					SendResponse *response = new SendResponse(*request, _listens.at(listenID - 1), *client);
 					response->makeMessageHeader();
 
 
@@ -141,6 +141,10 @@ void Server::run(void)
 			}
 		}
 	}
+	close(epoll_fd);
+    for (std::map<int, ClientInfo*>::iterator it = clients.begin(); it != clients.end(); ++it) {
+        delete it->second;
+    }
 }
 
 
