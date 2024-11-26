@@ -46,7 +46,7 @@ public:
 
 
 	// Getters
-	Socket							getSocket() const;
+	Socket							&getSocket();
 	int								getPort( void ) const;
 	int								getMaxBodySize( void ) const;
 	std::string						getHost( void ) const;

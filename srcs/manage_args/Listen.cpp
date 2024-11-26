@@ -67,16 +67,23 @@ Listen::Listen(std::string content)
 	// print_value();
 }
 
-Socket Listen::getSocket() const
+Socket &Listen::getSocket()
 {
 	return (_socket);
 }
-
+#include <fcntl.h>
 void Listen::setSocket(const std::string &hostName, int port)
 {
-	_socket.create();
-	_socket.bind(hostName, port);
-	_socket.listen();
+	try
+	{
+		_socket.create();
+		_socket.bind(hostName, port);
+		_socket.listen();
+	}
+	catch (std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
 }
 
 // Destructor
