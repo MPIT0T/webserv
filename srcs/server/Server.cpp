@@ -79,6 +79,7 @@ void Server::run(void)
 		{
 			int event_fd = events[i].data.fd;
 			bool isListeningsocket = false;
+			int listenID = 0;
 
             for (std::vector<Listen>::iterator it = _listens.begin(); it != _listens.end(); ++it)
 			{
@@ -87,8 +88,8 @@ void Server::run(void)
 					isListeningsocket = true;
 					try
 					{
-						ClientInfo *client = it->getSocket().accept();
-						log.log( log.CONNECTION, "Client connected."); //TODO ajouter details connection
+						ClientInfo *client = it->getSocket().accept(listenID);
+						log.log( log.CONNECTION, "Client ", client->fd(), " connected."); // TODO check les probs d'affichage
 						ev.events = EPOLLIN;
 						ev.data.fd = client->fd();
 						if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client->fd(), &ev) == -1)
@@ -105,32 +106,23 @@ void Server::run(void)
 						log.log(log.ERROR, e.what());
 					}
 				}
+				listenID++;
 			}
 			if (!isListeningsocket && (events[i].events & EPOLLIN))
 			{
 				ClientInfo *client = clients.at(event_fd);
-				int listenID = 0;
-
-
-				for (std::vector<Listen>::iterator it = _listens.begin(); it != _listens.end(); ++it)
-				{
-					if (it->getPort() == client->port())
-						break ;
-					listenID++;
-				}
 
 				try {
-					Request *request = _listens.at(listenID - 1).getSocket().receive(client);
+					Request *request = _listens.at(client->listenID()).getSocket().receive(client);
 					log.log(log.TRACE, ("Metode : " + request->getType() + " --> " + request->getUri()).c_str());
 
 					client->setRouteAccess(request->getUri(), _listens.at(listenID - 1).getRoutes());
 					log.log(log.TRACE, ("Route Access : " + client->getRouteAccess()).c_str());
 
-					SendResponse *response = new SendResponse(*request, _listens.at(listenID - 1), *client);
+					SendResponse *response = new SendResponse(*request, _listens.at(client->listenID()), *client);
 					response->makeMessageHeader();
 
-
-                    delete response;
+					delete response;
 					delete request;
 				}
 				catch (Socket::SocketReceiveException &e)

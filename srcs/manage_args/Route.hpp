@@ -48,6 +48,12 @@ public:
 
 	//debug
 	void print_arg() const;
+
+	//exceptions
+	class RouteAllowedMethodException : public std::exception
+	{
+		const char *what() const throw();
+	};
 };
 
 #endif // Route_HPP

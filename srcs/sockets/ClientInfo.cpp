@@ -8,12 +8,13 @@
 /* Constructors ************************************************************* */
 ClientInfo::ClientInfo() {}
 
-ClientInfo::ClientInfo(int fd, int port, std::string ip)
+ClientInfo::ClientInfo(int fd, int port, std::string ip, int listenID)
 {
 	_fd = fd;
 	_port = port;
 	_ip = ip;
 	_routeAccess = "/";
+	_listenID = listenID;
 }
 
 ClientInfo::ClientInfo(const ClientInfo &src)
@@ -49,6 +50,11 @@ int ClientInfo::port() const
 std::string ClientInfo::IP() const
 {
 	return (_ip);
+}
+
+int ClientInfo::listenID() const
+{
+	return (_listenID);
 }
 
 void ClientInfo::setFD(const int fd)

@@ -67,7 +67,7 @@ Route::Route (std::string routeStr) {
 			if (method != "GET"
 				&& method != "POST"
 				&& method != "DELETE")
-				throw std::exception(); //TODO put a good exception
+				throw RouteAllowedMethodException();
 			_allow_methods[method] = true;
 			method_pos = method_end + 1;
 		}
@@ -97,7 +97,7 @@ Route::Route (std::string routeStr) {
 			if (cgi_key != "extension"
 				&& cgi_key != "path"
 				&& cgi_key != "upload_dir")
-				throw std::exception(); //TODO put a good exception
+				throw std::exception(); //TODO @max c'est quoi ca
 			_cgi[cgi_key] = cgi_value;
 			cgi_pos = cgi_value_end + 1;
 		}
@@ -176,4 +176,10 @@ void Route::print_arg() const{
 		printf("%s: %s, ", it->first.c_str(), it->second.c_str());
 	}
 	printf("\n\n\n");
+}
+
+//exceptions
+const char* Route::RouteAllowedMethodException::what() const throw()
+{
+	return "Allowed method not supported by server";
 }

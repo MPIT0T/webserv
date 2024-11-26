@@ -29,7 +29,7 @@ public:
 	void			create();
 	void			bind(const std::string &ip, int port) const;
 	void			listen() const;
-	ClientInfo		*accept() const;
+	ClientInfo		*accept(int listenID) const;
 	static bool		send(ClientInfo *client, const std::string &data);
 	Request			*receive(ClientInfo *client);
 	void			closeSocket();
@@ -39,6 +39,12 @@ public:
 	class SocketCreateException : public std::exception
 	{
 	public :
+		const char *what() const throw();
+	};
+
+	class SocketOptionSetException : public std::exception
+	{
+	public:
 		const char *what() const throw();
 	};
 
