@@ -43,11 +43,10 @@ void Server::run(void)
 {
 	const int MAX_EVENTS = 100;
 	int epoll_fd = epoll_create1(0);
-    if (epoll_fd == -1) {
+	if (epoll_fd == -1)
 		throw std::runtime_error("Failed to create epoll instance");
-    }
 
-	struct epoll_event	ev;
+	struct epoll_event	ev = {};
 	struct epoll_event	events[MAX_EVENTS];
 
 	ev.events = EPOLLIN;
@@ -61,6 +60,7 @@ void Server::run(void)
 		log.log(log.SERVER, ss.str().c_str());
 		if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, it->getSocket().getFd(), &ev) == -1)
 		{
+			perror("");
 			throw std::runtime_error("Failed to add listening socket to epoll instance");
 		}
 	}
@@ -82,14 +82,12 @@ void Server::run(void)
 
 		for (int i = 0; i < nfds; ++i)
 		{
-        	int event_fd = events[i].data.fd;
-			bool isListeningSocket = false;
+			int event_fd = events[i].data.fd;
 
             for (std::vector<Listen>::iterator it = _listens.begin(); it != _listens.end(); ++it)
 			{
 				if (event_fd == it->getSocket().getFd())
 				{
-					isListeningSocket = true;
 					try
 					{
 						ClientInfo *client = it->getSocket().accept();
@@ -106,7 +104,7 @@ void Server::run(void)
 						clients.insert(std::make_pair(client->fd(), client));
 					}
 					catch (Socket::SocketAcceptException &e) {
-						log.log( log.ERROR, e.what());
+						log.log(log.ERROR, e.what());
 					}
 				}
 			}
@@ -124,15 +122,16 @@ void Server::run(void)
 
 				try {
 					Request *request = _listens.at(listenID).getSocket().receive(client);
-					log.log( log.TRACE, ("Metode : " + request->getType() + " --> " + request->getUri()).c_str());
+					log.log(log.TRACE, ("Metode : " + request->getType() + " --> " + request->getUri()).c_str());
 
-                    // SendResponse *response = new SendResponse(request, listen, client);
+					// SendResponse *response = new SendResponse(request, listen, client);
 
-					// response->getNewMessage();//TODO A VOIR !!!
+					// response->getNewMessage();     //TODO A VOIR !!!
                     // delete response;
 					delete request;
 				}
-				catch (Socket::SocketReceiveException &e) {
+				catch (Socket::SocketReceiveException &e)
+				{
 					log.log( log.ERROR, e.what());
 					close(event_fd);
 					epoll_ctl(epoll_fd, EPOLL_CTL_DEL, event_fd, NULL);
@@ -141,7 +140,6 @@ void Server::run(void)
 				}
 			}
 		}
-
 	}
 }
 
