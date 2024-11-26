@@ -38,6 +38,7 @@ Socket &Socket::operator=(const Socket &src)
 	return (*this);
 }
 
+#include <fcntl.h>
 /* Methods ****************************************************************** */
 void Socket::create()
 {
@@ -45,7 +46,8 @@ void Socket::create()
 	_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_fd < 0)		// if socket failed
 		throw SocketCreateException();
-	setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
+	if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int)) == -1)
+		throw SocketCreateException(); //TODO create socket option exception
 }
 
 void Socket::bind(const std::string &ip, const int port) const

@@ -18,7 +18,6 @@
 #include <cstdlib>
 #include <csignal>
 
-// #include "Signal.hpp"
 #include "Logger.hpp"
 #include "Listen.hpp"
 #include "Request.hpp"
@@ -31,10 +30,9 @@ class Signal;
 class Server
 {
 private:
-	Socket				_socket;
-	std::vector<Listen>	_listen;
+	std::vector<Listen>	_listens;
 	char				**_env;
-	std::map<int, ClientInfo*> clients;
+	std::map<int, ClientInfo *> clients;
 
 /* private method */
 	std::vector<Listen>	setListen(std::string content);
@@ -42,6 +40,7 @@ private:
 	void				checkJsonFormat(const std::string &content);
 
 public:
+	Logger				log;
 	static bool			_signals;
 	Server( void );
 	Server( const Server &src );

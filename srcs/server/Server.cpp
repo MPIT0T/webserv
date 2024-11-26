@@ -33,40 +33,38 @@ Server::~Server()
 
 void Server::init(void)
 {
-	_socket.create();
-	_socket.bind("127.0.0.1", 8080);
-	_socket.listen();
-}
-
-struct FDChecker {
-	bool operator()(const pollfd& p) const {
-		return p.fd == -1;
+	for (std::vector<Listen>::iterator it = _listens.begin(); it != _listens.end(); ++it)
+	{
+		it->setSocket(it->getHost(), it->getPort());
 	}
-};
+}
 
 void Server::run(void)
 {
-	Logger log( this->getEnv() );
-	const int MAX_EVENTS = 1000; // Maximum number of events to handle at once
-    int epoll_fd = epoll_create1(0); // Create an epoll instance
-    if (epoll_fd == -1) {
+	const int MAX_EVENTS = 100;
+	int epoll_fd = epoll_create1(0);
+	if (epoll_fd == -1)
 		throw std::runtime_error("Failed to create epoll instance");
-    }
 
-     // Track clients by their file descriptor
-    struct epoll_event ev, events[MAX_EVENTS];
+	struct epoll_event	ev = {};
+	struct epoll_event	events[MAX_EVENTS];
 
-    // Add the listening socket to the epoll instance
-    ev.events = EPOLLIN;
-    ev.data.fd = _socket.getFd();
-    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, _socket.getFd(), &ev) == -1) {
-		throw std::runtime_error("Failed to add listening socket to epoll instance");
-    }
+	ev.events = EPOLLIN;
+	for (std::vector<Listen>::iterator it = _listens.begin(); it != _listens.end(); ++it)
+	{
+		std::stringstream ss;
+		ss << "Listening on port http://" << it->getHost() << ":" << it->getPort();
+		log.log(log.SERVER, ss.str().c_str());
+		ev.data.fd = it->getSocket().getFd();
+		if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, it->getSocket().getFd(), &ev) == -1)
+			throw std::runtime_error("Failed to add listening socket to epoll instance");
+	}
 
-    log.log( log.SERVER, "The Server is UP !!");
+	log.log( log.SERVER, "The Server is UP !!");
 
-    while (_signals == false) {
-        int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
+	while (_signals == false)
+	{
+		int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
         if ((nfds  == -1) && _signals == false) {
 			log.log( log.ERROR, "Failed to wait for events");
             break;
@@ -77,62 +75,75 @@ void Server::run(void)
 			break;
 		}
 
-        for (int i = 0; i < nfds; ++i) {
-            int event_fd = events[i].data.fd;
+		for (int i = 0; i < nfds; ++i)
+		{
+			int event_fd = events[i].data.fd;
+			bool isListeningsocket = false;
 
-            if (event_fd == _socket.getFd()) {
-                // Handle new client connections
-                try {
-                    ClientInfo *client = _socket.accept();
-					log.log( log.CONNECTION, "Client connected.");
+            for (std::vector<Listen>::iterator it = _listens.begin(); it != _listens.end(); ++it)
+			{
+				if (event_fd == it->getSocket().getFd())
+				{
+					isListeningsocket = true;
+					try
+					{
+						ClientInfo *client = it->getSocket().accept();
+						log.log( log.CONNECTION, "Client connected."); //TODO ajouter details connection
+						ev.events = EPOLLIN;
+						ev.data.fd = client->fd();
+						if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client->fd(), &ev) == -1)
+						{
+							log.log( log.ERROR, "Failed to add client to epoll instance");
+							delete client;
+							continue;
+						}
+						clients.insert(std::make_pair(client->fd(), client));
+					}
+					catch (Socket::SocketAcceptException &e) {
+						log.log(log.ERROR, "Failed to accept client");
+						log.log(log.ERROR, e.what());
+					}
+				}
+			}
+			if (!isListeningsocket && (events[i].events & EPOLLIN))
+			{
+				ClientInfo *client = clients.at(event_fd);
+				int listenID = 0;
 
-                    ev.events = EPOLLIN;
-                    ev.data.fd = client->fd();
-                    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client->fd(), &ev) == -1) {
-                        log.log( log.ERROR, "Failed to add client to epoll instance");
-                        delete client; // Cleanup on failure
-                        continue;
-                    }
-                    clients.insert(std::make_pair(client->fd(), client));
-                } catch (Socket::SocketAcceptException &e) {
-                    std::cerr << e.what() << std::endl;
-                }
-            } else if (events[i].events & EPOLLIN) {
-                // Handle data from an existing client
-                ClientInfo *client = clients[event_fd];
-                try {
-                    Request *request = _socket.receive(client);
-					log.log( log.TRACE, ("Metode : " + request->getType() + " --> " + request->getUri()).c_str());
 
-                    SendResponse *response = new SendResponse(
-                        request->getVersion(),
-                        request->getHeaders().at("Connection"),
-                        "WebServ",
-                        request->getHeaders().at("Accept"),
-                        "www/main" + request->getUri(),
-                        OK,
-                        client->fd()
-                    );
-                    response->getNewMessage();
-                    delete response;
+				for (std::vector<Listen>::iterator it = _listens.begin(); it != _listens.end(); ++it)
+				{
+					if (it->getPort() == client->port())
+						break ;
+					listenID++;
+				}
+
+				try {
+					Request *request = _listens.at(listenID - 1).getSocket().receive(client);
+					log.log(log.TRACE, ("Metode : " + request->getType() + " --> " + request->getUri()).c_str());
+
+
+					// SendResponse *response = new SendResponse(request, listen, client);
+
+					// response->getNewMessage();     //TODO A VOIR !!!
+                    // delete response;
 					delete request;
-                } catch (Socket::SocketReceiveException &e) {
-                    std::cerr << e.what() << std::endl;
-                    close(event_fd);
-                    epoll_ctl(epoll_fd, EPOLL_CTL_DEL, event_fd, NULL); // Remove from epoll
-                    delete client;
-                    clients.erase(event_fd);
-                }
-            }
-        }
-    }
-
-    // Cleanup
-    close(epoll_fd);
-    for (std::map<int, ClientInfo*>::iterator it = clients.begin(); it != clients.end(); ++it) {
-        delete it->second;
-    }
+				}
+				catch (Socket::SocketReceiveException &e)
+				{
+					log.log( log.ERROR, "Failed to receive data from client");
+					log.log( log.ERROR, e.what());
+					close(event_fd);
+					epoll_ctl(epoll_fd, EPOLL_CTL_DEL, event_fd, NULL);
+					delete client;
+					clients.erase(event_fd);
+				}
+			}
+		}
+	}
 }
+
+
 
 void Server::stop(void)
 {
@@ -149,10 +160,10 @@ bool Server::parseConfigFile(std::string configFile)
 	try {
 		content = trimConfig(readFileContent(configFile));
 		checkJsonFormat(content);
-		_listen = setListen(content);
+		_listens = setListen(content);
 	}
 	catch (std::exception &e) {
-		std::cerr << e.what() << std::endl;
+		log.log( log.ERROR, e.what());
 		return false;
 	}
 	return true;
@@ -223,21 +234,21 @@ std::vector<Listen> Server::setListen(std::string content)
 }
 
 std::string Server::trimConfig(const std::string& config) {
-    std::string trimmed;
-    bool inQuotes = false;
+	std::string trimmed;
+	bool inQuotes = false;
 
-    for (std::string::size_type i = 0; i < config.size(); ++i) {
-        char c = config[i];
+	for (std::string::size_type i = 0; i < config.size(); ++i) {
+		char c = config[i];
 
-        if (c == '"') {
-            inQuotes = !inQuotes;
-            trimmed += c;
-        }
-        else if (inQuotes || (c != ' ' && c != '\t' && c != '\n')) {
-            trimmed += c;
-        }
-    }
-    return trimmed;
+		if (c == '"') {
+			inQuotes = !inQuotes;
+			trimmed += c;
+		}
+		else if (inQuotes || (c != ' ' && c != '\t' && c != '\n')) {
+			trimmed += c;
+		}
+	}
+	return trimmed;
 }
 
 
