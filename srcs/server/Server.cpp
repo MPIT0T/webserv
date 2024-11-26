@@ -120,7 +120,6 @@ void Server::run(void)
 
 				try {
 					Request *request = _listens.at(listenID - 1).getSocket().receive(client);
-					// std::cout << "ici" << std::endl;
 					log.log(log.TRACE, ("Metode : " + request->getType() + " --> " + request->getUri()).c_str());
 
 
