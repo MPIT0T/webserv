@@ -8,6 +8,7 @@
 #include <iostream>
 #include "ClientInfo.hpp"
 #include "Listen.hpp"
+#include "PostMethod.hpp"
 
 enum eHttpStatusCode {
 	// 1xx: Informational responses

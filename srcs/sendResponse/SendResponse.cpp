@@ -113,17 +113,32 @@ SendResponse::SendResponse(const Request &request, const Listen &_listen, const 
 {
 	std::string _contentType;
 
+	if (!request.empty() && request.getType() == "POST")
+	{
+		{
+			PostMethod post = PostMethod(request.getBody());
+			post.createFile();
+		}
+		bodyMessage = "created file: " + request.getUri();
+		code = CREATED;
+	}
+	else if (!request.empty())
+		fileToSend = "www/main" + request.getUri();
 	serverName = _listen.getServerName();
 	listen = _listen;
 	code = OK;
 	fdClient = clientInfo.fd();
-	version = request.getVersion();
-	connection = request.getHeaders().at("Connection");
-	fileToSend = "www/main" + request.getUri();
-	if (!request.getHeaders().at("Accept").empty())
+	if (!request.empty())
+	{
+		version = request.getVersion();
+		connection = request.getHeaders().at("Connection");
+	}
+	if (!request.empty() && !request.getHeaders().at("Accept").empty())
 		_contentType = request.getHeaders().at("Accept");
 	else
 		errorMessage(BAD_REQUEST);
+	if (request.getUri().size() > 2500)
+		errorMessage(URI_TOO_LONG);
 	generateMIME(_contentType, fileToSend);
 }
 
@@ -330,4 +345,3 @@ void SendResponse::sendMessage()
 	}
 	close(fd);
 }
-

@@ -70,5 +70,5 @@ HEAD			=	-Iincludes						\
 					-I$(SRC_D)$(DIR_ANSWER)			\
 					-I$(SRC_D)$(DIR_RMETHODS)		\
 					-I$(SRC_D)$(DIR_UTILS)			\
-					-I$(SRC_D)$(DIR_LOGGER)
+					-I$(SRC_D)$(DIR_LOGGER)			\
 					-I$(SRC_D)$(DIR_CGI)
