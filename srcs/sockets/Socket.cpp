@@ -68,7 +68,7 @@ void Socket::listen() const
 		throw SocketListenException();
 }
 
-ClientInfo *Socket::accept() const
+ClientInfo *Socket::accept(int listenID) const
 {
 	sockaddr_in clientAddr = {};
 	socklen_t	clientLen = sizeof(clientAddr);
@@ -82,7 +82,7 @@ ClientInfo *Socket::accept() const
 	clientIP = inet_ntoa(clientAddr.sin_addr);
 	clientPort = ntohs(clientAddr.sin_port);
 
-	return (new ClientInfo(clientFD, clientPort, clientIP));
+	return (new ClientInfo(clientFD, clientPort, clientIP, listenID));
 }
 
 bool Socket::send(ClientInfo *client, const std::string &data)

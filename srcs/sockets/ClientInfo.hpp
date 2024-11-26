@@ -8,7 +8,7 @@ class ClientInfo
 public:
 /* Constructors */
 	ClientInfo();
-	ClientInfo(int fd, int port, std::string ip);
+	ClientInfo(int fd, int port, std::string ip, int listenID);
 	ClientInfo(const ClientInfo &src);
 	~ClientInfo();
 
@@ -19,6 +19,7 @@ public:
 	int			fd() const;
 	int			port() const;
 	std::string	IP() const;
+	int			listenID() const;
 
 	void		setFD(int fd);
 	void		setPort(int port);
@@ -28,6 +29,7 @@ private:
 	int			_fd;
 	int			_port;
 	std::string	_ip;
+	int			_listenID;
 };
 
 
