@@ -1,0 +1,77 @@
+[2024-11-26 10:26:14] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 10:29:44] [ERROR] Failed to add listening socket to epoll instance: 
+[2024-11-26 10:29:44] [ERROR] Failed to add listening socket to epoll instance: 
+[2024-11-26 10:29:44] [SERVER] The Server is UP !!
+[2024-11-26 10:30:22] [SERVER] Server is shutting down...
+[2024-11-26 10:35:14] [ERROR] Failed to add listening socket to epoll instance: Bad file descriptor
+[2024-11-26 10:35:14] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 10:35:32] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 10:44:52] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 10:51:04] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 10:51:07] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 10:51:21] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 11:17:44] [SERVER] Listening on port 4242
+[2024-11-26 11:17:44] [SERVER] Listening on port 8080
+[2024-11-26 11:17:44] [SERVER] The Server is UP !!
+[2024-11-26 11:18:00] [SERVER] Server is shutting down...
+[2024-11-26 11:18:33] [SERVER] Listening on port 4242
+[2024-11-26 11:18:33] [SERVER] Listening on port 8080
+[2024-11-26 11:18:33] [SERVER] The Server is UP !!
+[2024-11-26 11:18:38] [SERVER] Server is shutting down...
+[2024-11-26 11:18:41] [SERVER] Listening on port 4242
+[2024-11-26 11:18:41] [SERVER] Listening on port 8080
+[2024-11-26 11:18:41] [SERVER] The Server is UP !!
+[2024-11-26 11:18:51] [SERVER] Server is shutting down...
+[2024-11-26 11:19:44] [SERVER] The Server is UP !!
+[2024-11-26 11:19:51] [SERVER] Server is shutting down...
+[2024-11-26 11:22:22] [SERVER] Listening on port http://127.0.0.1:4242
+[2024-11-26 11:22:22] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 11:23:27] [SERVER] Listening on port http://127.0.0.1:4242
+[2024-11-26 11:23:27] [SERVER] Listening on port http://127.0.0.1:8080
+[2024-11-26 11:23:27] [SERVER] The Server is UP !!
+[2024-11-26 11:23:54] [SERVER] Server is shutting down...
+[2024-11-26 11:23:56] [SERVER] Listening on port http://127.0.0.1:4242
+[2024-11-26 11:23:56] [SERVER] Listening on port http://127.0.0.1:8080
+[2024-11-26 11:23:56] [SERVER] The Server is UP !!
+[2024-11-26 11:24:13] [SERVER] Server is shutting down...
+[2024-11-26 11:24:15] [SERVER] Listening on port http://127.0.0.1:4242
+[2024-11-26 11:24:15] [SERVER] Listening on port http://127.0.0.1:8080
+[2024-11-26 11:24:15] [SERVER] The Server is UP !!
+[2024-11-26 11:24:15] [TRACE] Waiting for events...
+[2024-11-26 11:25:07] [SERVER] Server is shutting down...
+[2024-11-26 11:25:09] [SERVER] Listening on port http://127.0.0.1:4242
+[2024-11-26 11:25:09] [SERVER] Listening on port http://127.0.0.1:8080
+[2024-11-26 11:25:09] [SERVER] The Server is UP !!
+[2024-11-26 11:25:09] [TRACE] Waiting for events...
+[2024-11-26 11:25:42] [SERVER] Server is shutting down...
+[2024-11-26 11:26:08] [SERVER] Listening on port http://127.0.0.1:4242
+[2024-11-26 11:26:08] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 11:30:55] [SERVER] Listening socket FD: 3
+[2024-11-26 11:30:55] [SERVER] Listening on port http://127.0.0.1:4242
+[2024-11-26 11:30:55] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 11:31:41] [SERVER] Listening on port http://127.0.0.1:4242
+[2024-11-26 11:31:41] [SERVER] Listening on port http://127.0.0.1:8080
+[2024-11-26 11:31:41] [SERVER] The Server is UP !!
+[2024-11-26 11:31:49] [SERVER] Server is shutting down...
+[2024-11-26 11:31:58] [SERVER] Listening on port http://127.0.0.1:4242
+[2024-11-26 11:31:58] [SERVER] Listening on port http://127.0.0.1:8080
+[2024-11-26 11:31:58] [SERVER] The Server is UP !!
+[2024-11-26 11:32:00] [SERVER] Server is shutting down...
+[2024-11-26 11:32:02] [SERVER] Listening on port http://127.0.0.1:4242
+[2024-11-26 11:32:02] [SERVER] Listening on port http://127.0.0.1:8080
+[2024-11-26 11:32:02] [SERVER] The Server is UP !!
+[2024-11-26 11:33:54] [SERVER] Server is shutting down...
+[2024-11-26 11:34:27] [SERVER] Listening on port http://127.0.0.1:4242
+[2024-11-26 11:34:27] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 11:37:46] [SERVER] Listening on port http://127.0.0.1:4242
+[2024-11-26 11:37:46] [SERVER] Listening on port http://127.0.0.1:4242ev.data.fd : 3
+[2024-11-26 11:37:46] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 11:38:06] [SERVER] Listening on port http://127.0.0.1:4242
+[2024-11-26 11:38:06] [SERVER] Listening on port http://127.0.0.1:4242ev.data.fd : 3
+
+[2024-11-26 11:38:06] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 11:38:22] [SERVER] Listening on port http://127.0.0.1:4242
+
+[2024-11-26 11:38:22] [SERVER] Listening on port http://127.0.0.1:4242
+ev.data.fd : 3
+[2024-11-26 11:38:22] [ERROR] Failed to add listening socket to epoll instance

@@ -53,7 +53,12 @@ void Server::run(void)
 	ev.events = EPOLLIN;
 	for (std::vector<Listen>::iterator it = _listens.begin(); it != _listens.end(); ++it)
 	{
+		std::stringstream ss;
+		ss << "Listening on port http://" << it->getHost() << ":" << it->getPort() << std::endl;
+		log.log(log.SERVER, ss.str().c_str());
 		ev.data.fd = it->getSocket().getFd();
+		ss << "ev.data.fd : " << ev.data.fd;
+		log.log(log.SERVER, ss.str().c_str());
 		if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, it->getSocket().getFd(), &ev) == -1)
 		{
 			throw std::runtime_error("Failed to add listening socket to epoll instance");
