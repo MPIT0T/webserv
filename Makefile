@@ -50,6 +50,7 @@ ${OBJ_D}:
 	@mkdir -p ${OBJ_D}/server
 	@mkdir -p ${OBJ_D}/requestMethods
 	@mkdir -p ${OBJ_D}/utils
+	@mkdir -p ${OBJ_D}/CGI
 	@mkdir -p ${OBJ_D}/logger
 
 

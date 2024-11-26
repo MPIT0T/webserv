@@ -10,7 +10,7 @@ class PostMethod
 {
 	public:
 		PostMethod();
-		PostMethod(const std::string &fileName, const std::string &content);
+		PostMethod(const std::string &content);
 		PostMethod(const PostMethod &old);
 		~PostMethod();
 		PostMethod &operator=(const PostMethod &old);

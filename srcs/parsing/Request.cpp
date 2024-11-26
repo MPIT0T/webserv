@@ -38,20 +38,31 @@ void Request::setRequest(const std::string &request)
 	std::string requestCpy(request);
 	std::string tmp;
 
-	type = requestCpy.substr(0, requestCpy.find( ' '));
-	requestCpy.erase(0, requestCpy.find( ' ') + 1);
-	uri  = requestCpy.substr(0, requestCpy.find( ' '));
+	if (requestCpy.empty())
+		return ;
+	if (requestCpy.find(' '))
+	{
+		type = requestCpy.substr(0, requestCpy.find( ' '));
+		requestCpy.erase(0, requestCpy.find( ' ') + 1);
+	}
+	if (requestCpy.find(' '))
+	{
+		uri  = requestCpy.substr(0, requestCpy.find( ' '));
+		requestCpy.erase(0, requestCpy.find( ' ') + 1);
+	}
 	if (uri == "/")
 		uri = uri + "index.html";
-	requestCpy.erase(0, requestCpy.find( ' ') + 1);
-	version  = requestCpy.substr(0, requestCpy.find( '\n'));
-	requestCpy.erase(0, requestCpy.find( '\n') + 1);
+	if (requestCpy.find('\n'))
+	{
+		version  = requestCpy.substr(0, requestCpy.find( '\n'));
+		requestCpy.erase(0, requestCpy.find( '\n') + 1);
+	}
 	while (!requestCpy.empty() && requestCpy.at(0) != '\n')
 	{
 		tmp = requestCpy.substr(0, requestCpy.find(": "));
 		requestCpy.erase(0, requestCpy.find( ": ") + 2);
 		headers[tmp] = requestCpy.substr(0, requestCpy.find( '\n'));
-		if (requestCpy.find('\n') > requestCpy.size())
+		if (requestCpy.find('\n') == std::string::npos)
 			requestCpy.clear();
 		else
 			requestCpy.erase(0, requestCpy.find( '\n') + 1);
@@ -85,6 +96,13 @@ const std::string &Request::getBody() const
 	return body;
 }
 
+bool Request::empty() const
+{
+	if (type.empty() || uri.empty() || version.empty())
+		return true;
+	return false;
+}
+
 std::ostream &operator<<(std::ostream &OUT, const Request& request)
 {
 	std::map<std::string, std::string>::const_iterator	end = request.getHeaders().end();
@@ -98,3 +116,4 @@ std::ostream &operator<<(std::ostream &OUT, const Request& request)
 	OUT << "body: " << request.getBody() << std::endl;
 	return (OUT);
 }
+

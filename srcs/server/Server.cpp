@@ -28,7 +28,7 @@ Server &Server::operator=( const Server &src )
 
 Server::~Server()
 {
-	
+	return ;
 }
 
 void Server::init(void)
@@ -122,11 +122,11 @@ void Server::run(void)
 					Request *request = _listens.at(listenID - 1).getSocket().receive(client);
 					log.log(log.TRACE, ("Metode : " + request->getType() + " --> " + request->getUri()).c_str());
 
+					SendResponse *response = new SendResponse(*request, _listen.at(0), *client);
+					response->makeMessageHeader();
 
-					// SendResponse *response = new SendResponse(request, listen, client);
 
-					// response->getNewMessage();     //TODO A VOIR !!!
-                    // delete response;
+                    delete response;
 					delete request;
 				}
 				catch (Socket::SocketReceiveException &e)

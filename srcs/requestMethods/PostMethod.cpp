@@ -10,10 +10,17 @@ PostMethod::PostMethod()
 
 }
 
-PostMethod::PostMethod(const std::string &fileName, const std::string &content)
+PostMethod::PostMethod(const std::string &content)
 {
-	_fileName = fileName;
 	_content = content;
+	while (_content.find('+') != std::string::npos)
+		_content.at(_content.find('+')) = ' ';
+	if (_content.find('='))
+		_content.erase(0, _content.find('=') + 1);
+	if (_content.find('&'))
+		_fileName = _content.substr(0, _content.find('&'));
+	if (_content.find('='))
+		_content.erase(0, _content.find('=') + 1);
 }
 
 PostMethod::PostMethod(const PostMethod &old)
@@ -38,6 +45,8 @@ void PostMethod::createFile()
 {
 	std::ofstream	file;
 
+	if (_fileName.empty())
+		return ;
 	file.open(_fileName.c_str());
 	if (!file.is_open())
 		throw PostMethodFileOpenException();

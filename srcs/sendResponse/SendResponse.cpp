@@ -11,7 +11,6 @@
 #include <iostream>
 #include <ctime>
 
-
 static std::string getTimeFormat()
 {
 	time_t			result = time(0);
@@ -54,31 +53,9 @@ std::string ft_itoa(unsigned int nbr)
 	return result;
 }
 
-SendResponse::SendResponse()
+void SendResponse::makeMessageHeader()
 {
-	code = SERVICE_UNAVAILABLE;
-}
-
-SendResponse::SendResponse(const SendResponse &old)
-{
-	this->message = old.message;
-}
-
-SendResponse &SendResponse::operator=(const SendResponse &old)
-{
-	this->message = old.message;
-	return *this;
-}
-
-SendResponse::~SendResponse()
-{
-}
-
-void SendResponse::getNewMessage()
-{
-	int				fd = open(fileToSend.c_str(), O_RDONLY);
-	char			tab[1024];
-	size_t 			nbrRead = 1;
+	int				fd;
 	struct 	stat	messageStat;
 
 	//clear old message
@@ -87,12 +64,19 @@ void SendResponse::getNewMessage()
 	//get http version
 	message = version;
 
-	if (fd <= 0 || stat(fileToSend.c_str(), &messageStat) < 0)
-		code = INTERNAL_SERVER_ERROR;
+	if (!fileToSend.empty())
+	{
+		fd = open(fileToSend.c_str(), O_RDONLY);
+		if (fd <= 0 || stat(fileToSend.c_str(), &messageStat) < 0)
+		{
+			errorMessage(FORBIDDEN);
+			return ;
+		}
+	}
 
 	//get http response status
 	message.push_back(' ');
-	message.append(ft_itoa((unsigned  int)code)); // TODO save myself from satan
+	message.append(ft_itoa((unsigned  int)code));
 	message.push_back(' ');
 	message.append(getStatusDescription(code));
 
@@ -111,8 +95,10 @@ void SendResponse::getNewMessage()
 
 	//get message length
 	message.append("\nContent-Length: ");
-	if (code != INTERNAL_SERVER_ERROR && messageStat.st_size)
+	if (!fileToSend.empty())
 		message.append(ft_itoa(messageStat.st_size));
+	else
+		message.append(ft_itoa(bodyMessage.size()));
 
 	//get connection
 	message.append("\nConnection: ");
@@ -120,46 +106,72 @@ void SendResponse::getNewMessage()
 
 	//get message body
 	message.append("\n\n");
-	if (fd <= 0 || stat(fileToSend.c_str(), &messageStat) < 0)
-	{
-		message.append("<!DOCTYPE html>\n\n<head>\n<title>ERROR</title>\n</head>\n\n<body>\n<h1>error 500, INTERNAL_SERVER_ERROR</h1>\n</body>");
-		return		;
-	}
-	// std::cout << "message: " << message << std::endl; // TODO satan might be here
-	write(fdClient, message.c_str(), message.size());
-	while (nbrRead > 0)
-	{
-		nbrRead = read(fd, tab, 1023);
-		tab[nbrRead] = 0;
-		write(fdClient, tab, nbrRead);
-	}
-	close(fd);
-	return ;
+	this->sendMessage();
 }
 
-const std::string &SendResponse::getMessage() const
+SendResponse::SendResponse(const Request &request, const Listen &_listen, const ClientInfo &clientInfo)
 {
-	return message;
+	std::string _contentType;
+
+	if (!request.empty() && request.getType() == "POST")
+	{
+		{
+			PostMethod post = PostMethod(request.getBody());
+			post.createFile();
+		}
+		bodyMessage = "created file: " + request.getUri();
+		code = CREATED;
+	}
+	else if (!request.empty())
+		fileToSend = "www/main" + request.getUri();
+	serverName = _listen.getServerName();
+	listen = _listen;
+	code = OK;
+	fdClient = clientInfo.fd();
+	if (!request.empty())
+	{
+		version = request.getVersion();
+		connection = request.getHeaders().at("Connection");
+	}
+	if (!request.empty() && !request.getHeaders().at("Accept").empty())
+		_contentType = request.getHeaders().at("Accept");
+	else
+		errorMessage(BAD_REQUEST);
+	if (request.getUri().size() > 2500)
+		errorMessage(URI_TOO_LONG);
+	generateMIME(_contentType, fileToSend);
 }
 
-SendResponse::SendResponse(const std::string &_version,
-						   const std::string &_connection,
-						   const std::string &_serverName,
-						   const std::string &_contentType,
-						   const std::string &_fileToSend,
-						   eHttpStatusCode _code, int _fdClient)
+void SendResponse::errorMessage(eHttpStatusCode errorCode)
 {
-	version = _version;
-	connection = _connection;
-	serverName = _serverName;
+	code = errorCode;
+	fileToSend = listen.getErrorPages().at(errorCode);
+	generateMIME("text/html", fileToSend);
+	makeMessageHeader();
+}
+
+void SendResponse::generateMIME(const std::string &_contentType, const std::string &_fileToSend)
+{
 	fileToSend = _fileToSend;
-	code = _code;
-	fdClient = _fdClient;
 
-	contentType = mimeTypeOfFile(fileToSend.substr(fileToSend.find_last_of('.'), fileToSend.size()));
+	if (fileToSend.empty())
+	{
+		if (bodyMessage.find("<html>"))
+			contentType = mimeTypeOfFile(".html");
+		else
+			contentType = mimeTypeOfFile(".txt");
+		return ;
+	}
+	if (fileToSend.find_last_of('.') == std::string::npos)
+		contentType = mimeTypeOfFile(".txt");
+	else
+		contentType = mimeTypeOfFile(fileToSend.substr(fileToSend.find_last_of('.'), fileToSend.size()));
 	if (_contentType.find(contentType) == std::string::npos &&
 		_contentType.find(contentType.substr(0, contentType.find('/') + 1) + "*") == std::string::npos)
-		std::cout << "error: " << contentType << std::endl;
+	{
+		if (code < 400)
+			errorMessage(UNSUPPORTED_MEDIA_TYPE);
+	}
 }
 
 std::string getStatusDescription(eHttpStatusCode code)
@@ -211,7 +223,7 @@ std::string getStatusDescription(eHttpStatusCode code)
 	return statusDescriptions[code];
 }
 
-std::string mimeTypeOfFile(std::string fileToSend)
+std::string mimeTypeOfFile(const std::string &fileToSend)
 {
 	std::map<std::string, std::string> mimeTypes;
 
@@ -259,4 +271,77 @@ std::string mimeTypeOfFile(std::string fileToSend)
 	mimeTypes[".yaml"] = "application/x-yaml";
 	mimeTypes[".yml"] = "application/x-yaml";
 	return (mimeTypes[fileToSend]);
+}
+
+SendResponse::SendResponse()
+{
+	code = SERVICE_UNAVAILABLE;
+	fdClient = 1;
+}
+
+SendResponse::SendResponse(const SendResponse &old)
+{
+	this->version = old.version;
+	this->connection = old.connection;
+	this->serverName = old.serverName;
+	this->contentType = old.contentType;
+	this->fileToSend = old.fileToSend;
+	this->code = old.code;
+	this->bodyMessage = old.bodyMessage;
+	this->fdClient = old.fdClient;
+	this->message = old.message;
+	this->listen = old.listen;
+}
+
+SendResponse &SendResponse::operator=(const SendResponse &old)
+{
+	this->version = old.version;
+	this->connection = old.connection;
+	this->serverName = old.serverName;
+	this->contentType = old.contentType;
+	this->fileToSend = old.fileToSend;
+	this->code = old.code;
+	this->bodyMessage = old.bodyMessage;
+	this->fdClient = old.fdClient;
+	this->message = old.message;
+	this->listen = old.listen;
+	return *this;
+}
+
+SendResponse::~SendResponse()
+{
+}
+
+const std::string &SendResponse::getMessage() const
+{
+	return message;
+}
+
+void SendResponse::sendMessage()
+{
+	int				fd;
+	char			tab[1024];
+	size_t 			nbrRead = 1;
+	struct 	stat	messageStat;
+
+	if (fileToSend.empty())
+	{
+		write(fdClient, message.c_str(), message.size());
+		write(fdClient, bodyMessage.c_str(), bodyMessage.size());
+		return ;
+	}
+	fd = open(fileToSend.c_str(), O_RDONLY);
+	if (fd <= 0 || stat(fileToSend.c_str(), &messageStat) < 0)
+	{
+		errorMessage(UNAUTHORIZED);
+		return ;
+	}
+	write(fdClient, message.c_str(), message.size());
+	while (nbrRead > 0)
+	{
+		nbrRead = read(fd, tab, 1023);
+		tab[nbrRead] = 0;
+		write(fdClient, tab, nbrRead);
+	}
+	close(fd);
 }

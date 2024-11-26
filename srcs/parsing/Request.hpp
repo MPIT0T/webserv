@@ -24,6 +24,9 @@ class Request
 		const std::string						&getVersion() const;
 		const std::string						&getBody() const;
 
+
+		bool	empty() const;
+
 private:
 		std::string								type;
 		std::string								uri;
