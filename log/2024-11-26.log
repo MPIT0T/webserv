@@ -1,0 +1,34 @@
+[2024-11-26 10:27:36] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 10:29:00] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 10:30:02] [ERROR] Failed to get socket flags
+[2024-11-26 10:38:32] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 10:39:59] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 10:51:46] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 10:53:28] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 10:53:43] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 10:53:52] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 10:54:09] [ERROR] Failed to get socket flags
+[2024-11-26 10:57:51] [ERROR] Failed to create epoll instance
+[2024-11-26 11:01:15] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 11:10:39] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 11:11:03] [ERROR] Failed to get socket flags
+[2024-11-26 11:11:47] [ERROR] Failed to get socket flags
+[2024-11-26 11:12:32] [ERROR] Failed to get socket flags
+[2024-11-26 11:14:35] [ERROR] Failed to get socket flags
+[2024-11-26 11:20:26] [SERVER] The Server is UP !!
+[2024-11-26 11:20:50] [SERVER] Server is shutting down...
+[2024-11-26 11:26:19] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 11:33:55] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 11:34:10] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 11:34:30] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 11:34:39] [SERVER] The Server is UP !!
+[2024-11-26 11:34:41] [SERVER] Server is shutting down...
+[2024-11-26 11:35:14] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 11:35:31] [SERVER] The Server is UP !!
+[2024-11-26 11:38:44] [SERVER] Server is shutting down...
+[2024-11-26 11:38:51] [SERVER] The Server is UP !!
+[2024-11-26 11:38:52] [SERVER] Server is shutting down...
+[2024-11-26 11:39:03] [ERROR] Failed to add listening socket to epoll instance
+[2024-11-26 12:29:41] [SERVER] The Server is UP !!
+[2024-11-26 12:29:47] [CONNECTION] Client connected.
+[2024-11-26 12:29:47] [ERROR] map::at
