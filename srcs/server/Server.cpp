@@ -88,7 +88,7 @@ void Server::run(void)
 					try
 					{
 						ClientInfo *client = it->getSocket().accept();
-						log.log( log.CONNECTION, "Client connected."); //TODO ajouter details connection
+						log.log( log.CONNECTION, "Client %d connected.", client->fd());
 						ev.events = EPOLLIN;
 						ev.data.fd = client->fd();
 						if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client->fd(), &ev) == -1)

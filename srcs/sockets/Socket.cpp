@@ -44,10 +44,10 @@ void Socket::create()
 {
 	int one = 1;
 	_fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (_fd < 0)		// if socket failed
+	if (_fd < 0)
 		throw SocketCreateException();
 	if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int)) == -1)
-		throw SocketCreateException(); //TODO create socket option exception
+		throw SocketOptionSetException();
 }
 
 void Socket::bind(const std::string &ip, const int port) const
@@ -142,19 +142,24 @@ const char *Socket::SocketCreateException::what() const throw()
 	return ("Can't create socket.");
 }
 
-const char* Socket::SocketBindException::what() const throw()
+const char *Socket::SocketOptionSetException::what() const throw()
 {
-	return ("Can't bind socket to port.");
+	return ("Cannot set socket options.");
+}
+
+const char *Socket::SocketBindException::what() const throw()
+{
+	return ("Cannot bind socket to port.");
 }
 
 const char *Socket::SocketListenException::what() const throw()
 {
-	return ("Can't listen to socket.");
+	return ("Cannot listen to socket.");
 }
 
 const char* Socket::SocketAcceptException::what() const throw()
 {
-	return ("Can't accept client.");
+	return ("Cannot accept client.");
 }
 
 const char* Socket::SocketSendException::what() const throw()
@@ -166,4 +171,3 @@ const char* Socket::SocketReceiveException::what() const throw()
 {
 	return ("Error receiving packet.");
 }
-

@@ -38,6 +38,12 @@ public:
 		const char *what() const throw();
 	};
 
+	class SocketOptionSetException : public std::exception
+	{
+	public:
+		const char *what() const throw();
+	};
+
 	class SocketBindException : public std::exception
 	{
 	public :
