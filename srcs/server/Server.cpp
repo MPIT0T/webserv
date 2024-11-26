@@ -79,11 +79,13 @@ void Server::run(void)
 		for (int i = 0; i < nfds; ++i)
 		{
 			int event_fd = events[i].data.fd;
+			bool isListeningsocket = false;
 
             for (std::vector<Listen>::iterator it = _listens.begin(); it != _listens.end(); ++it)
 			{
 				if (event_fd == it->getSocket().getFd())
 				{
+					isListeningsocket = true;
 					try
 					{
 						ClientInfo *client = it->getSocket().accept();
@@ -104,21 +106,24 @@ void Server::run(void)
 					}
 				}
 			}
-			if (events[i].events & EPOLLIN)
+			if (!isListeningsocket && (events[i].events & EPOLLIN))
 			{
 				ClientInfo *client = clients.at(event_fd);
 				int listenID = 0;
 
+
 				for (std::vector<Listen>::iterator it = _listens.begin(); it != _listens.end(); ++it)
 				{
-					listenID++;
 					if (it->getPort() == client->port())
 						break ;
+					listenID++;
 				}
 
 				try {
-					Request *request = _listens.at(listenID).getSocket().receive(client);
+					Request *request = _listens.at(listenID - 1).getSocket().receive(client);
+					// std::cout << "ici" << std::endl;
 					log.log(log.TRACE, ("Metode : " + request->getType() + " --> " + request->getUri()).c_str());
+
 
 					// SendResponse *response = new SendResponse(request, listen, client);
 
