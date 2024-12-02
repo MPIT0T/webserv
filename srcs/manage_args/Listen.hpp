@@ -6,9 +6,9 @@
 #include <map>
 #include <cstdlib>
 #include <Socket.hpp>
-
-
 #include "Route.hpp"
+
+class Socket;
 
 class Listen
 {

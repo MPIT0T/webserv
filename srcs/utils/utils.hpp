@@ -22,8 +22,8 @@
 #include <sstream>
 #include "Listen.hpp"
 
-std::string readFileContent(const std::string& filePath);
-void printTokens(const std::vector<std::string>& tokens);
-void printListenVector(const std::vector<Listen>& listenConfigs);
+std::string 	readFileContent(const std::string& filePath);
+std::string     errorPage(int code);
+std::string		toString(int number);
 
 #endif // UTILS_HPP

@@ -2,6 +2,15 @@
 # define CLIENTINFO_HPP
 
 #include <string>
+#include <unistd.h>
+#include <iostream>
+#include <map>
+#include "Route.hpp"
+#include "Socket.hpp"
+
+class Socket;
+
+class Route;
 
 class ClientInfo
 {
@@ -24,11 +33,15 @@ public:
 	void		setFD(int fd);
 	void		setPort(int port);
 	void		setIP(const std::string& ip);
+	void		setRouteAccess(const std::string& routeAccess , const std::map<std::string, Route> &routes);
+
+	std::string	getRouteAccess();
 
 private:
 	int			_fd;
 	int			_port;
 	std::string	_ip;
+	std::string	_routeAccess;
 	int			_listenID;
 };
 
