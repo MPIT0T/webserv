@@ -13,6 +13,8 @@ PostMethod::PostMethod()
 PostMethod::PostMethod(const std::string &content)
 {
 	_content = content;
+
+	std::cout << _content << std::endl;
 	while (_content.find('+') != std::string::npos)
 		_content.at(_content.find('+')) = ' ';
 	if (_content.find('='))

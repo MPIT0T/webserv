@@ -123,7 +123,10 @@ SendResponse::SendResponse(const Request &request, const Listen &_listen, const 
 		code = CREATED;
 	}
 	else if (!request.empty())
-		fileToSend = "www/main" + request.getUri();
+	{
+		std::cout << request.getUri() << std::endl;
+		fileToSend = "www/" + request.getUri();
+	}
 	serverName = _listen.getServerName();
 	listen = _listen;
 	code = OK;

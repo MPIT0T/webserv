@@ -44,7 +44,6 @@ ${NAME}	:	${OBJ_D} ${OBJS}
 ${OBJ_D}:
 	@mkdir -p ${OBJ_D}
 	@mkdir -p ${OBJ_D}/sockets
-	@mkdir -p ${OBJ_D}/parsing
 	@mkdir -p ${OBJ_D}/sendResponse
 	@mkdir -p ${OBJ_D}/manage_args
 	@mkdir -p ${OBJ_D}/server
@@ -52,6 +51,7 @@ ${OBJ_D}:
 	@mkdir -p ${OBJ_D}/utils
 	@mkdir -p ${OBJ_D}/CGI
 	@mkdir -p ${OBJ_D}/logger
+	@mkdir -p ${OBJ_D}/exchange
 
 
 clean	:

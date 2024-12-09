@@ -116,4 +116,3 @@ std::ostream &operator<<(std::ostream &OUT, const Request& request)
 	OUT << "body: " << request.getBody() << std::endl;
 	return (OUT);
 }
-
