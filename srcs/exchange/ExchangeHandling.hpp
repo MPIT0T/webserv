@@ -14,7 +14,7 @@ class ExchangeHandling
 {
 	public:
 		ExchangeHandling();
-		ExchangeHandling(std::string request);
+		ExchangeHandling(const std::string& request, ClientInfo *client, const Listen &listen);
 		ExchangeHandling(const ExchangeHandling &old);
 		~ExchangeHandling();
 		ExchangeHandling &operator=(const ExchangeHandling &old);
@@ -25,7 +25,7 @@ class ExchangeHandling
 
 	private:
 		ClientInfo		*_client;
-		Listen			_listen;
+		Listen			*_listen;
 		Request			_request;
 		ErrorExchange	_error;
 		std::string		_message;

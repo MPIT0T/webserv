@@ -5,11 +5,16 @@
 #include "ExchangeHandling.hpp"
 #include <sys/stat.h>
 #include <fcntl.h>
+#include "Listen.hpp"
 
-
-ExchangeHandling::ExchangeHandling(std::string request)
+ExchangeHandling::ExchangeHandling(const std::string& request, ClientInfo *client, const Listen &listen)
 {
 	_message = request;
+
+	_client = client;
+	*_listen = listen;
+	_request = Request(request, client, listen);
+	_error = ErrorExchange(*_listen);
 }
 
 ExchangeHandling::~ExchangeHandling()

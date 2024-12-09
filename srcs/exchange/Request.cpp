@@ -15,6 +15,8 @@ Request::Request(const std::string &request, ClientInfo *client, const Listen &l
 {
 	_request = request;
 	_client = client;
+	*_listen = listen;
+	_code = OK;
 }
 
 Request::Request(const Request &old)
