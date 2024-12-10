@@ -45,6 +45,8 @@ ErrorExchange &ErrorExchange::operator=(const ErrorExchange &old)
 void ErrorExchange::testResponses(const std::string &newFileToSend, eHttpStatusCode code)
 {
 	_code = code;
+	if (_code)
+		return ;
 	_fileToSend = newFileToSend;
 	if (!_fileToSend.empty())
 	{

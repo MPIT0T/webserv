@@ -85,6 +85,10 @@ void	Request::makeRequestMethod()
 			else
 				_fileToSend = _client->getRouteAccess() + "/" + _uri;
 			_code = OK;
+			if (access(_fileToSend.c_str(), F_OK) == -1)
+				_code = NOT_FOUND;
+			else if (access(_fileToSend.c_str(), R_OK) == -1)
+				_code = FORBIDDEN;
 			break;
 		case 2:
 			std::cout << "Method POST" << std::endl;
