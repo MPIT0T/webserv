@@ -20,6 +20,23 @@ std::string toString(int number) {
 
 
 std::string errorPage(int code) {
-	std::string errorPage = "<html><head><title>Error</title></head><body><h1>Error " + toString(code) + "</h1></body></html>";
+	std::string errorPage = "<!DOCTYPE html>"
+		"<html lang=\"fr\">"
+		"<head>"
+		"<meta charset=\"UTF-8\">"
+		"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+		"<title>Error " + toString(code) + "</title>"
+		"<style>"
+		"h1 { font-size: 50px; }"
+		"body { display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'Inter', sans-serif; background-color: #faeedc; }"
+		"div { font-size: 2rem; font-weight: semibold; color: #281515; text-align: center; }"
+		"</style>"
+		"</head>"
+		"<body>"
+		"<div>"
+		"<h1> Error : " + toString(code) + "</h1>"
+		"</div>"
+		"</body>"
+		"</html>";
 	return errorPage;
 }
