@@ -27,8 +27,9 @@ void printRoute(const Route& route) {
     std::cout << "  Route:" << std::endl;
     std::cout << "    Path: " << route.getPath() << std::endl;
     std::cout << "    Root: " << route.getRoot() << std::endl;
-    std::cout << "    Directory Listing: " << (route.getDirectoryListing() ? "true" : "false") << std::endl;
+    std::cout << "    Default File: " << route.getDefaultFile() << std::endl;
     std::cout << "    HTTP Redirect: " << route.getHttpRedirect() << std::endl;
+    std::cout << "    Directory Listing: " << (route.getDirectoryListing() ? "true" : "false") << std::endl;
 
     std::cout << "    Allowed Methods: ";
     std::map<std::string, bool> methods = route.getAllowMethods();
@@ -70,8 +71,7 @@ void printListen(const Listen& listen) {
 // Fonction pour afficher le vecteur de Listen
 void printListenVector(const std::vector<Listen>& listenConfigs) {
     for (std::vector<Listen>::const_iterator it = listenConfigs.begin(); it != listenConfigs.end(); it++) {
-        //printListen(*it);
-        //std::cout << "-----------------------------" << std::endl;
+        printListen(*it);
     }
 }
 
