@@ -31,7 +31,7 @@ public:
 	void			listen() const;
 	ClientInfo		*accept(int listenID) const;
 	static bool		send(ClientInfo *client, const std::string &data);
-	Request			*receive(ClientInfo *client);
+	std::string		receive(ClientInfo *client);
 	void			closeSocket();
 	int 			getFd() const;
 

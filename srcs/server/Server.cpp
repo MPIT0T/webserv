@@ -3,6 +3,7 @@
 /* ***************** */
 
 #include "Server.hpp"
+#include "ExchangeHandling.hpp"
 
 bool Server::_signals = false;
 
@@ -113,17 +114,9 @@ void Server::run(void)
 				ClientInfo *client = clients.at(event_fd);
 
 				try {
-					Request *request = _listens.at(client->listenID()).getSocket().receive(client);
-					log.log(log.TRACE, ("Metode : " + request->getType() + " --> " + request->getUri()).c_str());
+					ExchangeHandling newExchange = ExchangeHandling(_listens.at(client->listenID()).getSocket().receive(client), client, _listens.at(client->listenID()));
 
-					client->setRouteAccess(request->getUri(), _listens.at(client->listenID()).getRoutes());
-					// log.log(log.TRACE, ("Route Access : " + client->getRouteAccess()).c_str());
-
-					SendResponse *response = new SendResponse(*request, _listens.at(client->listenID()), *client);
-					response->makeMessageHeader();
-
-					delete response;
-					delete request;
+					newExchange.generateMessage();
 				}
 				catch (Socket::SocketReceiveException &e)
 				{

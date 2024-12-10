@@ -90,24 +90,20 @@ bool Socket::send(ClientInfo *client, const std::string &data)
 	return (write(client->fd(), data.c_str(), data.size()) != -1);
 }
 
-Request *Socket::receive(ClientInfo *client)
+std::string Socket::receive(ClientInfo *client)
 {
 	const ssize_t	tmp_size = 2048;
 	char			tmp[tmp_size];
 	ssize_t			len = 0;
 	size_t			lenTotal = 0;
 	std::string		buffer = "";
-	Request			*request = new Request();
 
 
 	while (42)
 	{
 		len = recv(client->fd(), tmp, tmp_size, 0);
 		if (len < 0)
-		{
-			delete request;
 			throw SocketReceiveException();
-		}
 
 		if (len == 0)
 			break ;
@@ -118,8 +114,7 @@ Request *Socket::receive(ClientInfo *client)
 		if (len < tmp_size)
 			break ;
 	}
-	request->setRequest(buffer);
-	return (request);
+	return (buffer);
 }
 
 void Socket::closeSocket()

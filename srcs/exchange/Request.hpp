@@ -5,9 +5,10 @@
 #pragma once
 
 #include <iostream>
-#include "ClientInfo.hpp"
 #include "ErrorExchange.hpp"
 #include <map>
+
+class ClientInfo;
 
 class Request
 {
@@ -28,6 +29,20 @@ class Request
 		const std::string &getMessage() const;
 		const std::string &getFileToSend() const;
 
+	eHttpStatusCode getCode() const;
+
+	const std::string &getType() const;
+
+	const std::string &getBody() const;
+
+	const std::string &getRequest() const;
+
+	ClientInfo *getClient() const;
+
+	Listen *getListen() const;
+
+	const std::map<std::string, std::string> &getHeaders() const;
+
 private:
 		eHttpStatusCode _code;
 		std::string		_type;
@@ -43,3 +58,5 @@ private:
 
 		std::map<std::string, std::string>		_headers;
 };
+
+std::ostream	&operator<<(std::ostream &OUT, const Request &request);

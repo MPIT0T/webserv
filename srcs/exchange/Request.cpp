@@ -5,6 +5,7 @@
 #include "Request.hpp"
 #include <unistd.h>
 #include "Listen.hpp"
+#include "ClientInfo.hpp"
 
 Request::Request()
 {
@@ -15,22 +16,30 @@ Request::Request(const std::string &request, ClientInfo *client, const Listen &l
 {
 	_request = request;
 	_client = client;
-	*_listen = listen;
+	_listen = new Listen(listen);
 	_code = OK;
 }
 
 Request::Request(const Request &old)
 {
-
+	_request = old._request;
+	_client = old._client;
+	_listen = old._listen;
+	_code = old._code;
 }
 
 Request::~Request()
 {
-
+	delete _listen;
 }
 
 Request  &Request::operator=(const Request &old)
 {
+	_request = old._request;
+	_client = old._client;
+	_listen = old._listen;
+	_code = old._code;
+	return *this;
 }
 
 void	Request::parseRequest()
@@ -67,10 +76,19 @@ void	Request::makeRequestMethod()
 	methodType["POST"] = 2;
 	methodType["DELETE"] = 3;
 
+	_code = NOT_IMPLEMENTED;
 	switch (methodType[_type])
 	{
 		case 1:
-			_fileToSend = _client->getRouteAccess() + _uri;
+			if (!_listen->getRoutes()[_uri].getDefaultFile().empty())
+			{
+				_fileToSend = _client->getRouteAccess() + "/" + _listen->getRoutes()[_uri].getDefaultFile();
+			}
+			else
+				_fileToSend = _client->getRouteAccess() + "/" + _uri;
+			if (_uri == "/")
+				_fileToSend = "./www/main/index.html";
+			_code = OK;
 			break;
 		case 2:
 			std::cout << "Method POST" << std::endl;
@@ -79,14 +97,19 @@ void	Request::makeRequestMethod()
 			std::cout << "Method DELETE" << std::endl;
 			break;
 		default:
+			if (_type.empty())
+			{
+				_code = NOT_FOUND;
+				std::cout << "page not found" << std::endl;
+			}
 			std::cout << "Other method" << std::endl;
 	}
 }
 
 void	Request::errorRequest()
 {
-	int	space;
-	int	lineBreak;
+	int	space = 0;
+	int	lineBreak = 0;
 
 	if (_request.empty())
 		_code = BAD_REQUEST;
@@ -122,4 +145,49 @@ const std::string &Request::getMessage() const
 const std::string &Request::getFileToSend() const
 {
 	return _fileToSend;
+}
+
+eHttpStatusCode Request::getCode() const
+{
+	return _code;
+}
+
+const std::string &Request::getType() const
+{
+	return _type;
+}
+
+const std::string &Request::getBody() const
+{
+	return _body;
+}
+
+const std::string &Request::getRequest() const
+{
+	return _request;
+}
+
+ClientInfo *Request::getClient() const
+{
+	return _client;
+}
+
+Listen *Request::getListen() const
+{
+	return _listen;
+}
+
+const std::map<std::string, std::string> &Request::getHeaders() const
+{
+	return _headers;
+}
+
+std::ostream &operator<<(std::ostream &OUT, const Request& request)
+{
+	OUT << "Type: " << request.getType() << std::endl;
+	OUT << "URI: " << request.getUri() << std::endl;
+
+	OUT << "Version: " << request.getVersion() << std::endl;
+	OUT << "body: " << request.getBody() << std::endl;
+	return (OUT);
 }

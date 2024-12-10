@@ -45,6 +45,7 @@ public:
 	std::string getHttpRedirect() const;
 	std::map<std::string, bool> getAllowMethods() const;
 	std::map<std::string, std::string> getCgi() const;
+	std::string getDefaultFile() const;
 
 	//debug
 	void print_arg() const;

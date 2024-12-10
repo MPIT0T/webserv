@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include "Listen.hpp"
 #include "utils.hpp"
+#include <string.h>
 
 ErrorExchange::ErrorExchange()
 {
@@ -21,28 +22,39 @@ ErrorExchange::~ErrorExchange()
 
 ErrorExchange::ErrorExchange(const ErrorExchange &old)
 {
-
+	this->_fileToSend = old._fileToSend;
+	this->_code = old._code;
+	this->_listen = old._listen;
+	this->_message = old._message;
 }
 
 ErrorExchange::ErrorExchange(const Listen &listen)
 {
-	*_listen = listen;
+	_listen = new Listen(listen);
 }
 
 ErrorExchange &ErrorExchange::operator=(const ErrorExchange &old)
 {
+	this->_fileToSend = old._fileToSend;
+	this->_code = old._code;
+	this->_listen = old._listen;
+	this->_message = old._message;
 	return *this;
 }
 
-void ErrorExchange::testResponses(const std::string &newFileToSend)
+void ErrorExchange::testResponses(const std::string &newFileToSend, eHttpStatusCode code)
 {
+	_code = code;
 	_fileToSend = newFileToSend;
 	if (!_fileToSend.empty())
 	{
 		if (access(_fileToSend.c_str(), F_OK) == -1)
 			_code = NOT_FOUND;
 		if (access(_fileToSend.c_str(), R_OK) == -1)
+		{
+			std::cout << strerror(errno) << std::endl;
 			_code = FORBIDDEN;
+		}
 	}
 }
 

@@ -178,6 +178,11 @@ void Route::print_arg() const{
 	printf("\n\n\n");
 }
 
+std::string Route::getDefaultFile() const
+{
+	return std::string();
+}
+
 //exceptions
 const char* Route::RouteAllowedMethodException::what() const throw()
 {

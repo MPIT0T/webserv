@@ -21,7 +21,6 @@
 #include "Logger.hpp"
 #include "Listen.hpp"
 #include "Request.hpp"
-#include "SendResponse.hpp"
 #include "Socket.hpp"
 #include "utils.hpp"
 
