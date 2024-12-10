@@ -204,24 +204,3 @@ void Listen::parseErrorPages(const std::string &errorPagesStr) {
 		pos = pathEnd + 1;
 	}
 }
-
-void Listen::print_value(){
-	printf("Listen :\n");
-	printf("\nPort: %d\n", _port);
-	printf("Max Body Size: %d\n", _maxBodySize);
-	printf("Host: %s\n", _host.c_str());
-	printf("Server Name: %s\n", _serverName.c_str());
-
-	printf("\nError Pages:\n");
-	for (std::map<int, std::string>::const_iterator it = _errorPages.begin(); it != _errorPages.end(); ++it) {
-		printf("  %d: %s\n", it->first, it->second.c_str());
-	}
-
-	printf("\nRoutes  :\n\n");
-	for (std::map<std::string, Route>::const_iterator it = _routes.begin(); it != _routes.end(); ++it) {
-		printf("  Path: %s\n", it->first.c_str());
-		// Assuming Route class has a print method or similar to display its content
-		it->second.print_arg();
-	}
-	printf("\n\n\n");
-}

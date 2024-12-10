@@ -66,11 +66,11 @@ void Server::run(void)
 	while (_signals == false)
 	{
 		int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
-        if ((nfds  == -1) && _signals == false) {
+		if ((nfds  == -1) && _signals == false) {
 			log.log( log.ERROR, "Failed to wait for events");
-            break;
-        }
-		else if (_signals == true)
+			break;
+		}
+		if (_signals == true)
 		{
 			log.log( log.SERVER, "Server is shutting down...");
 			break;
@@ -82,7 +82,7 @@ void Server::run(void)
 			bool isListeningsocket = false;
 			int listenID = 0;
 
-            for (std::vector<Listen>::iterator it = _listens.begin(); it != _listens.end(); ++it)
+			for (std::vector<Listen>::iterator it = _listens.begin(); it != _listens.end(); ++it)
 			{
 				if (event_fd == it->getSocket().getFd())
 				{
@@ -131,9 +131,9 @@ void Server::run(void)
 		}
 	}
 	close(epoll_fd);
-    for (std::map<int, ClientInfo*>::iterator it = clients.begin(); it != clients.end(); ++it) {
-        delete it->second;
-    }
+	for (std::map<int, ClientInfo*>::iterator it = clients.begin(); it != clients.end(); ++it) {
+		delete it->second;
+	}
 }
 
 
