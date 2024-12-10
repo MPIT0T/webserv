@@ -44,7 +44,6 @@ ${NAME}	:	${OBJ_D} ${OBJS}
 ${OBJ_D}:
 	@mkdir -p ${OBJ_D}
 	@mkdir -p ${OBJ_D}/sockets
-	@mkdir -p ${OBJ_D}/sendResponse
 	@mkdir -p ${OBJ_D}/manage_args
 	@mkdir -p ${OBJ_D}/server
 	@mkdir -p ${OBJ_D}/requestMethods

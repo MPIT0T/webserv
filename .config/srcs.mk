@@ -14,7 +14,6 @@
 
 SRCS			=	$(MAIN)			\
 					$(SOCK)			\
-					$(ANSWER)		\
 					$(SERVER)		\
 					$(RMETHODS)		\
 					$(MANAGE_ARGS)	\
@@ -30,10 +29,9 @@ SRC_MANAGE_ARGS	=	ManageArgs.cpp	\
 					Listen.cpp		\
 					Route.cpp
 SRC_SERVER		=	Server.cpp
-SRC_ANSWER		=	SendResponse.cpp	\
-					BasicErrorPage.cpp
 SRC_RMETHODS	=	PostMethod.cpp
-SRC_UTILS		=	utils.cpp
+SRC_UTILS		=	utils.cpp				\
+					utilsExchange.cpp
 SRC_LOGGER		=	Logger.cpp
 SRC_CGI			=	CGI.cpp
 SRC_EXCHANGE	=	ExchangeHandling.cpp		\
@@ -44,7 +42,6 @@ MAIN			=	$(addprefix $(DIR_MAIN), $(SRC_MAIN))
 SOCK			=	$(addprefix $(DIR_SOCK), $(SRC_SOCK))
 MANAGE_ARGS		=	$(addprefix $(DIR_MANAGE_ARGS), $(SRC_MANAGE_ARGS))
 SERVER			=	$(addprefix $(DIR_SERVER), $(SRC_SERVER))
-ANSWER			=	$(addprefix $(DIR_ANSWER), $(SRC_ANSWER))
 RMETHODS		=	$(addprefix $(DIR_RMETHODS), $(SRC_RMETHODS))
 UTILS			=	$(addprefix $(DIR_UTILS), $(SRC_UTILS))
 LOGGER			=	$(addprefix $(DIR_LOGGER), $(SRC_LOGGER))
@@ -58,7 +55,6 @@ DIR_MAIN		=
 DIR_SOCK		=	sockets/
 DIR_MANAGE_ARGS =	manage_args/
 DIR_SERVER		=	server/
-DIR_ANSWER		=	sendResponse/
 DIR_RMETHODS	=	requestMethods/
 DIR_UTILS		=	utils/
 DIR_LOGGER		=	logger/
@@ -70,7 +66,6 @@ HEAD			=	-Iincludes						\
 					-I$(SRC_D)$(DIR_SOCK)			\
 					-I$(SRC_D)$(DIR_MANAGE_ARGS)	\
 					-I$(SRC_D)$(DIR_SERVER)			\
-					-I$(SRC_D)$(DIR_ANSWER)			\
 					-I$(SRC_D)$(DIR_RMETHODS)		\
 					-I$(SRC_D)$(DIR_UTILS)			\
 					-I$(SRC_D)$(DIR_LOGGER)			\
