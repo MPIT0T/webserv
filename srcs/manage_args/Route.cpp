@@ -168,11 +168,6 @@ std::map<std::string, std::string> Route::getCgi() const {
 	return _cgi;
 }
 
-std::string Route::getDefaultFile() const
-{
-	return std::string();
-}
-
 //exceptions
 const char* Route::RouteAllowedMethodException::what() const throw()
 {

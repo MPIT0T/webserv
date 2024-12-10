@@ -81,13 +81,9 @@ void	Request::makeRequestMethod()
 	{
 		case 1:
 			if (!_listen->getRoutes()[_uri].getDefaultFile().empty())
-			{
 				_fileToSend = _client->getRouteAccess() + "/" + _listen->getRoutes()[_uri].getDefaultFile();
-			}
 			else
 				_fileToSend = _client->getRouteAccess() + "/" + _uri;
-			if (_uri == "/")
-				_fileToSend = "./www/main/index.html";
 			_code = OK;
 			break;
 		case 2:

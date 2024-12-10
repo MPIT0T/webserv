@@ -45,7 +45,6 @@ public:
 	std::string getHttpRedirect() const;
 	std::map<std::string, bool> getAllowMethods() const;
 	std::map<std::string, std::string> getCgi() const;
-	std::string getDefaultFile() const;
 
 	//exceptions
 	class RouteAllowedMethodException : public std::exception

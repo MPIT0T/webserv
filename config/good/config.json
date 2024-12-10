@@ -17,7 +17,7 @@
 					"allow_methods": [
 						"GET"
 					],
-					"root": "/www/main",
+					"root": "./www/main",
 					"default_file": "index.html"
 				},
 				{
@@ -25,7 +25,7 @@
 					"allow_methods": [
 						"GET"
 					],
-					"root": "/www/mbrousse",
+					"root": "./www/mbrousse",
 					"default_file": "mbrousse.html"
 
 				},
@@ -35,7 +35,7 @@
 						"GET"
 					],
 					"default_file": "mpitot.html",
-					"root": "/www/mpitot"
+					"root": "./www/mpitot"
 				},
 				{
 					"path": "/gberthol",
@@ -43,7 +43,7 @@
 						"GET"
 					],
 					"default_file": "gberthol.html",
-					"root": "/www/gberthol"
+					"root": "./www/gberthol"
 				},
 				{
 					"path": "/cgi-bin",
@@ -67,7 +67,7 @@
 				"host": "127.0.0.1"
 			},
 			"server_name": "backup.webserv.com",
-			"root": "/www/backup",
+			"root": "./www/backup",
 			"error_pages": {
 				"404": "/www/backup/error_pages/backup_404.html",
 				"403": "/www/backup/error_pages/backup_403.html"
@@ -80,7 +80,7 @@
 						"GET"
 					],
 					"directory_listing": false,
-					"default_file": "index.html"
+					"default_file": "index.html",
 				}
 			]
 		}

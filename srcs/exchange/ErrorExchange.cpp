@@ -49,12 +49,12 @@ void ErrorExchange::testResponses(const std::string &newFileToSend, eHttpStatusC
 	if (!_fileToSend.empty())
 	{
 		if (access(_fileToSend.c_str(), F_OK) == -1)
-			_code = NOT_FOUND;
-		if (access(_fileToSend.c_str(), R_OK) == -1)
 		{
-			std::cout << strerror(errno) << std::endl;
-			_code = FORBIDDEN;
+			_code = NOT_FOUND;
+			return ;
 		}
+		if (access(_fileToSend.c_str(), R_OK) == -1)
+			_code = FORBIDDEN;
 	}
 }
 
