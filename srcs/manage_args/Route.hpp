@@ -38,16 +38,13 @@ public:
 
 	// Getters
 
-	
+	std::string getDefaultFile() const;
 	bool getDirectoryListing() const;
 	std::string getPath() const;
 	std::string getRoot() const;
 	std::string getHttpRedirect() const;
 	std::map<std::string, bool> getAllowMethods() const;
 	std::map<std::string, std::string> getCgi() const;
-
-	//debug
-	void print_arg() const;
 
 	//exceptions
 	class RouteAllowedMethodException : public std::exception

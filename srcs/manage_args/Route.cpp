@@ -50,12 +50,18 @@ Route::Route (std::string routeStr) {
 		std::string directory_listing = routeStr.substr(pos, end - pos);
 		_directory_listing = directory_listing == "true" ? true : false;
 	}
+	if ((pos = routeStr.find("\"_default_file\":")) != std::string::npos) {
+		pos += 17;
+		std::size_t end = routeStr.find('"', pos + 1);
+		_default_file = routeStr.substr(pos + 1, end - pos - 1);
+	}
 	else
 		_directory_listing = false;
 	
 	_allow_methods["DELETE"] = false;
 	_allow_methods["POST"] = false;
 	_allow_methods["GET"] = false;
+	_default_file = "";
 	if ((pos = routeStr.find("\"allow_methods\":")) != std::string::npos) {
 		pos += 16;
 		std::size_t end = routeStr.find(']', pos + 1);
@@ -77,8 +83,6 @@ Route::Route (std::string routeStr) {
 		std::size_t end = routeStr.find('"', pos + 1);
 		_default_file = routeStr.substr(pos + 1, end - pos - 1);
 	}
-	else
-		_default_file = "";
 	_cgi["extension"] = "";
 	_cgi["path"] = "";
 	_cgi["upload_dir"] = "";
@@ -136,6 +140,10 @@ void Route::setCgi(const std::map<std::string, std::string> &cgi) {
 
 // Getters
 
+std::string Route::getDefaultFile() const {
+	return _default_file;
+}
+
 bool Route::getDirectoryListing() const {
 	return _directory_listing;
 }
@@ -158,24 +166,6 @@ std::map<std::string, bool> Route::getAllowMethods() const {
 
 std::map<std::string, std::string> Route::getCgi() const {
 	return _cgi;
-}
-// Print method using printf
-
-void Route::print_arg() const{
-	printf("	Path: %s\n", _path.c_str());
-	printf("	Root: %s\n", _root.c_str());
-	printf("	Default file: %s\n", _default_file.c_str());
-	printf("	HTTP Redirect: %s\n", _http_redirect.c_str());
-	printf("	Directory Listing: %s\n", _directory_listing ? "true" : "false");
-	printf("	Allow Methods: ");
-	for (std::map<std::string, bool>::const_iterator it = _allow_methods.begin(); it != _allow_methods.end(); ++it) {
-		printf("%s: %s, ", it->first.c_str(), it->second ? "true" : "false");
-	}
-	printf("\n	CGI: ");
-	for (std::map<std::string, std::string>::const_iterator it = _cgi.begin(); it != _cgi.end(); ++it) {
-		printf("%s: %s, ", it->first.c_str(), it->second.c_str());
-	}
-	printf("\n\n\n");
 }
 
 //exceptions

@@ -59,8 +59,6 @@ public:
 	void	parseErrorPages(const std::string &errorPagesStr );
 	int 	parseSize(const std::string &sizeStr);
 
-	//debug
-	void print_value();
 };
 
 #endif // Listen_HPP
