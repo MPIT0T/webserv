@@ -103,3 +103,15 @@ void printListenVector(const std::vector<Listen>& listenConfigs) {
     }
 }
 
+
+std::string getRouteAccess(const std::string &routeAccess, const std::map<std::string, Route> &routes)
+{
+	for (std::map<std::string, Route>::const_iterator it = routes.begin(); it != routes.end(); ++it)
+	{
+		if (routeAccess == it->first)
+		{
+			return it->second.getRoot();
+		}
+	}
+    return NULL;
+}

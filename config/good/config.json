@@ -80,7 +80,7 @@
 						"GET"
 					],
 					"directory_listing": false,
-					"default_file": "index.html",
+					"default_file": "index.html"
 				}
 			]
 		}

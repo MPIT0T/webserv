@@ -14,6 +14,12 @@ class Route;
 
 class ClientInfo
 {
+private:
+	int			_fd;
+	int			_port;
+	std::string	_ip;
+	std::string	_routeAccess;
+	int			_listenID;
 public:
 /* Constructors */
 	ClientInfo();
@@ -37,12 +43,6 @@ public:
 
 	std::string	getRouteAccess();
 
-private:
-	int			_fd;
-	int			_port;
-	std::string	_ip;
-	std::string	_routeAccess;
-	int			_listenID;
 };
 
 

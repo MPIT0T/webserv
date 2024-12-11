@@ -25,5 +25,6 @@
 std::string 	readFileContent(const std::string& filePath);
 std::string     errorPage(int code);
 std::string		toString(int number);
+std::string     getRouteAccess(const std::string &routeAccess, const std::map<std::string, Route> &routes);
 
 #endif // UTILS_HPP
