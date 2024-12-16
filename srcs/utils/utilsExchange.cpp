@@ -150,6 +150,8 @@ std::string generateMIME(const std::string &file, const std::string &authorized)
 {
 	if (authorized.empty())
 		return "";
+	if (file.find_last_of('.') == std::string::npos && file.find("<!DOCTYPE html>") != std::string::npos)
+		return mimeTypeOfFile(".html");
 	if (file.find_last_of('.') == std::string::npos)
 		return mimeTypeOfFile(".txt");
 	else

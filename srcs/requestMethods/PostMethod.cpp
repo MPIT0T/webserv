@@ -12,17 +12,13 @@ PostMethod::PostMethod()
 
 PostMethod::PostMethod(const std::string &content)
 {
-	_content = content;
-
-	std::cout << _content << std::endl;
-	while (_content.find('+') != std::string::npos)
-		_content.at(_content.find('+')) = ' ';
-	if (_content.find('='))
-		_content.erase(0, _content.find('=') + 1);
-	if (_content.find('&'))
-		_fileName = _content.substr(0, _content.find('&'));
-	if (_content.find('='))
-		_content.erase(0, _content.find('=') + 1);
+	if (content.find("filename=") == std::string::npos || content.find("&content=") == std::string::npos)
+		return ;
+	_fileName = content.substr(content.find("filename=") + 9, content.find('&') - (content.find("filename=") + 9));
+	_content = content.substr(content.find("content=") + 8,  content.size());
+	_fileName = "www/saved_files/" + _fileName;
+	std::cout << "filename "<< _fileName << std::endl;
+	std::cout << "content "<< _content<< std::endl;
 }
 
 PostMethod::PostMethod(const PostMethod &old)
@@ -46,6 +42,7 @@ PostMethod &PostMethod::operator=(const PostMethod &old)
 void PostMethod::createFile()
 {
 	std::ofstream	file;
+	std::string		tmp;
 
 	if (_fileName.empty())
 		return ;
@@ -53,6 +50,9 @@ void PostMethod::createFile()
 	if (!file.is_open())
 		throw PostMethodFileOpenException();
 	file << _content;
+	tmp = _fileName.substr(_fileName.find("www/saved_files/") + 16, _fileName.size());
+	_message = "file: " + tmp + " has been created correctly";
+	_code = CREATED;
 	file.close();
 }
 
@@ -74,6 +74,16 @@ void PostMethod::setFileName(const std::string &fileName)
 void PostMethod::setContent(const std::string &content)
 {
 	_content = content;
+}
+
+const std::string &PostMethod::getMessage() const
+{
+	return _message;
+}
+
+const eHttpStatusCode &PostMethod::getCode() const
+{
+	return _code;
 }
 
 const char *PostMethod::PostMethodFileOpenException::what() const throw()

@@ -33,6 +33,7 @@ ClientInfo &ClientInfo::operator=(const ClientInfo &src)
 	_fd = src.fd();
 	_port = src.port();
 	_ip = src.IP();
+	_routeAccess  = src.getRouteAccess();
 	return (*this);
 }
 
@@ -84,7 +85,7 @@ void ClientInfo::setRouteAccess(const std::string &routeAccess, const std::map<s
 	}
 }
 
-std::string ClientInfo::getRouteAccess()
+std::string ClientInfo::getRouteAccess() const
 {
 	return (_routeAccess);
 }

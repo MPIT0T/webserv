@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include "Listen.hpp"
 #include "ClientInfo.hpp"
+#include "PostMethod.hpp"
 
 Request::Request()
 {
@@ -59,9 +60,7 @@ void	Request::parseRequest()
 		tmp = _request.substr(0, _request.find(": "));
 		_request.erase(0, _request.find( ": ") + 2);
 		_headers[tmp] = _request.substr(0, _request.find( '\n'));
-		if (_request.find('\n') == std::string::npos)
-			_request.clear();
-		else
+		if (!_request.empty() && _request.at(0) != '\n')
 			_request.erase(0, _request.find( '\n') + 1);
 	}
 	_request.erase(0, 1);
@@ -81,9 +80,13 @@ void	Request::makeRequestMethod()
 	{
 		case 1:
 			if (!_listen->getRoutes()[_uri].getDefaultFile().empty())
-				_fileToSend = _client->getRouteAccess() + "/" + _listen->getRoutes()[_uri].getDefaultFile();
+				_fileToSend = _listen->getRoutes()[_uri].getRoot() + "/" + _listen->getRoutes()[_uri].getDefaultFile();
 			else
-				_fileToSend = _client->getRouteAccess() + "/" + _uri;
+			{
+				_fileToSend = "./www/";
+				_fileToSend += (_uri.at(0) == '/') ? _uri : ("/" + _uri);
+			}
+			std::cout << _fileToSend << std::endl;
 			_code = OK;
 			if (access(_fileToSend.c_str(), F_OK) == -1)
 				_code = NOT_FOUND;
@@ -91,7 +94,12 @@ void	Request::makeRequestMethod()
 				_code = FORBIDDEN;
 			break;
 		case 2:
-			std::cout << "Method POST" << std::endl;
+		{
+			PostMethod post = PostMethod(_body);
+			post.createFile();
+			_code = post.getCode();
+			_message = post.getMessage();
+		}
 			break;
 		case 3:
 			std::cout << "Method DELETE" << std::endl;
@@ -103,6 +111,7 @@ void	Request::makeRequestMethod()
 				std::cout << "page not found" << std::endl;
 			}
 			std::cout << "Other method" << std::endl;
+			break;
 	}
 }
 

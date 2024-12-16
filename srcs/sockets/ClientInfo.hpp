@@ -41,7 +41,7 @@ public:
 	void		setIP(const std::string& ip);
 	void		setRouteAccess(const std::string& routeAccess , const std::map<std::string, Route> &routes);
 
-	std::string	getRouteAccess();
+	std::string	getRouteAccess() const;
 
 };
 

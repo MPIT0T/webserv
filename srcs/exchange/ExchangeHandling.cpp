@@ -95,14 +95,22 @@ void ExchangeHandling::generateHeader()
 	_header.append("\nDate: ");
 	_header.append(getTimeFormat());
 
-	//get serveur
+	//get server
 	_header.append("Server: ");
 	_header.append(_listen->getServerName());
 	_header.push_back('\n');
 
 	//get content type
 	_header.append("Content-Type: ");
-	_header.append(generateMIME(_fileToSend, _request.getHeaders().at("Accept")));
+	if (!_fileToSend.empty())
+	{
+		if (_request.getHeaders().find("Accept") != _request.getHeaders().end())
+			_header.append(generateMIME(_fileToSend, _request.getHeaders().at("Accept")));
+		else
+			_header.append(generateMIME(_fileToSend, "text/html"));
+	}
+	else
+		_header.append(generateMIME(_message, _request.getHeaders().at("Accept")));
 
 	//get message length
 	_header.append("\nContent-Length: ");

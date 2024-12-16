@@ -101,6 +101,10 @@ void Server::run(void)
 						}
 						client->setRouteAccess("/", it->getRoutes());
 						clients.insert(std::make_pair(client->fd(), client));
+//						for (std::map<int, ClientInfo *>::iterator it = clients.begin(); it != clients.end(); ++it)
+//						{
+//							std::cout << it->first << std::endl;
+//						}
 					}
 					catch (Socket::SocketAcceptException &e) {
 						log.log(log.ERROR, "Failed to accept client");
