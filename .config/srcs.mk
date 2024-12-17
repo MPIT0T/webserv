@@ -29,7 +29,8 @@ SRC_MANAGE_ARGS	=	ManageArgs.cpp	\
 					Listen.cpp		\
 					Route.cpp
 SRC_SERVER		=	Server.cpp
-SRC_RMETHODS	=	PostMethod.cpp
+SRC_RMETHODS	=	PostMethod.cpp		\
+					DelMethod.cpp
 SRC_UTILS		=	utils.cpp				\
 					utilsExchange.cpp
 SRC_LOGGER		=	Logger.cpp

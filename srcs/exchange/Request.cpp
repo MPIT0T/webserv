@@ -7,6 +7,7 @@
 #include "Listen.hpp"
 #include "ClientInfo.hpp"
 #include "PostMethod.hpp"
+#include "DelMethod.hpp"
 
 Request::Request()
 {
@@ -102,7 +103,12 @@ void	Request::makeRequestMethod()
 		}
 			break;
 		case 3:
-			std::cout << "Method DELETE" << std::endl;
+		{
+			DelMethod del = DelMethod(_uri);
+			del.deleteFile();
+			_code = del.getCode();
+			_message = del.getMessage();
+		}
 			break;
 		default:
 			if (_type.empty())
