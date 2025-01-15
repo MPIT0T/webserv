@@ -17,7 +17,15 @@ PostMethod::PostMethod(const std::string &content)
 	std::cout << content << std::endl;
 	_fileName = content.substr(content.find("filename=") + 9, content.find('&') - (content.find("filename=") + 9));
 	_content = content.substr(content.find("content=") + 8,  content.size() - content.find("content=") + 8);
-	_content = _content.substr(0, _content.size() - 2);
+	_content = _content.substr(0, _content.size());
+	while (_content.find('+') != std::string::npos)
+		_content.at(_content.find('+')) = ' ';
+	while (_content.find("%0D%0A") != std::string::npos)
+	{
+		_content.at(_content.find("%0D%0A")) = '\n';
+		_content.erase(_content.find("0D%0A"), 5);
+	}
+	_content.erase(_content.find("filename"), _content.size() - _content.find("filename"));
 	_fileName = "www/saved_files/" + _fileName;
 }
 
