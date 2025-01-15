@@ -14,11 +14,11 @@ PostMethod::PostMethod(const std::string &content)
 {
 	if (content.find("filename=") == std::string::npos || content.find("&content=") == std::string::npos)
 		return ;
+	std::cout << content << std::endl;
 	_fileName = content.substr(content.find("filename=") + 9, content.find('&') - (content.find("filename=") + 9));
-	_content = content.substr(content.find("content=") + 8,  content.size());
+	_content = content.substr(content.find("content=") + 8,  content.size() - content.find("content=") + 8);
+	_content = _content.substr(0, _content.size() - 2);
 	_fileName = "www/saved_files/" + _fileName;
-	std::cout << "filename "<< _fileName << std::endl;
-	std::cout << "content "<< _content<< std::endl;
 }
 
 PostMethod::PostMethod(const PostMethod &old)
